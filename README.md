@@ -1,6 +1,4 @@
 # PureCloud Kiosk
-## Responsive, bloat free, bootstrap powered admin style dashboard!
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/rdash/rdash-angular?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 PureCloud Kiosk is a service that allows users of the PureCloud Ecosystem to create and manage check-in events.
 
@@ -23,7 +21,7 @@ Continue developing the dashboard further by editing the `src` directory. With t
 For any new packages that need to be installed, be sure to save it into the package.json (for Node Modules)
 with and bower.json (for Bower Components).
 
-Just install using the '--save' argument when installing. Ex. 'sudo npm install express --save' 
+Just install using the '--save' argument when installing. Ex. 'sudo npm install express --save'
 
 ## Credits
 * [Elliot Hesp](https://github.com/Ehesp)
