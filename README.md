@@ -24,7 +24,4 @@ with and bower.json (for Bower Components).
 Just install using the '--save' argument when installing. Ex. 'sudo npm install express --save'
 
 ## Credits
-* [Elliot Hesp](https://github.com/Ehesp)
-* [Leonel Samayoa](https://github.com/lsamayoa)
-* [Mathew Goldsborough](https://github.com/mgoldsborough)
-* [Ricardo Pascua Jr](https://github.com/rdpascua)
+* [RDash Angular](https://github.com/rdash/rdash-angular)
