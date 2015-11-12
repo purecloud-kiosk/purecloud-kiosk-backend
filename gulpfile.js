@@ -36,8 +36,9 @@ gulp.task('usemin', function() {
 * for some reason, angular files had issue being concatenated after updating to v1.4.3
 * so files are just loaded separately, this just moves it to the dist folder
 **/
-gulp.task('angular', function(){
+gulp.task('libs', function(){
   var files = [
+    'dashboard-src/bower_components/jquery/dist/jquery.min.js',
     'dashboard-src/bower_components/angular/angular.min.js',
     'dashboard-src/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
     'dashboard-src/bower_components/angular-cookies/angular-cookies.min.js',
@@ -102,5 +103,5 @@ gulp.task('watch', function() {
 /**
  * Gulp tasks
  */
-gulp.task('build', ['usemin', 'build-assets', 'build-custom', 'angular']);
+gulp.task('build', ['usemin', 'build-assets', 'build-custom', 'libs']);
 gulp.task('default', ['build', 'watch']);
