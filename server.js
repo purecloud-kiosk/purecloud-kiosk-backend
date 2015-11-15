@@ -17,9 +17,28 @@ require("./lib/modules/pureCloud.js")(app, request);
 * redirect to the Purecloud Login page if a client access_token is invalid
 */
 app.get("/", function(req, res){
-  console.log(req.headers["accept-language"]);
+  var token = req.query.client_token;
+  if(token !== undefined){
+    request('https://apps.mypurecloud.com/api/v2/session',
+      {
+        'auth' : {
+          'bearer' : req.query.client_token
+        }
+      },
+      function(error, response, body){
+        if(response.statusCode != 200){
+          res.sendFile(__dirname + "/login.html");
+        }
+        else{
+          res.sendFile(__dirname + "/index.html");
+        }
+      }
+    );
 
-  res.sendFile(__dirname + "/index.html");
+  }
+  else{
+    res.sendFile(__dirname + "/login.html");
+  }
 });
 
 

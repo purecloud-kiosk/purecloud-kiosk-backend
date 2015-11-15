@@ -47,6 +47,11 @@ gulp.task('libs', function(){
   return gulp.src(files)
     .pipe(gulp.dest('dist/js'));
 });
+
+gulp.task('moveLogin', function(){
+  return gulp.src('dashboard-src/login.html')
+    .pipe(gulp.dest('./'));
+});
 /**
  * Copy assets
  */
@@ -103,5 +108,5 @@ gulp.task('watch', function() {
 /**
  * Gulp tasks
  */
-gulp.task('build', ['usemin', 'build-assets', 'build-custom', 'libs']);
+gulp.task('build', ['usemin', 'build-assets', 'build-custom', 'libs', 'moveLogin']);
 gulp.task('default', ['build', 'watch']);
