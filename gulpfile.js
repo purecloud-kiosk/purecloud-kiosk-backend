@@ -17,7 +17,7 @@ var paths = {
     styles: 'dashboard-src/less/**/*.*',
     images: 'dashboard-src/img/**/*.*',
     templates: 'dashboard-src/templates/**/*.html',
-    index: 'dashboard-src/index.html',
+    index: 'dashboard-src/index.marko',
     bower_fonts: 'dashboard-src/bower_components/**/*.{ttf,woff,eof,svg}'
 };
 
@@ -85,6 +85,8 @@ gulp.task('custom-js', function() {
 gulp.task('custom-less', function() {
     return gulp.src(paths.styles)
         .pipe(less())
+        .pipe(minifyCss())
+        .pipe(concat('dashboard.min.css'))
         .pipe(gulp.dest('dist/css'));
 });
 

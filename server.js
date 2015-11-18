@@ -2,14 +2,15 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var request = require("request");
 var app = express();
-
+var marko = require("marko");
 var client_id = "124e4b8c-b520-4fc0-8f3c-defe6add851a";
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 // static files
 app.use("/dist", express.static(__dirname + "/dist"));
-
-
+// templates
+var indexTemplate = marko.load("./index.marko", {writeToDisk : false});
+//append routes
 require("./lib/modules/pureCloud.js")(app, request);
 
 /**
@@ -30,11 +31,12 @@ app.get("/", function(req, res){
           res.sendFile(__dirname + "/login.html");
         }
         else{
-          res.sendFile(__dirname + "/index.html");
+          indexTemplate.render({session : JSON.parse(body)}, function(err, output){
+            res.send(output);
+          });
         }
       }
     );
-
   }
   else{
     res.sendFile(__dirname + "/login.html");

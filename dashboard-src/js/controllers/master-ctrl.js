@@ -3,18 +3,16 @@
  */
 
 angular.module('RDash')
-    .controller('MasterCtrl', ['$scope', '$cookieStore', MasterCtrl]);
+    .controller('MasterCtrl', ['$scope', '$cookieStore', '$http', '$window', MasterCtrl]);
 
-function MasterCtrl($scope, $cookieStore) {
+function MasterCtrl($scope, $cookieStore, $http, $window) {
     /**
      * Sidebar Toggle & Cookie Control
      */
     var mobileView = 992;
-
     $scope.getWidth = function() {
         return window.innerWidth;
     };
-
     $scope.$watch($scope.getWidth, function(newValue, oldValue) {
         if (newValue >= mobileView) {
             if (angular.isDefined($cookieStore.get('toggle'))) {
@@ -27,13 +25,12 @@ function MasterCtrl($scope, $cookieStore) {
         }
 
     });
-
     $scope.toggleSidebar = function() {
         $scope.toggle = !$scope.toggle;
         $cookieStore.put('toggle', $scope.toggle);
     };
-
     window.onresize = function() {
         $scope.$apply();
     };
+
 }
