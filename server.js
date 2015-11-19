@@ -11,19 +11,19 @@ app.use("/dist", express.static(__dirname + "/dist"));
 // templates
 var indexTemplate = marko.load("./index.marko", {writeToDisk : false});
 //append routes
-require("./lib/modules/pureCloud.js")(app, request);
+require("./lib/routes/pureCloud.js")(app, request);
 
 /**
-* This is where clients can get access to dashboard web app, it will
-* redirect to the Purecloud Login page if a client access_token is invalid
-*/
+ * This is where clients can get access to dashboard web app, it will
+ * redirect to the Purecloud Login page if a client access_token is invalid
+ **/
 app.get("/", function(req, res){
   var token = req.query.client_token;
   if(token !== undefined){
-    request('https://apps.mypurecloud.com/api/v2/session',
+    request.get('https://apps.mypurecloud.com/api/v2/session',
       {
         'auth' : {
-          'bearer' : req.query.client_token
+          'bearer' : token
         }
       },
       function(error, response, body){
