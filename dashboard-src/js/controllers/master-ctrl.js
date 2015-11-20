@@ -32,8 +32,5 @@ function MasterCtrl($scope, $cookieStore, $http, $window) {
     window.onresize = function() {
         $scope.$apply();
     };
-    $http.get('/purecloud/search').then(function(res){
-      console.log(res);
-    });
 
 }

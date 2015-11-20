@@ -8,10 +8,12 @@
     "cookie-parser": "^1.4.0",
     "express": "^4.13.3",
     "marko": "^2.7.29",
+    "mongoose": "^4.2.6",
     "request": "^2.65.0"
   },
   "devDependencies": {
     "bower": "^1.6.5",
+    "chai": "^3.4.1",
     "gulp": "^3.8.11",
     "gulp-concat": "^2.6.0",
     "gulp-connect": "^2.2.0",
@@ -22,9 +24,11 @@
     "gulp-uglify": "^1.4.2",
     "gulp-usemin": "^0.3.14",
     "gulp-watch": "^0.6.10",
-    "gulp-wrap": "^0.3.0"
+    "gulp-wrap": "^0.3.0",
+    "mocha": "^2.3.4"
   },
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
