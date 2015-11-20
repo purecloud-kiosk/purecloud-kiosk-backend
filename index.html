@@ -6,14 +6,7 @@
 
 	<title>PureCloud Kiosk</title>
   <!-- STYLES -->
-  <!-- build:css dist/lib/css/main.min.css -->
-  <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="bower_components/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="bower_components/rdash-ui/dist/css/rdash.min.css">
-  <!-- endbuild -->
-  <!-- custom styles -->
-  <link rel="stylesheet" type="text/css" href="dist/css/dashboard.min.css">
-
+  <link rel="stylesheet" href="dist/lib/css/main.min.css"/>
   <script type="text/javascript" src="dist/js/jquery.min.js"></script>
   <script type="text/javascript" src="dist/js/angular.min.js"></script>
   <script type="text/javascript" src="dist/js/ui-bootstrap-tpls.min.js"></script>
@@ -44,13 +37,18 @@
         </li>
       </ul>
       <div class="sidebar-footer">
-        <div class="col-xs-6">
-          <a href="https://github.com/charlieduong94/purecloud-kiosk">
+        <div class="col-xs-4">
+          <a href="" target="_blank">
             Github
           </a>
         </div>
-        <div class="col-xs-6">
-          <a href="http://www.inin.com/solutions/pages/cloud-contact-center-purecloud.aspx">
+        <div class="col-xs-4">
+          <a href="" target="_blank">
+            About
+          </a>
+        </div>
+        <div class="col-xs-4">
+          <a href="#">
             Support
           </a>
         </div>
@@ -67,26 +65,31 @@
             <div class="user pull-right">
               <div class="item dropdown" uib-dropdown>
                 <a href="#" uib-dropdown-toggle>
-                  <if test="data.session.res.person.images !== undefined && data,r=session.res.person.images.profile[0] !== undefined">
-                    <img src="${data.session.res.person.images.profile[0].ref.x96}">
-                  </if>
-                  <else>
-                    <img src="dist/img/avatar.jpg">
-                  </else>
+                  <img src="dist/img/avatar.jpg">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right">
                   <li class="dropdown-header">
-                    ${data.session.res.person.general.name[0].value}
+                    User Name goes here
                   </li>
                   <li class="divider"></li>
                   <li class="link">
-                    <a href="https://apps.mypurecloud.com/directory">
+                    <a href="#">
                       Profile
+                    </a>
+                  </li>
+                  <li class="link">
+                    <a href="#">
+                      Menu Item
+                    </a>
+                  </li>
+                  <li class="link">
+                    <a href="#">
+                      Menu Item
                     </a>
                   </li>
                   <li class="divider"></li>
                   <li class="link">
-                    <a href="https://login.mypurecloud.com/logout">
+                    <a href="#">
                       Logout
                     </a>
                   </li>
@@ -94,7 +97,7 @@
               </div>
               <div class="item dropdown" uib-dropdown>
                <a href="#" uib-dropdown-toggle>
-                  <i id="notification" class="fa fa-bell-o"></i>
+                  <i class="fa fa-bell-o"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right">
                   <li class="dropdown-header">
@@ -102,7 +105,7 @@
                   </li>
                   <li class="divider"></li>
                   <li>
-                    <a href="#">Something should go here</a>
+                    <a href="#">Server Down!</a>
                   </li>
                 </ul>
               </div>
