@@ -1,0 +1,4 @@
+{
+  "production_mongo_uri" : "mongodb://localhost/eventDB",
+  "test_mongo_uri" : "mongodb://localhost/testEventDB"
+}

@@ -6,9 +6,13 @@ var marko = require("marko");
 var mongoose = require("mongoose");
 var eventDao = require("./lib/dao/eventDao");
 var pureCloudAPIDao = require('./lib/dao/pureCloudAPIDao');
+
+// load configs
+var config = require("./config.json");
+
 //var client_id = "124e4b8c-b520-4fc0-8f3c-defe6add851a";
 // connect to mongo
-mongoose.connect("mongodb://localhost/eventDB");
+mongoose.connect(config.production_mongo_uri);
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 
