@@ -8,6 +8,7 @@ PureCloud Kiosk is a service that allows PureCloud users to create and manage ch
 * [Bower](http://bower.io)
 * [Gulp](http://gulpjs.com)
 * [MongoDB](http://mongodb.org)
+* [Redis](http://redis.io)
 
 ### Installation
 1. Clone this repo.

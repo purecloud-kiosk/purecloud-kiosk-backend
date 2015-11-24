@@ -13,7 +13,8 @@
     }
     // if access_token param is available, use the access token
     if(getParameterByName("access_token") != ""){
-      window.location.replace("http://localhost:8000?client_token=" + getParameterByName("access_token"));
+      window.location.replace("http://localhost:8000?client_token=" + getParameterByName("access_token") +
+        "&expires_in=" + getParameterByName("expires_in"));
     }
     else{ // else redirect to auth
       var queryStringData = {

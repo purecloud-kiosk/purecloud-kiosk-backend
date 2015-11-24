@@ -9,6 +9,7 @@
     "express": "^4.13.3",
     "marko": "^2.7.29",
     "mongoose": "^4.2.6",
+    "redis": "^2.3.1",
     "request": "^2.65.0"
   },
   "devDependencies": {
