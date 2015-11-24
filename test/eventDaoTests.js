@@ -25,28 +25,60 @@ var testEvent = { // event to test with
     }
   ]
 };
-var removeID; // id to remove (the above event's id)
+var eventID; // id to remove (the above event's id)
 
 describe("eventDao", function(){
 
-  it("can insert an event into the database", function(done){
-    eventDao.insertEvent(testEvent, function(err){
-      expect(err).to.be.null;
+  it("#insertEvent can insert an event into the database", function(done){
+    eventDao.insertEvent(testEvent, function(error, result){
+      eventID = result._id;
+      expect(error).to.be.null;
+      done();
+    });
+  });
+  it("#updateEvent can update an existing event in the database", function(done){
+    var newEventTitle = "testTitle2";
+    var newOrgName = "orgName";
+    testEvent.title = newEventTitle;
+    testEvent.organization = newOrgName;
+    eventDao.updateEvent(eventID, testEvent, function(error, result){
+      expect(error).to.be.null;
+      expect(result.nModified).to.equal(1);
       done();
     });
   });
 
-  it("can retrieve events from a database using an event manager's ID", function(done){
-    eventDao.getEventsManaged(12345, function(err, result){
-      expect(err).to.be.null;
+  it("#getEventsManaging can retrieve events from a database using an event manager's ID", function(done){
+    eventDao.getEventsManaging(12345, function(error, result){
+      expect(error).to.be.null;
       expect(result).to.have.length.of.at.least(1);
-      removeID = result[0]._id;
       done();
     });
   });
-  it("can remove an event by it's '_id'", function(done){
-    eventDao.removeEvent(removeID, function(err){
-      expect(err).to.be.null;
+  it("#getEventsAttending can retrieve events from a database using an attendee's ID", function(done){
+    eventDao.getEventsAttending(12344, function(error, result){
+      expect(error).to.be.null;
+      expect(result).to.have.length.of.at.least(1);
+      done();
+    });
+  });
+  it("#getEventAttendees can retrieve attendees from an event using an event's ID", function(done){
+    eventDao.getEventAttendees(eventID, function(error, result){
+      expect(error).to.be.null;
+      expect(result.attendees[0]._id).to.equal("12344");
+      done();
+    });
+  });
+  it("#getEventAttendees can retrieve managers from an event using an event's ID", function(done){
+    eventDao.getEventManagers(eventID, function(error, result){
+      expect(error).to.be.null;
+      expect(result.managers[0]._id).to.equal("12345");
+      done();
+    });
+  });
+  it("#removeEvent can remove an event by it's '_id'", function(done){
+    eventDao.removeEvent(eventID, function(error){
+      expect(error).to.be.null;
       done();
     });
   });

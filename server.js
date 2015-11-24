@@ -26,6 +26,7 @@ db.once("open", function(){
   var indexTemplate = marko.load("./index.marko", {writeToDisk : false});
   //append routes
   require("./lib/routes/pureCloud.js")(app, pureCloudAPIDao);
+  require("./lib/routes/events.js")(app);
   /**
    * This is where clients can get access to dashboard web app, it will
    * redirect to the Purecloud Login page if a client access_token is invalid
