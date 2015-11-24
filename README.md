@@ -15,7 +15,7 @@ PureCloud Kiosk is a service that allows PureCloud users to create and manage ch
 3. In the dashboard-src directory, install the Bower dependencies:  `bower install`.
 4. In root directory, run the gulp build task: `gulp build`.
 5. Edit the `production_mongo_uri` in `config.json` (if needed) and start MongoDB.
-5. Start the server : `npm start`
+6. Start the server : `npm start`
 
 ### Development
 Continue developing the dashboard further by editing the `dashboard-src` directory. With the `gulp` command, any file changes made will automatically be compiled into the specific location within the `dist` directory.
