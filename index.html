@@ -124,7 +124,10 @@
 
         <!-- Main Content -->
         <div ui-view></div>
-
+          <div ng-app="">
+            <p>Name: <input type "text" ng-model="name"></p>
+            <p> I wrote: {{name}}</p>
+          </div>
       </div><!-- End Page Content -->
     </div><!-- End Content Wrapper -->
   </div><!-- End Page Wrapper -->

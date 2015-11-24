@@ -1,5 +1,36 @@
 <div class="row" data-ng-controller="EventsCtrl">
   <div class="col-lg-6">
     Events go here
+    <p>Form for Events:
+    	-title
+    	-date
+    	-location
+    	-organization
+    	</p>
+    <!--First Name: <input type="text" ng-model="firstName"><br>
+	Last Name: <input type="text" ng-model="lastName"><br>
+	Date: <input type ="date" ng-model="date_expression" format="timezone"><br>
+	No of Attendees: <input type="number" ng-model="number_expression"><br>
+	Name of Attendee: <input type="text" ng-model="Attendee"><br>-->
+	Event Name: <input type="text" ng-model="eventName"><br>
+	Event Date: <input type="date" ng-model="eventDate"><br>
+	Location: <input type="text" ng-model="loci"><br>
+	Organization: <input type="text" ng-model="org"><br>
+	
+	
+	<br>
+	
+	<!--Event Creator Name: {{firstName + " " + lastName}}
+	Uppercase: {{firstName|uppercase}}
+	Date of Creation: {{date_expression}}-->
+	Event Name: {{eventName}}
+	Event Date: {{eventDate}}
+	Location: {{loci}}
+	Organization: {{org}}
+	<!--No of Attendees: {{number_expression}}
+	Name of Attendee: {{Attendee}}-->
+	
+	
+
   </div>
 </div>

@@ -7,4 +7,9 @@ angular.module('RDash')
 
 function EventsCtrl($scope) {
     // stub
+	$scope.eventName= "Conference1";
+	$scope.eventDate= "12/12/2015";
+	$scope.loci="San Diego";
+	$scope.org="Interactive Itelligence";
+	
 }
