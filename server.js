@@ -6,14 +6,14 @@ var app = express();
 var marko = require("marko");
 var mongoose = require("mongoose");
 
-var pureCloudAPIDao = require('./lib/dao/pureCloudAPIDao');
+var pureCloudAPIDao = require('./lib/models/dao/pureCloudAPIDao');
 
 // load config file
 var config = require("./config.json");
 
 
 // retrieve redisClient
-var redisClient = require("./lib/dao/redisClient.js");
+var redisClient = require("./lib/models/dao/redisClient.js");
 
 redisClient.on("connect", function(){
   // once connection to redis is successful, connect to mongo
@@ -31,8 +31,8 @@ redisClient.on("connect", function(){
     var indexTemplate = marko.load("./index.marko", {writeToDisk : false});
 
     //append routes
-    app.use("/purecloud", require("./lib/routes/pureCloud.js"));
-    app.use("/events", require("./lib/routes/events.js"));
+    app.use("/purecloud", require("./lib/controllers/routes/pureCloud.js"));
+    app.use("/events", require("./lib/controllers/routes/events.js"));
     /**
      * This is the entry point for the web application.
      * redirect to the Purecloud Login page if a client access_token is invalid
