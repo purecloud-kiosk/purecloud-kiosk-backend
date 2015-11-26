@@ -4,7 +4,9 @@
   "description": "Dashboard and backend server for PureCloud Kiosk Service.",
   "main": "server.js",
   "dependencies": {
+    "aws-sdk": "^2.2.19",
     "body-parser": "^1.14.1",
+    "connect-busboy": "0.0.2",
     "cookie-parser": "^1.4.0",
     "express": "^4.13.3",
     "marko": "^2.7.29",

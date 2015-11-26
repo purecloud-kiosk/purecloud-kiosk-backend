@@ -21,7 +21,7 @@ redisClient.on("connect", function(){
   var db = mongoose.connection;
   db.on("error", console.error.bind(console, "connection error:"));
   db.once("open", function(){
-    // once the database has successfully connected, start appending routes to express object
+    // Add necessary middleware
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended : true}));
     // host static files
