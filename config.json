@@ -4,8 +4,8 @@
   "redis_port" : "6379",
   "redis_host" : "127.0.0.1",
   "aws_config" : {
-    "accessKeyId": "<insert access key here>",
-    "secretAccessKey": "<insert secret key here>",
+    "accessKeyId": "AKIAJXF2IIGFJIL4U6JQ",
+    "secretAccessKey": "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",
     "region": "us-east-1"
   }
 }
