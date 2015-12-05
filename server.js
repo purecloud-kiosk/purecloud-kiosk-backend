@@ -54,11 +54,11 @@ redisClient.on("connect", function(){
               "email" : data.res.user.email,
               "name" : data.res.person.general.name[0].value,
               "orgName" : data.res.org.general.name[0].value,
-            }, req.query.expires_in);
-
-            console.log(req.query.expires_in);
-            indexTemplate.render({session : data}, function(err, output){
-              res.send(output);
+            }, req.query.expires_in, function(redisError, redisResponse){
+              console.log(req.query.expires_in);
+              indexTemplate.render({session : data}, function(err, output){
+                res.send(output);
+              });
             });
           }
         });
