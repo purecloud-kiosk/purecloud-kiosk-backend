@@ -1,5 +1,5 @@
 var config = require('../config.json');
-var EventDao = require('../lib/models/dao/eventDao');
+var EventDao = require('../lib/models/dao/EventDao');
 var eventDao = new EventDao;
 var mongoose = require("mongoose");
 mongoose.connect(config.test_mongo_uri);
