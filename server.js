@@ -6,8 +6,8 @@ var app = express();
 var marko = require("marko");
 var mongoose = require("mongoose");
 
-var pureCloudAPIDao = require('./lib/models/dao/pureCloudAPIDao');
-
+var PureCloudAPIDao = require('./lib/models/dao/PureCloudAPIDao');
+var pureCloudDao = new PureCloudAPIDao();
 // load config file
 var config = require("./config.json");
 
@@ -40,7 +40,7 @@ redisClient.on("connect", function(){
     app.get("/", function(req, res){
       var token = req.query.client_token;
       if(token !== undefined){
-        pureCloudAPIDao.getSession(token, function(error, response, body){
+        pureCloudDao.getSession(token, function(error, response, body){
           if(response.statusCode != 200){
             res.sendFile(__dirname + "/login.html");
           }
