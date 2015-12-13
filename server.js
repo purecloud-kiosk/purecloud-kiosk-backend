@@ -6,8 +6,10 @@ var app = express();
 var marko = require("marko");
 var mongoose = require("mongoose");
 
-var PureCloudAPIDao = require('./lib/models/dao/PureCloudAPIDao');
-var pureCloudDao = new PureCloudAPIDao();
+var PureCloudAPIService = require('./lib/services/PureCloudAPIService');
+var SessionStoreService = require('./lib/services/SessionStoreService');
+var pureCloudService = new PureCloudAPIService();
+var sessionStoreService = new SessionStoreService();
 // load config file
 var config = require("./config.json");
 
@@ -31,8 +33,8 @@ redisClient.on("connect", function(){
     var indexTemplate = marko.load("./index.marko", {writeToDisk : false});
 
     //append routes
-    app.use("/purecloud", require("./lib/controllers/routes/pureCloud.js"));
-    app.use("/events", require("./lib/controllers/routes/events.js"));
+    app.use("/purecloud", require("./lib/controllers/routes/pureCloud"));
+    app.use("/events", require("./lib/controllers/routes/events"));
     /**
      * This is the entry point for the web application.
      * redirect to the Purecloud Login page if a client access_token is invalid
@@ -40,21 +42,23 @@ redisClient.on("connect", function(){
     app.get("/", function(req, res){
       var token = req.query.client_token;
       if(token !== undefined){
-        pureCloudDao.getSession(token, function(error, response, body){
+        pureCloudService.getSession(token, function(error, response, body){
           if(response.statusCode != 200){
             res.sendFile(__dirname + "/login.html");
           }
           else{
             var data = JSON.parse(body);
             // store some basic user data for later use
-            redisClient.hmset(req.query.client_token, {
-              "userID" : data.res.user.personId,
+            sessionStoreService.storeSessionData(token, {
+              "personID" : data.res.user.personId,
               "email" : data.res.user.email,
-              "name" : data.res.person.general.name[0].value
-            });
-            redisClient.expire(req.query.client_token, req.query.expires_in);
-            indexTemplate.render({session : data}, function(err, output){
-              res.send(output);
+              "name" : data.res.person.general.name[0].value,
+              "orgName" : data.res.org.general.name[0].value,
+            }, req.query.expires_in, function(redisError, redisResponse){
+              console.log(req.query.expires_in);
+              indexTemplate.render({session : data}, function(err, output){
+                res.send(output);
+              });
             });
           }
         });
