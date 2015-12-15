@@ -1,85 +1,33 @@
-// gulpfile created by RDash creators
-// only slightly modified
-var gulp = require('gulp'),
-    usemin = require('gulp-usemin'),
-    wrap = require('gulp-wrap'),
-    connect = require('gulp-connect'),
-    watch = require('gulp-watch'),
-    minifyCss = require('gulp-minify-css'),
-    minifyJs = require('gulp-uglify'),
-    concat = require('gulp-concat'),
-    less = require('gulp-less'),
-    rename = require('gulp-rename'),
-    minifyHTML = require('gulp-minify-html');
+var gulp = require('gulp');
+var minifyCss = require('gulp-minify-css');
+var minifyJs = require('gulp-uglify');
+var less = require('gulp-less');
+var concat = require('gulp-concat');
+var rename = require('gulp-rename');
+var browserify = require('browserify');
+var babelify = require('babelify');
+var source = require('vinyl-source-stream');
+
 
 var paths = {
     scripts: 'dashboard-src/js/**/*.*',
     styles: 'dashboard-src/less/**/*.*',
     images: 'dashboard-src/img/**/*.*',
-    templates: 'dashboard-src/templates/**/*.html',
-    index: 'dashboard-src/index.marko',
     bower_fonts: 'dashboard-src/bower_components/**/*.{ttf,woff,eof,svg}'
 };
 
-/**
- * Handle bower components from index (css)
- */
-gulp.task('usemin', function() {
-    return gulp.src(paths.index)
-        .pipe(usemin({
-            css: [minifyCss({keepSpecialComments: 0}), 'concat'],
-        }))
-        .pipe(gulp.dest('./'));
-});
-
-/**
-* for some reason, angular files had issue being concatenated after updating to v1.4.3
-* so files are just loaded separately, this just moves it to the dist folder
-**/
-gulp.task('libs', function(){
-  var files = [
-    'dashboard-src/bower_components/jquery/dist/jquery.min.js',
-    'dashboard-src/bower_components/angular/angular.min.js',
-    'dashboard-src/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-    'dashboard-src/bower_components/angular-cookies/angular-cookies.min.js',
-    'dashboard-src/bower_components/angular-ui-router/release/angular-ui-router.min.js'
-  ];
-  return gulp.src(files)
-    .pipe(gulp.dest('dist/js'));
-});
-
-gulp.task('moveLogin', function(){
-  return gulp.src('dashboard-src/login.html')
-    .pipe(gulp.dest('./'));
-});
-/**
- * Copy assets
- */
-gulp.task('build-assets', ['copy-bower_fonts']);
 
 gulp.task('copy-bower_fonts', function() {
     return gulp.src(paths.bower_fonts)
         .pipe(rename({
             dirname: '/fonts'
         }))
-        .pipe(gulp.dest('dist/lib'));
+        .pipe(gulp.dest('dist'));
 });
-
-/**
- * Handle custom files
- */
-gulp.task('build-custom', ['custom-images', 'custom-js', 'custom-less', 'custom-templates']);
 
 gulp.task('custom-images', function() {
     return gulp.src(paths.images)
         .pipe(gulp.dest('dist/img'));
-});
-
-gulp.task('custom-js', function() {
-    return gulp.src(paths.scripts)
-        .pipe(minifyJs())
-        .pipe(concat('dashboard.min.js'))
-        .pipe(gulp.dest('dist/js'));
 });
 
 gulp.task('custom-less', function() {
@@ -90,25 +38,42 @@ gulp.task('custom-less', function() {
         .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('custom-templates', function() {
-    return gulp.src(paths.templates)
-        .pipe(minifyHTML())
-        .pipe(gulp.dest('dist/templates'));
+gulp.task('lib-css', function(){
+  var files = [
+    'dashboard-src/bower_components/bootstrap/dist/css/bootstrap.min.css',
+    'dashboard-src/bower_components/font-awesome/css/font-awesome.min.css',
+    'dashboard-src/bower_components/rdash-ui/dist/css/rdash.min.css',
+  ];
+  return gulp.src(files)
+    .pipe(minifyCss())
+    .pipe(concat("lib.min.css"))
+    .pipe(gulp.dest('dist/css'));
 });
 
-/**
- * Watch custom files
- */
-gulp.task('watch', function() {
-    gulp.watch([paths.images], ['custom-images']);
-    gulp.watch([paths.styles], ['custom-less']);
-    gulp.watch([paths.scripts], ['custom-js']);
-    gulp.watch([paths.templates], ['custom-templates']);
-    gulp.watch([paths.index], ['usemin']);
+gulp.task('lib-js', function(){
+  var files = [
+    'dashboard-src/cleanUrl.js',
+    'dashboard-src/bower_components/jquery/dist/jquery.min.js',
+    'dashboard-src/bower_components/bootstrap/dist/bootstrap.min.js'
+  ];
+  return gulp.src(files)
+    .pipe(minifyJs())
+    .pipe(concat('lib.min.js'))
+    .pipe(gulp.dest('dist/js'));
 });
 
-/**
- * Gulp tasks
- */
-gulp.task('build', ['usemin', 'build-assets', 'build-custom', 'libs', 'moveLogin']);
-gulp.task('default', ['build', 'watch']);
+gulp.task('bundle', function(){
+  browserify({
+    entries : './dashboard-src/index.jsx',
+    extensions : ['.jsx'],
+    debug : true
+  })
+  .transform(babelify , {presets : ['es2015', 'react']})
+  .bundle()
+  .pipe(source('bundle.js'))
+  .pipe(gulp.dest('dist/js'));
+});
+
+gulp.task('build', ['bundle', 'custom-images', 'custom-less', 'lib-css', 'lib-js', 'copy-bower_fonts']);
+
+gulp.task('default', ['build'])
