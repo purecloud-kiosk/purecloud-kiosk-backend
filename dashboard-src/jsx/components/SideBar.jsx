@@ -3,26 +3,33 @@ import React, {Component} from "react";
 import * as navActions from "../actions/navActions";
 
 export default class SideBar extends Component{
-  handleClick(){
+  handleToggleBarClick(){
     console.log("clicked");
     navActions.toggleSideBar();
+  }
+  handleLinkClick(page){
+    navActions.routeToPage(page);
   }
   render(){
     return (
       <div id="sidebar-wrapper">
         <ul className="sidebar">
           <li className="sidebar-main">
-            <a onClick={this.handleClick}>
+            <a onClick={this.handleToggleBarClick}>
               Dashboard
               <span className="menu-icon glyphicon glyphicon-transfer"></span>
             </a>
           </li>
           <li className="sidebar-title"><span>NAVIGATION</span></li>
           <li className="sidebar-list">
-            <a href="#/">Dashboard <span className="menu-icon fa fa-tachometer"></span></a>
+            <a href="javascript:void(0);" onClick={this.handleLinkClick.bind(this, "dash")}>
+              Dashboard <span className="menu-icon fa fa-tachometer"></span>
+            </a>
           </li>
           <li className="sidebar-list">
-            <a href="#/tables">Tables <span className="menu-icon fa fa-table"></span></a>
+            <a href="javascript:void(0);" onClick={this.handleLinkClick.bind(this, "tables")}>
+              Tables <span className="menu-icon fa fa-table"></span>
+            </a>
           </li>
         </ul>
         <div class="sidebar-footer">

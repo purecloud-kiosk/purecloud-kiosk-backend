@@ -3,22 +3,24 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var request = require("request");
-var app = express();
 var marko = require("marko");
 var mongoose = require("mongoose");
 var React = require("react");
 
+// retrieve redisClient
+var redisClient = require("./lib/models/dao/redisClient.js");
 // load config file
 var config = require("./config.json");
 
 // import and instantiate services
 var PureCloudAPIService = require('./lib/services/PureCloudAPIService');
 var SessionStoreService = require('./lib/services/SessionStoreService');
+
+var app = express();
 var pureCloudService = new PureCloudAPIService();
 var sessionStoreService = new SessionStoreService();
 
-// retrieve redisClient
-var redisClient = require("./lib/models/dao/redisClient.js");
+
 
 redisClient.on("connect", function(){
   // once connection to redis is successful, connect to mongo
@@ -70,5 +72,4 @@ redisClient.on("connect", function(){
       console.log("Server is listening on port 8000...");
     });
   });
-
 });

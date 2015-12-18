@@ -1,12 +1,13 @@
 "use strict";
 import React, { Component } from "react";
-
+import { Router, Route, IndexRoute } from "react-router";
 import navConstants from "../constants/navConstants";
-import navStore from "../stores/navStore.jsx";
+import navStore from "../stores/navStore";
+import history from "../history/history";
 // import components
-import SideBar from "./SideBar.jsx";
-import HeaderBar from "./HeaderBar.jsx";
-
+import SideBar from "./SideBar";
+import HeaderBar from "./HeaderBar";
+import Dash from "./Dash"
 export default class App extends Component{
   constructor(props){
     super(props);
@@ -32,6 +33,13 @@ export default class App extends Component{
         <div id="content-wrapper">
           <div className="page-content">
             <HeaderBar/>
+            <Router history={history}>
+              <Route path="/">
+                <IndexRoute component={HeaderBar} />
+                <Route path="dash" component={Dash}/>
+                <Route path="tables" component={HeaderBar}/>
+              </Route>
+            </Router>
           </div>
         </div>
       </div>
