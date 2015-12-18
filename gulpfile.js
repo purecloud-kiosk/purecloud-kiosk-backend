@@ -7,7 +7,7 @@ var rename = require('gulp-rename');
 var browserify = require('browserify');
 var babelify = require('babelify');
 var source = require('vinyl-source-stream');
-
+var buffer = require('vinyl-buffer');
 
 var paths = {
     scripts: 'dashboard-src/js/**/*.*',
@@ -70,7 +70,9 @@ gulp.task('bundle', function(){
   })
   .transform(babelify , {presets : ['es2015', 'react']})
   .bundle()
-  .pipe(source('bundle.js'))
+  .pipe(source('bundle.min.js'))
+  .pipe(buffer())
+  .pipe(minifyJs())
   .pipe(gulp.dest('dist/js'));
 });
 

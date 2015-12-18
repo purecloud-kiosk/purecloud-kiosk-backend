@@ -7,7 +7,7 @@ import history from "../history/history";
 // import components
 import SideBar from "./SideBar";
 import HeaderBar from "./HeaderBar";
-import Dash from "./Dash"
+import DashView from "./DashView"
 export default class App extends Component{
   constructor(props){
     super(props);
@@ -23,7 +23,6 @@ export default class App extends Component{
     });
   }
   componentDidMount(){
-
     navStore.addListener(navConstants.SIDEBAR_TOGGLED, this.updateToggle.bind(this));
   }
   render(){
@@ -35,8 +34,8 @@ export default class App extends Component{
             <HeaderBar/>
             <Router history={history}>
               <Route path="/">
-                <IndexRoute component={HeaderBar} />
-                <Route path="dash" component={Dash}/>
+                <IndexRoute component={DashView} />
+                <Route path="dash" component={DashView}/>
                 <Route path="tables" component={HeaderBar}/>
               </Route>
             </Router>

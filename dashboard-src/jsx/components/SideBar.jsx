@@ -32,13 +32,13 @@ export default class SideBar extends Component{
             </a>
           </li>
         </ul>
-        <div class="sidebar-footer">
-          <div class="col-xs-6">
+        <div className="sidebar-footer">
+          <div className="col-xs-6">
             <a href="https://github.com/charlieduong94/purecloud-kiosk">
               Github
             </a>
           </div>
-          <div class="col-xs-6">
+          <div className="col-xs-6">
             <a href="http://www.inin.com/solutions/pages/cloud-contact-center-purecloud.aspx">
               Support
             </a>
