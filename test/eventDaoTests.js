@@ -84,8 +84,8 @@ describe("eventDao", function(){
       done();
     });
   });
-  it("#getAssociatedEvents can retrieve events not checked into from a database using an event manager's ID", function(done){
-    eventDao.getAssociatedEvents("llsijefleijefsseff43324", true, false, 25, 0, function(error, result){
+  it("#getAssociatedEvents can retrieve events that a manager is associated with in the database using an event manager's ID", function(done){
+    eventDao.getAssociatedEvents("llsijefleijefsseff43324", true, 25, 0, function(error, result){
       expect(error).to.be.null;
       expect(result).to.have.length.of.at.least(1);
       done();
@@ -108,6 +108,14 @@ describe("eventDao", function(){
   it("#removeEvent can remove an event by it's '_id'", function(done){
     eventDao.removeEvent(eventID, function(error){
       expect(error).to.be.null;
+      done();
+    });
+  });
+  it("#removeCheckIns can remove a single check-in by using an eventID and personID", function(done){
+    eventDao.removeCheckIn("llsijefleij23489343324", eventID, function(error, result){
+      expect(error).to.be.null;
+      expect(result.result.ok).to.equal(1);
+      expect(result.result.n).to.be.above(0);
       done();
     });
   });
