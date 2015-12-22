@@ -54,7 +54,7 @@ gulp.task('lib-js', function(){
   var files = [
     'dashboard-src/cleanUrl.js',
     'dashboard-src/bower_components/jquery/dist/jquery.min.js',
-    'dashboard-src/bower_components/bootstrap/dist/bootstrap.min.js'
+    'dashboard-src/bower_components/bootstrap/dist/js/bootstrap.min.js'
   ];
   return gulp.src(files)
     .pipe(minifyJs())

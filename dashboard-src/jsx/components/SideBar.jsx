@@ -16,7 +16,7 @@ export default class SideBar extends Component{
         <ul className="sidebar">
           <li className="sidebar-main">
             <a onClick={this.handleToggleBarClick}>
-              Dashboard
+              PureCloud Kiosk
               <span className="menu-icon glyphicon glyphicon-transfer"></span>
             </a>
           </li>

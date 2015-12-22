@@ -24,6 +24,7 @@ export default class App extends Component{
   }
   componentDidMount(){
     navStore.addListener(navConstants.SIDEBAR_TOGGLED, this.updateToggle.bind(this));
+    $(".dropdown-toggle").dropdown();
   }
   render(){
     return (
