@@ -1,21 +1,26 @@
+"use strict";
 // lib imports
 var express = require("express");
 var bodyParser = require("body-parser");
 var request = require("request");
-var app = express();
 var marko = require("marko");
 var mongoose = require("mongoose");
-
-var PureCloudAPIService = require('./lib/services/PureCloudAPIService');
-var SessionStoreService = require('./lib/services/SessionStoreService');
-var pureCloudService = new PureCloudAPIService();
-var sessionStoreService = new SessionStoreService();
-// load config file
-var config = require("./config.json");
-
+var React = require("react");
 
 // retrieve redisClient
 var redisClient = require("./lib/models/dao/redisClient.js");
+// load config file
+var config = require("./config.json");
+
+// import and instantiate services
+var PureCloudAPIService = require('./lib/services/PureCloudAPIService');
+var SessionStoreService = require('./lib/services/SessionStoreService');
+
+var app = express();
+var pureCloudService = new PureCloudAPIService();
+var sessionStoreService = new SessionStoreService();
+
+
 
 redisClient.on("connect", function(){
   // once connection to redis is successful, connect to mongo
@@ -23,28 +28,27 @@ redisClient.on("connect", function(){
   var db = mongoose.connection;
   db.on("error", console.error.bind(console, "connection error:"));
   db.once("open", function(){
-    // Add necessary middleware
+    // upon open, add necessary middleware
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended : true}));
     // host static files
     app.use("/dist", express.static(__dirname + "/dist"));
-
     // templates
-    var indexTemplate = marko.load("./index.marko", {writeToDisk : false});
+    // var indexTemplate = marko.load("./index.marko", {writeToDisk : false});
 
     //append routes
     app.use("/purecloud", require("./lib/controllers/routes/pureCloud"));
     app.use("/events", require("./lib/controllers/routes/events"));
     /**
      * This is the entry point for the web application.
-     * redirect to the Purecloud Login page if a client access_token is invalid
+     * redirect to the Purecloud Login page if a client access_token is invalid or does not exist
      **/
     app.get("/", function(req, res){
       var token = req.query.client_token;
       if(token !== undefined){
         pureCloudService.getSession(token, function(error, response, body){
           if(response.statusCode != 200){
-            res.sendFile(__dirname + "/login.html");
+            res.sendFile(__dirname + "/dashboard-src/views/login.html");
           }
           else{
             var data = JSON.parse(body);
@@ -55,21 +59,17 @@ redisClient.on("connect", function(){
               "name" : data.res.person.general.name[0].value,
               "orgName" : data.res.org.general.name[0].value,
             }, req.query.expires_in, function(redisError, redisResponse){
-              console.log(req.query.expires_in);
-              indexTemplate.render({session : data}, function(err, output){
-                res.send(output);
-              });
+              res.sendFile(__dirname + "/dashboard-src/views/index.html");
             });
           }
         });
       }
       else{
-        res.sendFile(__dirname + "/login.html");
+        res.sendFile(__dirname + "/dashboard-src/views/login.html");
       }
     });
     app.listen(8000, function(){
       console.log("Server is listening on port 8000...");
     });
   });
-
 });
