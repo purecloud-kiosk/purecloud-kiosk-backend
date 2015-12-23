@@ -30,4 +30,4 @@ Just install using the '--save' argument when installing. Ex. `npm install --sav
 Tests are written using [Mocha](http://mochajs.org). As development progresses, add tests to the `test` directory. To execute all of the tests, run `npm test`. Be sure to modify the `test_mongo_uri` (if needed) before testing.
 
 ## Credits
-* [RDash Angular](https://github.com/rdash/rdash-angular)
+* [RDash](https://github.com/rdash/rdash-ui)
