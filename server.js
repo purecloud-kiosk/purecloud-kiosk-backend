@@ -68,6 +68,11 @@ redisClient.on("connect", function(){
         res.sendFile(__dirname + "/dashboard-src/views/login.html");
       }
     });
+    app.get("/swagger-api-docs", function(req, res){
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      res.sendFile(__dirname + "/swagger.yaml");
+    });
     app.listen(8000, function(){
       console.log("Server is listening on port 8000...");
     });
