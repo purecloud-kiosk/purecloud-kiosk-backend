@@ -58,7 +58,8 @@ redisClient.on("connect", function(){
               "personID" : data.res.user.personId,
               "email" : data.res.user.email,
               "name" : data.res.person.general.name[0].value,
-              "orgName" : data.res.org.general.name[0].value,
+              "organization" : data.res.org.general.name[0].value,
+              "eventsManaging" : ["test"]
             }, req.query.expires_in, function(redisError, redisResponse){
               res.sendFile(__dirname + "/dashboard-src/views/index.html");
             });

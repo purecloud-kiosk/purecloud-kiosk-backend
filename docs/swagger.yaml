@@ -4,6 +4,55 @@
     title: "PureCloud Kiosk API"
     description : "API Documentation for the PureCloud Kiosk Service."
   paths:
+    /purecloud/login:
+      post:
+        description: "Route used for logging into the PureCloud Kiosk System."
+        parameters:
+          -
+            name: "Login Credentials"
+            in: "body"
+            description: "Login Credentials"
+            required: true
+            schema:
+              $ref : "#/definitions/LoginBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/LoginResult"
+    /purecloud/search:
+      get:
+        description: "Route used for searching the PureCloud People Directory."
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "q"
+            in: "query"
+            description: "Query"
+            required: false
+            type: "string"
+          -
+            name: "limit"
+            in: "query"
+            description: "Number of results to limit to"
+            required: false
+            type: "string"
+          -
+            name: "offset"
+            in: "query"
+            description: "Number of results to offset by"
+            required: false
+            type: "string"
+        responses:
+          200:
+            description : "Successful Response"
+            schema :
+              $ref : "#/definitions/CheckIn"
     /events/create:
       post:
         description: "Creates an event. \n"
@@ -71,13 +120,25 @@
               $ref : "#/definitions/EventRemovedResponse"
     /events/managing:
       get:
-        description: "Retrieves all events that the user is managing.\n"
+        description: "Retrieves all events that the user is managing. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
         parameters:
           -
             name: "Authorization"
             in: "header"
             description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
             required: true
+            type: "string"
+          -
+            name: "limit"
+            in: "query"
+            description: "Number of results to limit. Defaults to 25."
+            required: false
+            type: "number"
+          -
+            name: "page"
+            in: "query"
+            description: "'Page' to grab, defaults to `0`"
+            required: false
             type: "string"
         responses:
           200:
@@ -88,13 +149,25 @@
                 $ref : "#/definitions/EventsManagingResponse"
     /events/public:
       get:
-        description: "Retrieves all public events within the user's organization.\n"
+        description: "Retrieves all public events within the user's organization. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
         parameters:
           -
             name: "Authorization"
             in: "header"
             description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
             required: true
+            type: "string"
+          -
+            name: "limit"
+            in: "query"
+            description: "Number of results to limit. Defaults to 25."
+            required: false
+            type: "number"
+          -
+            name: "page"
+            in: "query"
+            description: "'Page' to grab, defaults to `0`"
+            required: false
             type: "string"
         responses:
           "200":
@@ -105,7 +178,7 @@
                 $ref : "#/definitions/Event"
     /events/getAttendees:
       get:
-        description: "Retrieves all attendees associated with an event. Use the limit and page fields for pagination if needed. `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
+        description: "Retrieves all attendees associated with an event. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
         parameters:
           -
             name: "Authorization"
@@ -138,57 +211,7 @@
               type : "array"
               items:
                 $ref : "#/definitions/CheckIn"
-    /purecloud/login:
-      post:
-        description: "Route used for logging into the PureCloud Kiosk System."
-        parameters:
-          -
-            name: ""
-            in: "body"
-            description: "Login Credentials"
-            required: true
-            schema:
-              $ref : "#/definitions/LoginBody"
-        responses:
-          200:
-            description: "Successful response"
-            schema:
-              $ref : "#/definitions/LoginResult"
-    /purecloud/search:
-      get:
-        description: "Route used for searching the PureCloud People Directory."
-        parameters:
-          -
-            name: "Authorization"
-            in: "header"
-            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
-            required: true
-            type: "string"
-          -
-            name: "q"
-            in: "query"
-            description: "Query"
-            required: false
-            type: "string"
-          -
-            name: "limit"
-            in: "query"
-            description: "Number of results to limit to"
-            required: false
-            type: "string"
-          -
-            name: "offset"
-            in: "query"
-            description: "Number of results to offset by"
-            required: false
-            type: "string"
-        responses:
-          200:
-            description : "Successful Response"
-            schema :
-              $ref : "#/definitions/CheckIn"
   definitions:
-
     LoginBody :
       required:
         - email
