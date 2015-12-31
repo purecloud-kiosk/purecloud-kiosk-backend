@@ -33,6 +33,7 @@ redisClient.on("connect", function(){
     app.use(bodyParser.urlencoded({extended : true}));
     // host static files
     app.use("/dist", express.static(__dirname + "/dist"));
+    app.use("/docs", express.static(__dirname + "/docs"));
     // templates
     // var indexTemplate = marko.load("./index.marko", {writeToDisk : false});
 
@@ -68,10 +69,8 @@ redisClient.on("connect", function(){
         res.sendFile(__dirname + "/dashboard-src/views/login.html");
       }
     });
-    app.get("/swagger-api-docs", function(req, res){
-      res.header("Access-Control-Allow-Origin", "*");
-      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-      res.sendFile(__dirname + "/swagger.yaml");
+    app.get("/api-docs", function(req, res){
+      res.sendFile(__dirname + "/docs/index.html");
     });
     app.listen(8000, function(){
       console.log("Server is listening on port 8000...");

@@ -2,7 +2,7 @@
   info:
     version: "0.0.0"
     title: "PureCloud Kiosk API"
-    description : "API Documentation for the PureCloud Kiosk Service. Note: As of rignt now, you cannot test out the API using the 'Try it Out!' button."
+    description : "API Documentation for the PureCloud Kiosk Service."
   paths:
     /events/create:
       post:
