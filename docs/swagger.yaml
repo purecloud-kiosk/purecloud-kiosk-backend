@@ -118,6 +118,27 @@
             description: "Successful response"
             schema:
               $ref : "#/definitions/EventRemovedResponse"
+    /events/checkIn:
+      post:
+        description: "This route will check a user into an event. If the event is private and the user is not listed as an attendee of the event, the check-in will fail. If the event is public, the check-in will pass as long as the user is part of the organization.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed to authenticate with. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name : "body"
+            in : "body"
+            description : "Data needed to check a user into an event. The checkIn's timestamp should be the currentTime in milliseconds."
+            schema :
+              $ref : "#/definitions/CheckInBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventRemovedResponse"
     /events/managing:
       get:
         description: "Retrieves all events that the user is managing. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
@@ -290,6 +311,23 @@
           type : "boolean"
         description:
           type : "string"
+    CheckInBody:
+      required:
+        - eventID
+        - checkIn
+      properties:
+        eventID:
+          type : "string"
+        checkIn:
+          properties:
+            personID:
+              type : "string"
+            name:
+              type : "string"
+            organization :
+              type : "string"
+            timestamp :
+              type : "number"
     CheckIn:
       properties:
         person_id:
