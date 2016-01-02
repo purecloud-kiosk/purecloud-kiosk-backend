@@ -118,6 +118,48 @@
             description: "Successful response"
             schema:
               $ref : "#/definitions/EventRemovedResponse"
+    /events/addPrivateAttendee:
+      post:
+        description: "This route will add an attendee to a private event. If the event is not private, the request will fail.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed to authenticate with. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name : "body"
+            in : "body"
+            description : "Data needed to add a user to a private event."
+            schema :
+              $ref : "#/definitions/PrivateAttendeeBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventRemovedResponse"
+    /events/removeCheckIn:
+      post:
+        description: "This route will remove an check-in from an event. Note: This will works on users in any event, regardless of their check-in status. So this route can be used for removing private attendees.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed to authenticate with. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name : "body"
+            in : "body"
+            description : "Data needed to remove a user from an event."
+            schema :
+              $ref : "#/definitions/RemoveCheckInBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventRemovedResponse"
     /events/checkIn:
       post:
         description: "This route will check a user into an event. If the event is private and the user is not listed as an attendee of the event, the check-in will fail. If the event is public, the check-in will pass as long as the user is part of the organization.\n"
@@ -197,9 +239,9 @@
               type : "array"
               items:
                 $ref : "#/definitions/Event"
-    /events/getAttendees:
+    /events/getEventCheckIns:
       get:
-        description: "Retrieves all attendees associated with an event. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
+        description: "Retrieves all checked-in users of an event. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
         parameters:
           -
             name: "Authorization"
@@ -328,6 +370,30 @@
               type : "string"
             timestamp :
               type : "number"
+    PrivateAttendeeBody:
+      required:
+        - eventID
+        - checkIn
+      properties:
+        eventID:
+          type : "string"
+        checkIn:
+          properties:
+            personID:
+              type : "string"
+            name:
+              type : "string"
+            organization :
+              type : "string"
+    RemoveCheckInBody:
+      required:
+        - eventID
+        - personID
+      properties:
+        eventID:
+          type : "string"
+        personID :
+          type : "string"
     CheckIn:
       properties:
         person_id:
