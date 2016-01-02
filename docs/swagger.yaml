@@ -3,9 +3,18 @@
     version: "0.0.0"
     title: "PureCloud Kiosk API"
     description : "API Documentation for the PureCloud Kiosk Service."
+  tags:
+    -
+      name : "purecloud"
+      description : "Routes for working with the PureCloud API."
+    -
+      name : "events"
+      description : "Routes for managing events."
   paths:
     /purecloud/login:
       post:
+        tags :
+          - "purecloud"
         description: "Route used for logging into the PureCloud Kiosk System."
         parameters:
           -
@@ -22,6 +31,8 @@
               $ref : "#/definitions/LoginResult"
     /purecloud/search:
       get:
+        tags :
+          - "purecloud"
         description: "Route used for searching the PureCloud People Directory."
         parameters:
           -
@@ -53,8 +64,22 @@
             description : "Successful Response"
             schema :
               $ref : "#/definitions/CheckIn"
+    /purecloud/myQrCode:
+      get:
+        tags :
+          - "purecloud"
+        description: "Route used for retrieving a QRCode for a user. Access token is passed through the query params instead of the Authorization header because it easier to retrieve images. The url can just be placed in an `<img>` tag."
+        parameters:
+          -
+            name: "access_token"
+            in: "query"
+            description: "Access Token needed for authentication. If the user is not authenticated, this request will fail."
+            required: true
+            type: "string"
     /events/create:
       post:
+        tags :
+          - "events"
         description: "Creates an event. \n"
         parameters:
           -
@@ -78,6 +103,8 @@
 
     /events/update:
       post:
+        tags :
+          - "events"
         description: "Updates an event. All parameters must be specified to successfully update an event.\n"
         parameters:
           -
@@ -99,6 +126,8 @@
               $ref : "#/definitions/EventUpdatedResponse"
     /events/remove:
       post:
+        tags :
+          - "events"
         description: "Updates an event. All parameters must be specified to successfully update an event.\n"
         parameters:
           -
@@ -120,6 +149,8 @@
               $ref : "#/definitions/EventRemovedResponse"
     /events/addPrivateAttendee:
       post:
+        tags :
+          - "events"
         description: "This route will add an attendee to a private event. If the event is not private, the request will fail.\n"
         parameters:
           -
@@ -141,6 +172,8 @@
               $ref : "#/definitions/EventRemovedResponse"
     /events/removeCheckIn:
       post:
+        tags :
+          - "events"
         description: "This route will remove an check-in from an event. Note: This will works on users in any event, regardless of their check-in status. So this route can be used for removing private attendees.\n"
         parameters:
           -
@@ -162,6 +195,8 @@
               $ref : "#/definitions/EventRemovedResponse"
     /events/checkIn:
       post:
+        tags :
+          - "events"
         description: "This route will check a user into an event. If the event is private and the user is not listed as an attendee of the event, the check-in will fail. If the event is public, the check-in will pass as long as the user is part of the organization.\n"
         parameters:
           -
@@ -183,6 +218,8 @@
               $ref : "#/definitions/EventRemovedResponse"
     /events/managing:
       get:
+        tags :
+          - "events"
         description: "Retrieves all events that the user is managing. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
         parameters:
           -
@@ -212,6 +249,8 @@
                 $ref : "#/definitions/EventsManagingResponse"
     /events/public:
       get:
+        tags :
+          - "events"
         description: "Retrieves all public events within the user's organization. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
         parameters:
           -
@@ -241,6 +280,8 @@
                 $ref : "#/definitions/Event"
     /events/getEventCheckIns:
       get:
+        tags :
+          - "events"
         description: "Retrieves all checked-in users of an event. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
         parameters:
           -

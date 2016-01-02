@@ -62,7 +62,7 @@ describe("eventDao", function(){
       done();
     });
   });
-  it("#insertCheckIn cannot the same check-in into the database", function(done){
+  it("#insertCheckIn cannot insert the same check-in into the database", function(done){
     eventDao.insertCheckIn(testManagerCheckIn, function(error, result){
       expect(error).to.be.not.null;
       done();
