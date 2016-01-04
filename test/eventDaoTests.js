@@ -45,7 +45,6 @@ describe("eventDao", function(){
   it("#updateEvent can update an existing event in the database", function(done){
     testEvent.title = "testTitle2";
     eventDao.updateEvent(eventID, testEvent, function(error, result){
-      console.log(result);
       expect(error).to.be.null;
       expect(result.n).to.equal(1);
       done();
@@ -63,13 +62,14 @@ describe("eventDao", function(){
   it("#insertCheckIn cannot insert the same check-in into the database", function(done){
     eventDao.insertCheckIn(testManagerCheckIn, function(error, result){
       expect(error).to.be.not.null;
+      console.log(error);
+      console.log(result);
       done();
     });
   });
   it("#insertCheckIn can insert a different check-in into the database", function(done){
     testAttendeeCheckIn.event = eventID;
     eventDao.insertCheckIn(testAttendeeCheckIn, function(error){
-      console.log(error);
       expect(error).to.be.null;
       done();
     });
