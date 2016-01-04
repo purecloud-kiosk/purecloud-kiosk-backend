@@ -43,13 +43,11 @@ describe("eventDao", function(){
     });
   });
   it("#updateEvent can update an existing event in the database", function(done){
-    var newEventTitle = "testTitle2";
-    var newOrgName = "orgName";
-    testEvent.title = newEventTitle;
-    testEvent.organization = newOrgName;
+    testEvent.title = "testTitle2";
     eventDao.updateEvent(eventID, testEvent, function(error, result){
+      console.log(result);
       expect(error).to.be.null;
-      expect(result.nModified).to.equal(1);
+      expect(result.n).to.equal(1);
       done();
     });
   });
