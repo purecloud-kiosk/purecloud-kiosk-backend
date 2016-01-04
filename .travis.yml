@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - "5.0"
+services:
+  - mongodb
+  - redis-server
+before_script:
+  - npm install -g gulp bower
+script:
+  - cd dashboard-src
+  - bower install
+  - cd ..
+  - gulp
