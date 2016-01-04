@@ -62,8 +62,6 @@ describe("eventDao", function(){
   it("#insertCheckIn cannot insert the same check-in into the database", function(done){
     eventDao.insertCheckIn(testManagerCheckIn, function(error, result){
       expect(error).to.be.not.null;
-      console.log(error);
-      console.log(result);
       done();
     });
   });
