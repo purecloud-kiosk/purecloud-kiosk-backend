@@ -1,6 +1,4 @@
-# PureCloud Kiosk
-
-[![Build Status](https://travis-ci.org/charlieduong94/PureCloud-Kiosk.svg)](https://travis-ci.org/charlieduong94/PureCloud-Kiosk)
+# PureCloud Kiosk [![Build Status](https://travis-ci.org/charlieduong94/PureCloud-Kiosk.svg)](https://travis-ci.org/charlieduong94/PureCloud-Kiosk)
 
 PureCloud Kiosk is a service that allows PureCloud users to create and manage check-in events.
 
