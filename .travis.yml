@@ -12,3 +12,6 @@ script:
   - cd ..
   - gulp
   - npm test
+cache:
+  directories:
+    - node_modules
