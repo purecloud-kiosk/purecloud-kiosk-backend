@@ -6,12 +6,14 @@ var pureCloudService = new PureCloudAPIService();
 var authKey;
 
 describe("PureCloudAPIService", function(){
+  // should probably use a test account for this...
+  /**
   describe("#login", function(){
     it("should be able to log in a user of the PureCloud system and return an auth token.", function(done){
       this.timeout(10000);
       var testLogin = {
         "email" : "charlieduong94@gmail.com",
-        "password" : "ronaldinho10"
+        "password" : "*******"
       };
       pureCloudService.login(testLogin, function(error, response, result){
         expect(error).to.be.null;
@@ -56,4 +58,5 @@ describe("PureCloudAPIService", function(){
       });
     });
   });
-})
+  **/
+});
