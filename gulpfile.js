@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var minifyCss = require('gulp-cssnano');
+var cssnano = require('gulp-cssnano');
 var minifyJs = require('gulp-uglify');
 var less = require('gulp-less');
 var concat = require('gulp-concat');
@@ -33,7 +33,7 @@ gulp.task('custom-images', function() {
 gulp.task('custom-less', function() {
     return gulp.src(paths.styles)
         .pipe(less())
-        .pipe(minifyCss())
+        .pipe(cssnano())
         .pipe(concat('dashboard.min.css'))
         .pipe(gulp.dest('dist/css'));
 });
@@ -45,7 +45,7 @@ gulp.task('lib-css', function(){
     'dashboard-src/bower_components/rdash-ui/dist/css/rdash.min.css',
   ];
   return gulp.src(files)
-    .pipe(minifyCss())
+    .pipe(cssnano())
     .pipe(concat("lib.min.css"))
     .pipe(gulp.dest('dist/css'));
 });

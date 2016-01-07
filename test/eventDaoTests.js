@@ -2,13 +2,12 @@ var config = require('../config.json');
 var EventDao = require('../lib/models/dao/EventDao');
 var eventDao = new EventDao();
 var mongoose = require("mongoose");
-mongoose.connect(config.test_mongo_uri);
 
 var expect = require('chai').expect;
 
 var testEvent = { // event to test with
   "title" : "Some Event Title Here",
-  "descripton" : "Some description",
+  "description" : "Some description",
   "date" : Date.now(),
   "location" : "Someplace Erie, PA",
   "organization" : "PureCloud Kiosk",
@@ -35,7 +34,16 @@ var testManagerCheckIn = {
 var eventID; // id to remove (the above event's id)
 
 describe("eventDao", function(){
-
+  before(function(done){
+    mongoose.connect(config.test_mongo_uri, function(){
+      done();
+    });
+  });
+  after(function(done){
+    mongoose.disconnect(function(){
+      done();
+    });
+  });
   describe("#insertEvent", function(){
     it("can insert an event into the database", function(done){
       eventDao.insertEvent(testEvent, function(error, result){
@@ -183,4 +191,5 @@ describe("eventDao", function(){
       });
     });
   });
+
 });
