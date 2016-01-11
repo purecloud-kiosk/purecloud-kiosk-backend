@@ -170,6 +170,15 @@ describe("eventDao", function(){
       });
     });
   });
+  describe("#searchManagedEvents", function(){
+    it("can search for events matching the query supplied using Regex", function(done){
+      eventDao.searchManagedEvents("test", testManagerCheckIn.person_id,
+        testManagerCheckIn.organization, function(error, result){
+          expect(result.length).to.equal(1);
+          done();
+        });
+    });
+  });
 
   describe("#removeEvent", function(){
     it("can remove an event by it's '_id'", function(done){
@@ -192,7 +201,7 @@ describe("eventDao", function(){
   });
 
   describe("#removeCheckInsByEvent", function(){
-    it("#removeCheckInsByEvent can remove all check-ins by an eventID", function(done){
+    it("can remove all check-ins by an eventID", function(done){
       eventDao.removeCheckInsByEvent(eventID, function(error, result){
         expect(error).to.be.null;
         expect(result.result.ok).to.equal(1);
@@ -201,5 +210,7 @@ describe("eventDao", function(){
       });
     });
   });
+
+
 
 });

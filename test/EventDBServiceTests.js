@@ -235,6 +235,33 @@ describe("EventDBService", function(){
     });
   });
 
+  describe("#searchManagedEvents", function(){
+    it("can search for events matching the query supplied using Regex", function(done){
+      eventService.searchManagedEvents("Public", testManager, 25, 0, function(error, result){
+          console.log(error);
+          console.log(result);
+          expect(result.length).to.equal(1);
+          done();
+        });
+    });
+    it("can search for events matching the query supplied using Regex", function(done){
+      eventService.searchManagedEvents("private", testManager, 25, 0, function(error, result){
+          console.log(error);
+          console.log(result);
+          expect(result.length).to.equal(1);
+          done();
+        });
+    });
+    it("will return nothing if the query is not matched", function(done){
+      eventService.searchManagedEvents("not a title", testManager, 25, 0, function(error, result){
+          console.log(error);
+          console.log(result);
+          expect(result.length).to.equal(0);
+          done();
+        });
+    });
+  });
+
   describe("#removeEvent", function(){
     it("can remove a public event from the database", function(done){
       eventService.removeEvent(testPublicEventID, testManager, function(error, result){
