@@ -10,6 +10,9 @@
     -
       name : "events"
       description : "Routes for managing events."
+    -
+      name : "stats"
+      description : "Routes for retrieving statistics."
   paths:
     /purecloud/login:
       post:
@@ -307,6 +310,25 @@
             in: "query"
             description: "'Page' to grab, defaults to `0`"
             required: false
+            type: "string"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/CheckIn"
+    /stats/me:
+      get:
+        tags :
+          - "stats"
+        description: "Retrieves statistics and basic information on user making the request.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
             type: "string"
         responses:
           200:

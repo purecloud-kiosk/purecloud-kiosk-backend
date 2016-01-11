@@ -141,6 +141,16 @@ describe("eventDao", function(){
     });
   });
 
+  describe("#getPublicEventsCount", function(){
+    it("can retrieve a count of all public events belonging to an organization", function(done){
+      eventDao.getPublicEventsCount("PureCloud Kiosk", function(error, result){
+        expect(error).to.be.null;
+        expect(result).to.equal(1);
+        done();
+      });
+    });
+  });
+
   describe("#getEventCheckIns", function(){
     it("can retrieve check-ins of an event", function(done){
       eventDao.getEventCheckIns(eventID, 25, 0, function(error, result){

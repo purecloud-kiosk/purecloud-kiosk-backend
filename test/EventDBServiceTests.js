@@ -1,6 +1,5 @@
 var config = require('../config.json');
 var mongoose = require("mongoose");
-mongoose.connect(config.test_mongo_uri);
 var redisClient = require("../lib/models/dao/redisClient");
 
 var EventDao = require("../lib/models/dao/EventDao");
@@ -40,8 +39,10 @@ var testManagerSessionKey = "testManagerKey";
 describe("EventDBService", function(){
   // simulate a login
   before(function(done){
-    redisClient.hmset(testManagerSessionKey, testManager, function(hmSetError, hmSetResponse){
-      done();
+    mongoose.connect(config.test_mongo_uri, function(){
+      redisClient.hmset(testManagerSessionKey, testManager, function(hmSetError, hmSetResponse){
+        done();
+      });
     });
   });
 
