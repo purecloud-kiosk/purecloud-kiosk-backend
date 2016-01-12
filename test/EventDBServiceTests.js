@@ -25,23 +25,27 @@ var testPrivateEvent = { // event to test with
   "location" : "Someplace Erie, PA",
   "private" : true
 };
+
+var testManagerSessionKey = "testManagerKey";
 var testManager = {
   "personID" : "Test Manager",
   "email" : "test.manager@email.com",
   "name" : "Mr. Test Manager",
   "organization" : "Some Organization",
-  "eventsManaging" : []
+  "eventsManaging" : [],
+  "access_token" : testManagerSessionKey
 };
 var testPublicEventID;
 var testPrivateEventID;
-var testManagerSessionKey = "testManagerKey";
 
 describe("EventDBService", function(){
   // simulate a login
   before(function(done){
     mongoose.connect(config.test_mongo_uri, function(){
       redisClient.hmset(testManagerSessionKey, testManager, function(hmSetError, hmSetResponse){
-        done();
+        redisClient.expire(testManagerSessionKey, 1000, function(expireError, expireResponse){
+          done();
+        });
       });
     });
   });
