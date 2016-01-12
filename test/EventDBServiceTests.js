@@ -1,6 +1,5 @@
 var config = require('../config.json');
 var mongoose = require("mongoose");
-mongoose.connect(config.test_mongo_uri);
 var redisClient = require("../lib/models/dao/redisClient");
 
 var EventDao = require("../lib/models/dao/EventDao");
@@ -26,22 +25,28 @@ var testPrivateEvent = { // event to test with
   "location" : "Someplace Erie, PA",
   "private" : true
 };
+
+var testManagerSessionKey = "testManagerKey";
 var testManager = {
   "personID" : "Test Manager",
   "email" : "test.manager@email.com",
   "name" : "Mr. Test Manager",
   "organization" : "Some Organization",
-  "eventsManaging" : []
+  "eventsManaging" : [],
+  "access_token" : testManagerSessionKey
 };
 var testPublicEventID;
 var testPrivateEventID;
-var testManagerSessionKey = "testManagerKey";
 
 describe("EventDBService", function(){
   // simulate a login
   before(function(done){
-    redisClient.hmset(testManagerSessionKey, testManager, function(hmSetError, hmSetResponse){
-      done();
+    mongoose.connect(config.test_mongo_uri, function(){
+      redisClient.hmset(testManagerSessionKey, testManager, function(hmSetError, hmSetResponse){
+        redisClient.expire(testManagerSessionKey, 1000, function(expireError, expireResponse){
+          done();
+        });
+      });
     });
   });
 
@@ -231,6 +236,33 @@ describe("EventDBService", function(){
         expect(result).to.equal(undefined); // event is either removed or does not exist
         done();
       });
+    });
+  });
+
+  describe("#searchManagedEvents", function(){
+    it("can search for events matching the query supplied using Regex", function(done){
+      eventService.searchManagedEvents("Public", testManager, 25, 0, function(error, result){
+          console.log(error);
+          console.log(result);
+          expect(result.length).to.equal(1);
+          done();
+        });
+    });
+    it("can search for events matching the query supplied using Regex", function(done){
+      eventService.searchManagedEvents("private", testManager, 25, 0, function(error, result){
+          console.log(error);
+          console.log(result);
+          expect(result.length).to.equal(1);
+          done();
+        });
+    });
+    it("will return nothing if the query is not matched", function(done){
+      eventService.searchManagedEvents("not a title", testManager, 25, 0, function(error, result){
+          console.log(error);
+          console.log(result);
+          expect(result.length).to.equal(0);
+          done();
+        });
     });
   });
 

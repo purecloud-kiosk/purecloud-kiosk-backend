@@ -141,6 +141,16 @@ describe("eventDao", function(){
     });
   });
 
+  describe("#getPublicEventsCount", function(){
+    it("can retrieve a count of all public events belonging to an organization", function(done){
+      eventDao.getPublicEventsCount("PureCloud Kiosk", function(error, result){
+        expect(error).to.be.null;
+        expect(result).to.equal(1);
+        done();
+      });
+    });
+  });
+
   describe("#getEventCheckIns", function(){
     it("can retrieve check-ins of an event", function(done){
       eventDao.getEventCheckIns(eventID, 25, 0, function(error, result){
@@ -158,6 +168,15 @@ describe("eventDao", function(){
         expect(result).to.have.length.of.at.least(1);
         done();
       });
+    });
+  });
+  describe("#searchManagedEvents", function(){
+    it("can search for events matching the query supplied using Regex", function(done){
+      eventDao.searchManagedEvents("test", testManagerCheckIn.person_id,
+        testManagerCheckIn.organization, function(error, result){
+          expect(result.length).to.equal(1);
+          done();
+        });
     });
   });
 
@@ -182,7 +201,7 @@ describe("eventDao", function(){
   });
 
   describe("#removeCheckInsByEvent", function(){
-    it("#removeCheckInsByEvent can remove all check-ins by an eventID", function(done){
+    it("can remove all check-ins by an eventID", function(done){
       eventDao.removeCheckInsByEvent(eventID, function(error, result){
         expect(error).to.be.null;
         expect(result.result.ok).to.equal(1);
@@ -191,5 +210,7 @@ describe("eventDao", function(){
       });
     });
   });
+
+
 
 });
