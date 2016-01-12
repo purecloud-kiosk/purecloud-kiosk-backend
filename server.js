@@ -20,7 +20,7 @@ var app = express();
 var pureCloudService = new PureCloudAPIService();
 var sessionStoreService = new SessionStoreService();
 
-
+var loggerMiddleware = require("./lib/controllers/middleware/logger");
 
 redisClient.on("connect", function(){
   // once connection to redis is successful, connect to mongo
@@ -28,17 +28,24 @@ redisClient.on("connect", function(){
   var db = mongoose.connection;
   db.on("error", console.error.bind(console, "connection error:"));
   db.once("open", function(){
+
     // upon open, add necessary middleware
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended : true}));
+
+    // logger for seeing requests
+    app.use(loggerMiddleware);
+
     // host static files
     app.use("/dist", express.static(__dirname + "/dist"));
+    app.use("/docs", express.static(__dirname + "/docs"));
     // templates
     // var indexTemplate = marko.load("./index.marko", {writeToDisk : false});
 
     //append routes
     app.use("/purecloud", require("./lib/controllers/routes/pureCloud"));
     app.use("/events", require("./lib/controllers/routes/events"));
+    
     /**
      * This is the entry point for the web application.
      * redirect to the Purecloud Login page if a client access_token is invalid or does not exist
@@ -57,7 +64,8 @@ redisClient.on("connect", function(){
               "personID" : data.res.user.personId,
               "email" : data.res.user.email,
               "name" : data.res.person.general.name[0].value,
-              "orgName" : data.res.org.general.name[0].value,
+              "organization" : data.res.org.general.name[0].value,
+              "eventsManaging" : ["test"]
             }, req.query.expires_in, function(redisError, redisResponse){
               res.sendFile(__dirname + "/dashboard-src/views/index.html");
             });
@@ -67,6 +75,9 @@ redisClient.on("connect", function(){
       else{
         res.sendFile(__dirname + "/dashboard-src/views/login.html");
       }
+    });
+    app.get("/api-docs", function(req, res){
+      res.sendFile(__dirname + "/docs/index.html");
     });
     app.listen(8000, function(){
       console.log("Server is listening on port 8000...");

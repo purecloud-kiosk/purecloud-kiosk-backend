@@ -1,0 +1,520 @@
+  swagger: "2.0"
+  info:
+    version: "0.0.0"
+    title: "PureCloud Kiosk API"
+    description : "API Documentation for the PureCloud Kiosk Service."
+  tags:
+    -
+      name : "purecloud"
+      description : "Routes for working with the PureCloud API."
+    -
+      name : "events"
+      description : "Routes for managing events."
+  paths:
+    /purecloud/login:
+      post:
+        tags :
+          - "purecloud"
+        description: "Route used for logging into the PureCloud Kiosk System."
+        parameters:
+          -
+            name: "Login Credentials"
+            in: "body"
+            description: "Login Credentials"
+            required: true
+            schema:
+              $ref : "#/definitions/LoginBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/LoginResult"
+    /purecloud/search:
+      get:
+        tags :
+          - "purecloud"
+        description: "Route used for searching the PureCloud People Directory."
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "q"
+            in: "query"
+            description: "Query"
+            required: false
+            type: "string"
+          -
+            name: "limit"
+            in: "query"
+            description: "Number of results to limit to"
+            required: false
+            type: "string"
+          -
+            name: "offset"
+            in: "query"
+            description: "Number of results to offset by"
+            required: false
+            type: "string"
+        responses:
+          200:
+            description : "Successful Response"
+            schema :
+              $ref : "#/definitions/CheckIn"
+    /purecloud/myQrCode:
+      get:
+        tags :
+          - "purecloud"
+        description: "Route used for retrieving a QRCode for a user. Access token is passed through the query params instead of the Authorization header because it easier to retrieve images. The url can just be placed in an `<img>` tag."
+        parameters:
+          -
+            name: "access_token"
+            in: "query"
+            description: "Access Token needed for authentication. If the user is not authenticated, this request will fail."
+            required: true
+            type: "string"
+    /events/create:
+      post:
+        tags :
+          - "events"
+        description: "Creates an event. \n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name : "event"
+            in : "body"
+            description : "Event Data"
+            required : true
+            schema :
+              $ref : "#/definitions/CreateEventBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventCreatedResponse"
+
+    /events/update:
+      post:
+        tags :
+          - "events"
+        description: "Updates an event. All parameters must be specified to successfully update an event.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed to authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          - name : "updated event"
+            in : "body"
+            description : "Updated Event Information and EventID"
+            required : true
+            schema :
+              $ref : "#/definitions/UpdateEventBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventUpdatedResponse"
+    /events/remove:
+      post:
+        tags :
+          - "events"
+        description: "Updates an event. All parameters must be specified to successfully update an event.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed to authenticate with. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name : "eventID"
+            in : "body"
+            description : "ID of event to remove"
+            schema :
+              $ref : "#/definitions/RemoveEventBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventRemovedResponse"
+    /events/addPrivateAttendee:
+      post:
+        tags :
+          - "events"
+        description: "This route will add an attendee to a private event. If the event is not private, the request will fail.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed to authenticate with. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name : "body"
+            in : "body"
+            description : "Data needed to add a user to a private event."
+            schema :
+              $ref : "#/definitions/PrivateAttendeeBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventRemovedResponse"
+    /events/removeCheckIn:
+      post:
+        tags :
+          - "events"
+        description: "This route will remove an check-in from an event. Note: This will works on users in any event, regardless of their check-in status. So this route can be used for removing private attendees.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed to authenticate with. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name : "body"
+            in : "body"
+            description : "Data needed to remove a user from an event."
+            schema :
+              $ref : "#/definitions/RemoveCheckInBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventRemovedResponse"
+    /events/checkIn:
+      post:
+        tags :
+          - "events"
+        description: "This route will check a user into an event. If the event is private and the user is not listed as an attendee of the event, the check-in will fail. If the event is public, the check-in will pass as long as the user is part of the organization.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed to authenticate with. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name : "body"
+            in : "body"
+            description : "Data needed to check a user into an event. The checkIn's timestamp should be the currentTime in milliseconds."
+            schema :
+              $ref : "#/definitions/CheckInBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventRemovedResponse"
+    /events/managing:
+      get:
+        tags :
+          - "events"
+        description: "Retrieves all events that the user is managing. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "limit"
+            in: "query"
+            description: "Number of results to limit. Defaults to 25."
+            required: false
+            type: "number"
+          -
+            name: "page"
+            in: "query"
+            description: "'Page' to grab, defaults to `0`"
+            required: false
+            type: "string"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/EventsManagingResponse"
+    /events/public:
+      get:
+        tags :
+          - "events"
+        description: "Retrieves all public events within the user's organization. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "limit"
+            in: "query"
+            description: "Number of results to limit. Defaults to 25."
+            required: false
+            type: "number"
+          -
+            name: "page"
+            in: "query"
+            description: "'Page' to grab, defaults to `0`"
+            required: false
+            type: "string"
+        responses:
+          "200":
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/Event"
+    /events/getEventCheckIns:
+      get:
+        tags :
+          - "events"
+        description: "Retrieves all checked-in users of an event. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "eventID"
+            in: "query"
+            description: "ID of event"
+            required: true
+            type: "string"
+          -
+            name: "limit"
+            in: "query"
+            description: "Number of results to limit. Defaults to 25."
+            required: false
+            type: "number"
+          -
+            name: "page"
+            in: "query"
+            description: "'Page' to grab, defaults to `0`"
+            required: false
+            type: "string"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/CheckIn"
+  definitions:
+    LoginBody :
+      required:
+        - email
+        - password
+      properties :
+        email :
+          type : "string"
+        password :
+          type : "string"
+    CreateEventBody:
+      required :
+        - title
+        - date
+        - location
+        - description
+        - private
+      properties :
+        title:
+          type : "string"
+        date:
+          type : "number"
+        location:
+          type : "string"
+        image_url:
+          type : "string"
+        private:
+          type : "boolean"
+        description:
+          type : "string"
+    UpdateEventBody:
+      required :
+        - eventID
+        - title
+        - date
+        - location
+        - description
+        - image_url
+        - private
+      properties :
+        eventID :
+          type : "string"
+        title:
+          type : "string"
+        date:
+          type : "number"
+        location:
+          type : "string"
+        image_url:
+          type : "string"
+        private:
+          type : "boolean"
+        description:
+          type : "string"
+    RemoveEventBody:
+      required :
+        - eventID
+      properties :
+        eventID :
+          type : "string"
+    Event:
+      properties :
+        title:
+          type : "string"
+        date:
+          type : "number"
+          format : "date"
+        location:
+          type : "string"
+        organization:
+          type : "string"
+        _id:
+          type : "string"
+        image_url:
+          type : "string"
+        private:
+          type : "boolean"
+        description:
+          type : "string"
+    CheckInBody:
+      required:
+        - eventID
+        - checkIn
+      properties:
+        eventID:
+          type : "string"
+        checkIn:
+          properties:
+            personID:
+              type : "string"
+            name:
+              type : "string"
+            organization :
+              type : "string"
+            timestamp :
+              type : "number"
+    PrivateAttendeeBody:
+      required:
+        - eventID
+        - checkIn
+      properties:
+        eventID:
+          type : "string"
+        checkIn:
+          properties:
+            personID:
+              type : "string"
+            name:
+              type : "string"
+            organization :
+              type : "string"
+    RemoveCheckInBody:
+      required:
+        - eventID
+        - personID
+      properties:
+        eventID:
+          type : "string"
+        personID :
+          type : "string"
+    CheckIn:
+      properties:
+        person_id:
+          type : "string"
+        name:
+          type : "string"
+        organization:
+          type : "string"
+        timestamp:
+          type : "string"
+        checked_in:
+          type : "boolean"
+    LoginResult :
+      properties:
+        ms:
+          type : "number"
+        res:
+          type : "object"
+          properties :
+            X-OrgBook-Auth-Key :
+              type : "string"
+    EventCreatedResponse:
+      properties:
+        event:
+          properties :
+            title:
+              type : "string"
+            date:
+              type : "number"
+            location:
+              type : "string"
+            organization:
+              type : "string"
+            _id:
+              type : "string"
+            image_url:
+              type : "string"
+            private:
+              type : "boolean"
+            description:
+              type : "string"
+        check_in:
+          properties:
+            person_id:
+              type : "string"
+            name:
+              type : "string"
+            organization:
+              type : "string"
+            timestamp:
+              type : "string"
+            checked_in:
+              type : "boolean"
+    EventsManagingResponse:
+      properties:
+        event:
+          properties :
+            title:
+              type : "string"
+            date:
+              type : "number"
+            location:
+              type : "string"
+            organization:
+              type : "string"
+            _id:
+              type : "string"
+            image_url:
+              type : "string"
+            private:
+              type : "boolean"
+            description:
+              type : "string"
+        checked_in :
+          type : "boolean"
+    EventUpdatedResponse:
+      properties:
+        res :
+          type : "string"
+    EventRemovedResponse:
+      properties:
+        res :
+          type : "string"
