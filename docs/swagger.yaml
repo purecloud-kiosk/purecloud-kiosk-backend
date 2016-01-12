@@ -10,6 +10,9 @@
     -
       name : "events"
       description : "Routes for managing events."
+    -
+      name : "stats"
+      description : "Routes for retrieving statistics."
   paths:
     /purecloud/login:
       post:
@@ -307,6 +310,93 @@
             in: "query"
             description: "'Page' to grab, defaults to `0`"
             required: false
+            type: "string"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/CheckIn"
+    /events/searchManagedEvents:
+      get:
+        tags :
+          - "events"
+        description: "Searches the events that the user is managing. Use the limit and page fields for pagination if needed.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "q"
+            in: "query"
+            description: "The query."
+            required: true
+            type: "number"
+          -
+            name: "limit"
+            in: "query"
+            description: "Number of results to limit. Defaults to 25."
+            required: false
+            type: "number"
+          -
+            name: "page"
+            in: "query"
+            description: "'Page' to grab, defaults to `0`"
+            required: false
+            type: "string"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/EventsManagingResponse"
+    # /events/uploadImage:
+    #   post:
+    #     tags :
+    #       - "events"
+    #     description: "Uploads an image that will be associated with an event\n"
+    #     parameters:
+    #       -
+    #         name: "Authorization"
+    #         in: "header"
+    #         description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+    #         required: true
+    #         type: "string"
+    #       -
+    #         name: "eventID"
+    #         in: "query"
+    #         description: "ID of event"
+    #         required: true
+    #         type: "string"
+    #       -
+    #         name: "file"
+    #         in : "formData"
+    #         description : "The file to be uploaded"
+    #         required : true
+    #         type : "file"
+    #     responses:
+    #       200:
+    #         description: "Successful response"
+    #         schema:
+    #           type : "array"
+    #           items:
+    #             $ref : "#/definitions/CheckIn"
+    /stats/me:
+      get:
+        tags :
+          - "stats"
+        description: "Retrieves statistics and basic information on user making the request.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
             type: "string"
         responses:
           200:

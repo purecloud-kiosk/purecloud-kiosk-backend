@@ -45,7 +45,7 @@ redisClient.on("connect", function(){
     //append routes
     app.use("/purecloud", require("./lib/controllers/routes/pureCloud"));
     app.use("/events", require("./lib/controllers/routes/events"));
-    
+    app.use("/stats", require("./lib/controllers/routes/stats"));
     /**
      * This is the entry point for the web application.
      * redirect to the Purecloud Login page if a client access_token is invalid or does not exist
