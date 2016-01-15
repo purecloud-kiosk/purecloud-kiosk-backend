@@ -1,8 +1,29 @@
 "use strict";
 import React, { Component } from "react";
+import * as statsActions from "../actions/statsActions";
+import statsStore from "../stores/statsStore";
+import statsConstants from "../constants/statsConstants";
 
 export default class HeaderBar extends Component {
+  constructor(props){
+    super(props);
+    this.state = {stats : null};
+  }
+  componentDidMount(){
+    console.log("header mounted");
+    statsStore.addListener(statsConstants.STATS_RETRIEVED, this.updateStats.bind(this));
+  }
+  updateStats(){
+    console.log("updated");
+    this.setState({
+      stats : statsStore.getStats()
+    });
+  }
   render(){
+    var {stats} = this.state;
+    if(stats == null){
+      stats = {name : "", organization : ""};
+    }
     return (
       <div className="row header">
         <div className="col-xs-12">
@@ -12,7 +33,7 @@ export default class HeaderBar extends Component {
                 <img src="dist/img/avatar.jpg"/>
               </a>
               <ul className="dropdown-menu dropdown-menu-right">
-                <li className="dropdown-header">User Name goes here</li>
+                <li className="dropdown-header">{stats.name}</li>
                 <li className="divider"></li>
                 <li className="link"><a href="https://apps.mypurecloud.com/directory/">Profile</a></li>
                 <li className="divider"></li>
@@ -32,7 +53,7 @@ export default class HeaderBar extends Component {
           </div>
           <div className="meta">
             <div className="page">
-              Dashboard
+              {stats.organization} Dashboard
             </div>
             <div className="breadcrumb-links">
               Home / Dashboard

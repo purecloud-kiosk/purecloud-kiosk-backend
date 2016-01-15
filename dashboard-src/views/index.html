@@ -8,11 +8,18 @@
     <!-- STYLES -->
     <link rel="stylesheet" type="text/css" href="dist/css/lib.min.css">
     <link rel="stylesheet" type="text/css" href="dist/css/dashboard.min.css">
-    <!-- Scripts -->
-    <script type="text/javascript" src="dist/js/lib.min.js"></script>
+
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <!-- content in here will get replaced when the app loads -->
+      <div class="text-center">
+        <i class="fa fa-spinner fa-spin fa-5x"></i>
+        <p>Loading...</p>
+      </div>
+    </div>
+    <!-- Scripts -->
+    <script type="text/javascript" src="dist/js/lib.min.js"></script>
     <script type="text/javascript" src="dist/js/bundle.min.js"></script>
   </body>
 </html>

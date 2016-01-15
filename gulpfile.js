@@ -63,7 +63,7 @@ gulp.task('lib-js', function(){
 });
 
 gulp.task('bundle', function(){
-  browserify({
+  return browserify({
     entries : './dashboard-src/index.jsx',
     extensions : ['.jsx'],
     debug : true
