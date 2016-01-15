@@ -59,6 +59,8 @@ describe("eventDao", function(){
       eventDao.getEvent(eventID, function(error, result){
         expect(error).to.be.null;
         expect(result.title).to.equal(testEvent.title);
+        expect(result.thumbnail_url).to.not.equal(undefined);
+        expect(result.image_url).to.not.equal(undefined);
         done();
       });
     });

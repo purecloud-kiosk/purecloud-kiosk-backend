@@ -431,6 +431,8 @@
           type : "string"
         image_url:
           type : "string"
+        thumbnail_url:
+          type : "string"
         private:
           type : "boolean"
         description:
@@ -444,6 +446,7 @@
         - description
         - image_url
         - private
+        - thumbnail_url
       properties :
         eventID :
           type : "string"
@@ -454,6 +457,8 @@
         location:
           type : "string"
         image_url:
+          type : "string"
+        thumbnail_url:
           type : "string"
         private:
           type : "boolean"
@@ -479,6 +484,8 @@
         _id:
           type : "string"
         image_url:
+          type : "string"
+        thumbnail_url:
           type : "string"
         private:
           type : "boolean"
@@ -561,6 +568,8 @@
             _id:
               type : "string"
             image_url:
+              type : "string"
+            thumbnail_url:
               type : "string"
             private:
               type : "boolean"
