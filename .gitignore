@@ -1,5 +1,6 @@
 /dist
 /dashboard-src/bower_components
+/dashboard-src/npm-debug.log
 /node_modules
 /index.marko
 /login.html

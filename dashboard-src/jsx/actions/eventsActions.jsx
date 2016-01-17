@@ -74,3 +74,30 @@ export function setCurrentEvent(event){
     data : event
   });
 }
+/**
+ *  Dispatches to the navStore that the sidebar has been toggled
+ **/
+
+export function createEvent(event){
+	console.log("Data we are sending: ");
+	console.log(event);
+	 $.ajax({
+	    url : "/events/create",
+	    method : "POST",
+	    data : event,
+	    headers : {
+	      "Authorization" : "bearer " + requestConstants.AUTH_TOKEN
+	    }
+	  }).done(function(data){
+	  	console.log("Response from Create : ");
+	    console.log(data);
+	    dispatcher.dispatch({
+	      actionType : eventsConstants.EVENT_CREATED,
+	      data : data
+	    });
+	  }).error(function(error){
+	  	console.log("ERROR : ");
+	    console.log(error);
+	  });
+}
+

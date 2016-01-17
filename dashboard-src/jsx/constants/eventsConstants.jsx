@@ -1,11 +1,12 @@
 "use strict";
 /**
- *  Constants for anything Nav related
+ *  Constants for anything Event related
  **/
  const actions = {
    EVENTS_MANAGING_RETRIEVED : "EVENTS_MANAGING_RETRIEVED",
    PUBLIC_EVENTS_RETRIEVED : "PUBLIC_EVENTS_RETRIEVED",
    PRIVATE_EVENTS_RETRIEVED : "PRIVATE_EVENTS_RETRIEVED",
-   CURRENT_EVENT_SET : "CURRENT_EVENT_SET"
+   CURRENT_EVENT_SET : "CURRENT_EVENT_SET",
+   EVENT_CREATED: "EVENT_CREATED"
  };
  export default actions;

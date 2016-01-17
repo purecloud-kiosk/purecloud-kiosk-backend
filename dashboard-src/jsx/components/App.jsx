@@ -9,6 +9,7 @@ import SideBar from "./SideBar";
 import HeaderBar from "./HeaderBar";
 import DashView from "./DashView";
 import EventView from "./EventView";
+import CreateEventView from "./Events";
 export default class App extends Component{
   constructor(props){
     super(props);
@@ -42,7 +43,9 @@ export default class App extends Component{
                   <Route path="tables" component={HeaderBar}/>
                   <Route path="event">
                     <IndexRoute component={EventView}/>
+                    
                   </Route>
+                  <Route path="create" component={CreateEventView}/>
                 </Route>
               </Router>
             </div>

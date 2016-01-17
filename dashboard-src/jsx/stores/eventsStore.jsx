@@ -25,6 +25,10 @@ function setCurrentEvent(event){
   currentEvent = event;
 }
 
+function storeCreatedEvent(event){
+  createEvent = event;
+}
+
 class EventsStore extends EventEmitter{
   getPublicEvents(){
     return publicEvents;
@@ -57,7 +61,11 @@ dispatcher.register(function(payload){
     case eventsConstants.CURRENT_EVENT_SET:
       setCurrentEvent(payload.data);
       break;
+    default:
+      //no op
+        break;
   }
+  // event created will still be emitted
   eventsStore.emit(payload.actionType);
 });
 
