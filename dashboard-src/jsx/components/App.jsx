@@ -7,7 +7,8 @@ import history from "../history/history";
 // import components
 import SideBar from "./SideBar";
 import HeaderBar from "./HeaderBar";
-import DashView from "./DashView"
+import DashView from "./DashView";
+import EventView from "./EventView";
 export default class App extends Component{
   constructor(props){
     super(props);
@@ -33,13 +34,18 @@ export default class App extends Component{
         <div id="content-wrapper">
           <div className="page-content">
             <HeaderBar/>
-            <Router history={history}>
-              <Route path="/">
-                <IndexRoute component={DashView} />
-                <Route path="dash" component={DashView}/>
-                <Route path="tables" component={HeaderBar}/>
-              </Route>
-            </Router>
+            <div className="main-content">
+              <Router history={history}>
+                <Route path="/">
+                  <IndexRoute component={DashView} />
+                  <Route path="dash" component={DashView}/>
+                  <Route path="tables" component={HeaderBar}/>
+                  <Route path="event">
+                    <IndexRoute component={EventView}/>
+                  </Route>
+                </Route>
+              </Router>
+            </div>
           </div>
         </div>
       </div>
