@@ -1,6 +1,7 @@
 "use strict";
 // lib imports
 var express = require("express");
+var compression = require("compression");
 var bodyParser = require("body-parser");
 var request = require("request");
 var marko = require("marko");
@@ -30,6 +31,7 @@ redisClient.on("connect", function(){
   db.once("open", function(){
 
     // upon open, add necessary middleware
+    app.use(compression());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended : true}));
 
