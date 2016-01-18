@@ -131,7 +131,27 @@ describe("EventDBService", function(){
         done();
       });
     });
+  });
 
+  describe("#getPrivateEvents", function(){
+    it("can retrieve all private events belonging to an organization", function(done){
+      eventService.getPrivateEvents(testManager.personID, {}, function(error, result){
+        console.log(result);
+        expect(error).to.be.null;
+        expect(result.length).to.be.above(0); // event is either removed or does not exist
+        expect(result[0].event.title).to.equal(testPrivateEvent.title);
+        expect(result[0].event.private).to.equal(true);
+        done();
+      });
+    });
+    it("returns dates in millis", function(done){
+      eventService.getPrivateEvents(testManager.personID, {}, function(error, result){
+        expect(error).to.be.null;
+        expect(result.length).to.be.above(0); // event is either removed or does not exist
+        expect(result[0].event.date).to.be.a("number");
+        done();
+      });
+    });
   });
 
   describe("#getEventsManaging", function(){

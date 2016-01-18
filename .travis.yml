@@ -6,11 +6,10 @@ services:
   - redis-server
 before_script:
   - npm install -g gulp bower
-script:
   - cd dashboard-src
   - bower install
   - cd ..
-  - gulp
+script:
   - npm test
 cache:
   directories:

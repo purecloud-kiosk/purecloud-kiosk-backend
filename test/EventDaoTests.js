@@ -5,13 +5,21 @@ var mongoose = require("mongoose");
 
 var expect = require('chai').expect;
 
-var testEvent = { // event to test with
+var testPublicEvent = { // event to test with
   "title" : "Some Event Title Here",
   "description" : "Some description",
   "date" : Date.now(),
   "location" : "Someplace Erie, PA",
   "organization" : "PureCloud Kiosk",
   "private" : false
+};
+var testPrivateEvent = { // event to test with
+  "title" : "Some Private Event",
+  "description" : "Some description",
+  "date" : Date.now(),
+  "location" : "Someplace Erie, PA",
+  "organization" : "PureCloud Kiosk",
+  "private" : true
 };
 var testAttendeeCheckIn = {
   "person_id" : "llsijefleij23489343324",
@@ -31,7 +39,8 @@ var testManagerCheckIn = {
   "event_manager" : true,
   "image" : "String"
 };
-var eventID; // id to remove (the above event's id)
+var publicEventID; // id to remove (the above event's id)
+var privateEventID;
 
 describe("eventDao", function(){
   before(function(done){
@@ -40,14 +49,23 @@ describe("eventDao", function(){
     });
   });
   after(function(done){
-    mongoose.disconnect(function(){
-      done();
-    });
+    eventDao.removeEvent(privateEventID, function(error, result){
+      mongoose.disconnect(function(){
+        done();
+      });
+    })
   });
   describe("#insertEvent", function(){
-    it("can insert an event into the database", function(done){
-      eventDao.insertEvent(testEvent, function(error, result){
-        eventID = result._id;
+    it("can insert a public event into the database", function(done){
+      eventDao.insertEvent(testPublicEvent, function(error, result){
+        publicEventID = result._id;
+        expect(error).to.be.null;
+        done();
+      });
+    });
+    it("can insert a private event into the database", function(done){
+      eventDao.insertEvent(testPrivateEvent, function(error, result){
+        privateEventID = result._id;
         expect(error).to.be.null;
         done();
       });
@@ -56,9 +74,9 @@ describe("eventDao", function(){
 
   describe("#getEvent", function(){
     it("can retrieve a single event from the database", function(done){
-      eventDao.getEvent(eventID, function(error, result){
+      eventDao.getEvent(publicEventID, function(error, result){
         expect(error).to.be.null;
-        expect(result.title).to.equal(testEvent.title);
+        expect(result.title).to.equal(testPublicEvent.title);
         expect(result.thumbnail_url).to.not.equal(undefined);
         expect(result.image_url).to.not.equal(undefined);
         done();
@@ -68,8 +86,8 @@ describe("eventDao", function(){
 
   describe("#updateEvent", function(done){
     it("can update an existing event in the database", function(done){
-      testEvent.title = "testTitle2";
-      eventDao.updateEvent(eventID, testEvent, function(error, result){
+      testPublicEvent.title = "testTitle2";
+      eventDao.updateEvent(publicEventID, testPublicEvent, function(error, result){
         expect(error).to.be.null;
         expect(result.n).to.equal(1);
         done();
@@ -79,8 +97,8 @@ describe("eventDao", function(){
 
   describe("#insertCheckIn", function(){
     it("#insertCheckIn can insert a check-in into the database", function(done){
-      // add eventID to checkIn
-      testManagerCheckIn.event = eventID;
+      // add publicEventID to checkIn
+      testManagerCheckIn.event = publicEventID;
       eventDao.insertCheckIn(testManagerCheckIn, function(error, result){
         expect(error).to.be.null;
         expect(result.person_id).to.equal(testManagerCheckIn.person_id);
@@ -94,7 +112,7 @@ describe("eventDao", function(){
       });
     });
     it("#insertCheckIn can insert a different check-in into the database", function(done){
-      testAttendeeCheckIn.event = eventID;
+      testAttendeeCheckIn.event = publicEventID;
       eventDao.insertCheckIn(testAttendeeCheckIn, function(error){
         expect(error).to.be.null;
         done();
@@ -104,7 +122,7 @@ describe("eventDao", function(){
 
   describe("#getCheckIn", function(){
     it("can retrieve a single event from the database", function(done){
-      eventDao.getCheckIn(testManagerCheckIn.person_id, eventID, function(error, result){
+      eventDao.getCheckIn(testManagerCheckIn.person_id, publicEventID, function(error, result){
         expect(error).to.be.null;
         expect(result.name).to.equal(testManagerCheckIn.name);
         done();
@@ -112,7 +130,7 @@ describe("eventDao", function(){
     });
 
     it("can be used to update check_in status.", function(done){
-      eventDao.getCheckIn(testManagerCheckIn.person_id, eventID, function(error, result){
+      eventDao.getCheckIn(testManagerCheckIn.person_id, publicEventID, function(error, result){
         expect(error).to.be.null;
         result.checked_in = true;
         result.save(function(saveError, saveResult){
@@ -143,6 +161,18 @@ describe("eventDao", function(){
     });
   });
 
+  describe("#getPrivateEvents", function(){
+    it("can retrieve private events a user has access to", function(done){
+      eventDao.getPrivateEvents(testManagerCheckIn.person_id, 25, 0, function(error, result){
+        expect(error).to.be.null;
+        expect(result).to.have.length.of.at.least(1);
+        expect(result[0].event).to.be.null;
+        console.log(result);
+        done();
+      });
+    });
+  });
+
   describe("#getPublicEventsCount", function(){
     it("can retrieve a count of all public events belonging to an organization", function(done){
       eventDao.getPublicEventsCount("PureCloud Kiosk", function(error, result){
@@ -155,7 +185,7 @@ describe("eventDao", function(){
 
   describe("#getEventCheckIns", function(){
     it("can retrieve check-ins of an event", function(done){
-      eventDao.getEventCheckIns(eventID, 25, 0, function(error, result){
+      eventDao.getEventCheckIns(publicEventID, 25, 0, function(error, result){
         expect(error).to.be.null;
         expect(result).to.have.length.of.at.least(1);
         done();
@@ -165,7 +195,7 @@ describe("eventDao", function(){
 
   describe("#getEventManagers", function(){
     it("can retrieve event managers from an event using an event's ID", function(done){
-      eventDao.getEventManagers(eventID, 25, 0, function(error, result){
+      eventDao.getEventManagers(publicEventID, 25, 0, function(error, result){
         expect(error).to.be.null;
         expect(result).to.have.length.of.at.least(1);
         done();
@@ -184,7 +214,7 @@ describe("eventDao", function(){
 
   describe("#removeEvent", function(){
     it("can remove an event by it's '_id'", function(done){
-      eventDao.removeEvent(eventID, function(error){
+      eventDao.removeEvent(publicEventID, function(error){
         expect(error).to.be.null;
         done();
       });
@@ -193,7 +223,7 @@ describe("eventDao", function(){
 
   describe("#removeCheckIn", function(){
     it("can remove a single check-in by using an eventID and personID", function(done){
-      eventDao.removeCheckIn("llsijefleij23489343324", eventID, function(error, result){
+      eventDao.removeCheckIn("llsijefleij23489343324", publicEventID, function(error, result){
         expect(error).to.be.null;
         expect(result.result.ok).to.equal(1);
         expect(result.result.n).to.be.above(0);
@@ -204,7 +234,7 @@ describe("eventDao", function(){
 
   describe("#removeCheckInsByEvent", function(){
     it("can remove all check-ins by an eventID", function(done){
-      eventDao.removeCheckInsByEvent(eventID, function(error, result){
+      eventDao.removeCheckInsByEvent(publicEventID, function(error, result){
         expect(error).to.be.null;
         expect(result.result.ok).to.equal(1);
         expect(result.result.n).to.be.above(0);
