@@ -103,7 +103,6 @@
             description: "Successful response"
             schema:
               $ref : "#/definitions/EventCreatedResponse"
-
     /events/update:
       post:
         tags :
@@ -281,6 +280,37 @@
               type : "array"
               items:
                 $ref : "#/definitions/Event"
+    /events/private:
+      get:
+        tags :
+          - "events"
+        description: "Retrieves private events a user has access to. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "limit"
+            in: "query"
+            description: "Number of results to limit. Defaults to 25."
+            required: false
+            type: "number"
+          -
+            name: "page"
+            in: "query"
+            description: "'Page' to grab, defaults to `0`"
+            required: false
+            type: "string"
+        responses:
+          "200":
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/EventsManagingResponse"
     /events/getEventCheckIns:
       get:
         tags :
@@ -431,6 +461,8 @@
           type : "string"
         image_url:
           type : "string"
+        thumbnail_url:
+          type : "string"
         private:
           type : "boolean"
         description:
@@ -444,6 +476,7 @@
         - description
         - image_url
         - private
+        - thumbnail_url
       properties :
         eventID :
           type : "string"
@@ -454,6 +487,8 @@
         location:
           type : "string"
         image_url:
+          type : "string"
+        thumbnail_url:
           type : "string"
         private:
           type : "boolean"
@@ -479,6 +514,8 @@
         _id:
           type : "string"
         image_url:
+          type : "string"
+        thumbnail_url:
           type : "string"
         private:
           type : "boolean"
@@ -561,6 +598,8 @@
             _id:
               type : "string"
             image_url:
+              type : "string"
+            thumbnail_url:
               type : "string"
             private:
               type : "boolean"
