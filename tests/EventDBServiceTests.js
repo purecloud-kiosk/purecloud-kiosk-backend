@@ -116,7 +116,7 @@ describe("EventDBService", function(){
 
   describe("#getPublicEvents", function(){
     it("can retrieve all public events belonging to an organization", function(done){
-      eventService.getPublicEvents("Some Organization", {}, function(error, result){
+      eventService.getPublicEvents("Some Organization", {"limit" : 25, "page" : 0}, function(error, result){
         expect(error).to.be.null;
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].title).to.equal(testPublicEvent.title);
@@ -124,7 +124,7 @@ describe("EventDBService", function(){
       });
     });
     it("returns dates in millis", function(done){
-      eventService.getPublicEvents("Some Organization", {}, function(error, result){
+      eventService.getPublicEvents("Some Organization", {"limit" : 25, "page" : 0}, function(error, result){
         expect(error).to.be.null;
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].date).to.be.a("number");
@@ -135,7 +135,7 @@ describe("EventDBService", function(){
 
   describe("#getPrivateEvents", function(){
     it("can retrieve all private events belonging to an organization", function(done){
-      eventService.getPrivateEvents(testManager.personID, {}, function(error, result){
+      eventService.getPrivateEvents(testManager.personID, {"limit" : 25, "page" : 0}, function(error, result){
         console.log(result);
         expect(error).to.be.null;
         expect(result.length).to.be.above(0); // event is either removed or does not exist
@@ -145,7 +145,7 @@ describe("EventDBService", function(){
       });
     });
     it("returns dates in millis", function(done){
-      eventService.getPrivateEvents(testManager.personID, {}, function(error, result){
+      eventService.getPrivateEvents(testManager.personID, {"limit" : 25, "page" : 0}, function(error, result){
         expect(error).to.be.null;
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].event.date).to.be.a("number");
@@ -156,7 +156,7 @@ describe("EventDBService", function(){
 
   describe("#getEventsManaging", function(){
     it("can retrieve all events the managed by a user", function(done){
-      eventService.getEventsManaging(testManager.personID, {}, function(error, result){
+      eventService.getEventsManaging(testManager.personID, {"limit" : 25, "page" : 0}, function(error, result){
         expect(error).to.be.null;
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].event.title).to.not.be.null;
@@ -165,7 +165,7 @@ describe("EventDBService", function(){
       });
     });
     it("returns dates in millis", function(done){
-      eventService.getEventsManaging(testManager.personID, {}, function(error, result){
+      eventService.getEventsManaging(testManager.personID, {"limit" : 25, "page" : 0}, function(error, result){
         expect(error).to.be.null;
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].event.date).to.be.a("number");
@@ -261,7 +261,7 @@ describe("EventDBService", function(){
 
   describe("#searchManagedEvents", function(){
     it("can search for events matching the query supplied using Regex", function(done){
-      eventService.searchManagedEvents("Public", testManager, 25, 0, function(error, result){
+      eventService.searchManagedEvents("Public", testManager, {"limit" : 25, "page" : 0}, function(error, result){
           console.log(error);
           console.log(result);
           expect(result.length).to.equal(1);
@@ -269,7 +269,7 @@ describe("EventDBService", function(){
         });
     });
     it("can search for events matching the query supplied using Regex", function(done){
-      eventService.searchManagedEvents("private", testManager, 25, 0, function(error, result){
+      eventService.searchManagedEvents("private", testManager,  {"limit" : 25, "page" : 0}, function(error, result){
           console.log(error);
           console.log(result);
           expect(result.length).to.equal(1);
@@ -277,7 +277,7 @@ describe("EventDBService", function(){
         });
     });
     it("will return nothing if the query is not matched", function(done){
-      eventService.searchManagedEvents("not a title", testManager, 25, 0, function(error, result){
+      eventService.searchManagedEvents("not a title", testManager,  {"limit" : 25, "page" : 0}, function(error, result){
           console.log(error);
           console.log(result);
           expect(result.length).to.equal(0);

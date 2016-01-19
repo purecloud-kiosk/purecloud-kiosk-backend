@@ -76,7 +76,7 @@ redisClient.on("connect", function(){
       res.sendFile(__dirname + "/docs/index.html");
     });
     app.listen(8080, function(){
-      console.log("Server is listening on port 8000...");
+      console.log("Server is listening on port 8080...");
     });
   });
 });
