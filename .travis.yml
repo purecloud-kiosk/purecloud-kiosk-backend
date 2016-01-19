@@ -5,10 +5,7 @@ services:
   - mongodb
   - redis-server
 before_script:
-  - npm install -g gulp bower
-  - cd dashboard-src
-  - bower install
-  - cd ..
+  - npm install
 script:
   - npm test
 cache:
