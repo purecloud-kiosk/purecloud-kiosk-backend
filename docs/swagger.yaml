@@ -284,7 +284,7 @@
       get:
         tags :
           - "events"
-        description: "Retrieves all private events available to a user. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
+        description: "Retrieves private events a user has access to. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
         parameters:
           -
             name: "Authorization"
@@ -310,7 +310,7 @@
             schema:
               type : "array"
               items:
-                $ref : "#/definitions/Event"
+                $ref : "#/definitions/EventsManagingResponse"
     /events/getEventCheckIns:
       get:
         tags :

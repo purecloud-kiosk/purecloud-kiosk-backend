@@ -1,12 +1,9 @@
 "use strict";
 // lib imports
 var express = require("express");
-var compression = require("compression");
 var bodyParser = require("body-parser");
 var request = require("request");
-var marko = require("marko");
 var mongoose = require("mongoose");
-var React = require("react");
 
 // retrieve redisClient
 var redisClient = require("./lib/models/dao/redisClient.js");
@@ -29,9 +26,7 @@ redisClient.on("connect", function(){
   var db = mongoose.connection;
   db.on("error", console.error.bind(console, "connection error:"));
   db.once("open", function(){
-
     // upon open, add necessary middleware
-    app.use(compression());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended : true}));
 
@@ -39,7 +34,6 @@ redisClient.on("connect", function(){
     app.use(loggerMiddleware);
 
     // host static files
-    app.use("/dist", express.static(__dirname + "/dist"));
     app.use("/docs", express.static(__dirname + "/docs"));
     // templates
     // var indexTemplate = marko.load("./index.marko", {writeToDisk : false});
@@ -81,7 +75,7 @@ redisClient.on("connect", function(){
     app.get("/api-docs", function(req, res){
       res.sendFile(__dirname + "/docs/index.html");
     });
-    app.listen(8000, function(){
+    app.listen(8080, function(){
       console.log("Server is listening on port 8000...");
     });
   });
