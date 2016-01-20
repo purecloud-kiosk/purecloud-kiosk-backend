@@ -11,6 +11,7 @@ var testPublicEvent = { // event to test with
   "date" : Date.now(),
   "location" : "Someplace Erie, PA",
   "organization" : "PureCloud Kiosk",
+  "orgGuid" : "3248932-3423424323-234324234-234234234",
   "private" : false
 };
 var testPrivateEvent = { // event to test with
@@ -19,12 +20,13 @@ var testPrivateEvent = { // event to test with
   "date" : Date.now(),
   "location" : "Someplace Erie, PA",
   "organization" : "PureCloud Kiosk",
+  "orgGuid" : "3248932-3423424323-234324234-234234234",
   "private" : true
 };
 var testAttendeeCheckIn = {
   "person_id" : "llsijefleij23489343324",
   "name" : "Sample Manager CheckIn",
-  "organization" : "PureCloud Kiosk",
+  "orgGuid" : "3248932-3423424323-234324234-234234234",
   "checked_in" : false,
   "timestamp" : Date.now(), // date checked_in
   "event_manager" : false,
@@ -33,7 +35,7 @@ var testAttendeeCheckIn = {
 var testManagerCheckIn = {
   "person_id" : "llsijefleijefsseff43324",
   "name" : "Sample CheckIn",
-  "organization" : "PureCloud Kiosk",
+  "orgGuid" : "3248932-3423424323-234324234-234234234",
   "checked_in" : false,
   "timestamp" : Date.now(), // date checked_in
   "event_manager" : true,
@@ -153,7 +155,7 @@ describe("eventDao", function(){
 
   describe("#getPublicEvents", function(){
     it("can retrieve public events belonging to an organization", function(done){
-      eventDao.getPublicEvents("PureCloud Kiosk", 25, 0, function(error, result){
+      eventDao.getPublicEvents(testPublicEvent.orgGuid, 25, 0, function(error, result){
         expect(error).to.be.null;
         expect(result).to.have.length.of.at.least(1);
         done();
@@ -175,7 +177,7 @@ describe("eventDao", function(){
 
   describe("#getPublicEventsCount", function(){
     it("can retrieve a count of all public events belonging to an organization", function(done){
-      eventDao.getPublicEventsCount("PureCloud Kiosk", function(error, result){
+      eventDao.getPublicEventsCount(testPublicEvent.orgGuid, function(error, result){
         expect(error).to.be.null;
         expect(result).to.equal(1);
         done();
@@ -205,7 +207,7 @@ describe("eventDao", function(){
   describe("#searchManagedEvents", function(){
     it("can search for events matching the query supplied using Regex", function(done){
       eventDao.searchManagedEvents("test", testManagerCheckIn.person_id,
-        testManagerCheckIn.organization, function(error, result){
+        testManagerCheckIn.orgGuid, function(error, result){
           expect(result.length).to.equal(1);
           done();
         });

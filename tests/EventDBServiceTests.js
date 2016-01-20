@@ -32,6 +32,7 @@ var testManager = {
   "email" : "test.manager@email.com",
   "name" : "Mr. Test Manager",
   "organization" : "Some Organization",
+  "orgGuid" : "2343442234-fsfefes234-sfsef23-sfseffsfsfe3",
   "eventsManaging" : [],
   "access_token" : testManagerSessionKey
 };
@@ -72,12 +73,12 @@ describe("EventDBService", function(){
 
   describe("#createEvent", function(){
     it("can insert a public event into the database", function(done){
-      console.log(testPublicEvent.date);
       eventService.createEvent(testPublicEvent, testManager, function(error, result){
         expect(error).to.be.null;
         expect(result.event).to.not.equal(undefined);
         expect(result.event.title).to.equal(testPublicEvent.title);
         expect(result.event.private).to.equal(testPublicEvent.private);
+        expect(result.event.orgGuid).to.equal(testManager.orgGuid);
         expect(result.checkIn).to.not.equal(undefined);
         expect(result.checkIn.person_id).to.equal(testManager.personID);
         testPublicEventID = result.event._id;
@@ -116,8 +117,8 @@ describe("EventDBService", function(){
   });
 
   describe("#getPublicEvents", function(){
-    it("can retrieve all public events belonging to an organization", function(done){
-      eventService.getPublicEvents("Some Organization", {"limit" : 25, "page" : 0}, function(error, result){
+    it("can retrieve all public events belonging to an organization using an orgGuid", function(done){
+      eventService.getPublicEvents(testManager.orgGuid, {"limit" : 25, "page" : 0}, function(error, result){
         expect(error).to.be.null;
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].title).to.equal(testPublicEvent.title);
@@ -125,7 +126,7 @@ describe("EventDBService", function(){
       });
     });
     it("returns dates in millis", function(done){
-      eventService.getPublicEvents("Some Organization", {"limit" : 25, "page" : 0}, function(error, result){
+      eventService.getPublicEvents(testManager.orgGuid, {"limit" : 25, "page" : 0}, function(error, result){
         expect(error).to.be.null;
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].date).to.be.a("number");
@@ -180,7 +181,7 @@ describe("EventDBService", function(){
       var somePrivateCheckIn = {
         "personID" : "lisjefil23rjli3rj",
         "name" : "Someone in the org.",
-        "organization" : testManager.organization,
+        "orgGuid" : testManager.orgGuid,
         "timestamp" : Date.now()
       };
       eventService.addPrivateAttendee(testPrivateEventID, testManager, somePrivateCheckIn, function(error, result){
@@ -193,7 +194,7 @@ describe("EventDBService", function(){
       var somePublicCheckIn = {
         "personID" : "lisjefil23rjli3rj",
         "name" : "Someone in the org.",
-        "organization" : testManager.organization,
+        "orgGuid" : testManager.orgGuid,
         "timestamp" : Date.now()
       };
       eventService.addPrivateAttendee(testPublicEventID, testManager, somePublicCheckIn, function(error, result){
@@ -209,7 +210,7 @@ describe("EventDBService", function(){
       var managerCheckIn = {
         "personID" : testManager.personID,
         "name" : testManager.name,
-        "organization" : testManager.organization,
+        "orgGuid" : testManager.orgGuid,
         "timestamp" : Date.now()
       };
       eventService.checkIntoEvent(testPublicEventID, testManager, managerCheckIn, function(error, result){
@@ -222,7 +223,7 @@ describe("EventDBService", function(){
       var somePublicCheckIn = {
         "personID" : "lisjefil23rjli3rj",
         "name" : "Someone in the org.",
-        "organization" : testManager.organization,
+        "orgGuid" : testManager.orgGuid,
         "timestamp" : Date.now()
       };
       eventService.checkIntoEvent(testPublicEventID, testManager, somePublicCheckIn, function(error, result){
@@ -235,7 +236,7 @@ describe("EventDBService", function(){
       var managerCheckIn = {
         "personID" : testManager.personID,
         "name" : testManager.name,
-        "organization" : testManager.organization,
+        "orgGuid" : testManager.orgGuid,
         "timestamp" : Date.now()
       };
       eventService.checkIntoEvent(testPrivateEventID, testManager, managerCheckIn, function(error, result){
@@ -248,7 +249,7 @@ describe("EventDBService", function(){
       var somePrivateCheckIn = {
         "personID" : testManager.personID,
         "name" : testManager.name,
-        "organization" : testManager.organization,
+        "orgGuid" : testManager.orgGuid,
         "timestamp" : Date.now()
       };
       eventService.checkIntoEvent(testPrivateEventID, testManager, somePrivateCheckIn, function(error, result){

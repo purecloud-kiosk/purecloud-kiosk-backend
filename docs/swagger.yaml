@@ -18,7 +18,7 @@
       post:
         tags :
           - "purecloud"
-        description: "Route used for logging into the PureCloud Kiosk System."
+        description: "Route used for logging into the PureCloud Kiosk System. This is only here for testing and will be removed soon."
         parameters:
           -
             name: "Login Credentials"
