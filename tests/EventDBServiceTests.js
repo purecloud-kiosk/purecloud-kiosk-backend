@@ -72,6 +72,7 @@ describe("EventDBService", function(){
 
   describe("#createEvent", function(){
     it("can insert a public event into the database", function(done){
+      console.log(testPublicEvent.date);
       eventService.createEvent(testPublicEvent, testManager, function(error, result){
         expect(error).to.be.null;
         expect(result.event).to.not.equal(undefined);
