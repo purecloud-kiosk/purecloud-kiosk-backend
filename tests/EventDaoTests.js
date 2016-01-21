@@ -27,7 +27,7 @@ var testAttendeeCheckIn = {
   "person_id" : "llsijefleij23489343324",
   "name" : "Sample Manager CheckIn",
   "orgGuid" : "3248932-3423424323-234324234-234234234",
-  "checked_in" : false,
+  "checked_in" : true,
   "timestamp" : Date.now(), // date checked_in
   "event_manager" : false,
   "image" : "String"
@@ -36,7 +36,7 @@ var testManagerCheckIn = {
   "person_id" : "llsijefleijefsseff43324",
   "name" : "Sample CheckIn",
   "orgGuid" : "3248932-3423424323-234324234-234234234",
-  "checked_in" : false,
+  "checked_in" : true,
   "timestamp" : Date.now(), // date checked_in
   "event_manager" : true,
   "image" : "String"
@@ -145,7 +145,7 @@ describe("eventDao", function(){
 
   describe("#getAssociatedEvents", function(){
     it("can retrieve events that a manager is associated with in the database using an event manager's ID", function(done){
-      eventDao.getAssociatedEvents(testManagerCheckIn.person_id, true, 25, 0, function(error, result){
+      eventDao.getAssociatedEvents(testManagerCheckIn.person_id, testManagerCheckIn.orgGuid, true, 25, 0, function(error, result){
         expect(error).to.be.null;
         expect(result).to.have.length.of.at.least(1);
         done();
@@ -165,7 +165,7 @@ describe("eventDao", function(){
 
   describe("#getPrivateEvents", function(){
     it("can retrieve private events a user has access to", function(done){
-      eventDao.getPrivateEvents(testManagerCheckIn.person_id, 25, 0, function(error, result){
+      eventDao.getPrivateEvents(testManagerCheckIn.person_id, testManagerCheckIn.orgGuid, 25, 0, function(error, result){
         expect(error).to.be.null;
         expect(result).to.have.length.of.at.least(1);
         expect(result[0].event).to.be.null;
@@ -180,6 +180,34 @@ describe("eventDao", function(){
       eventDao.getPublicEventsCount(testPublicEvent.orgGuid, function(error, result){
         expect(error).to.be.null;
         expect(result).to.equal(1);
+        done();
+      });
+    });
+  });
+
+  describe("#getCheckedInCount", function(){
+    it("can retrieve the number of users checked into an event", function(done){
+      eventDao.getCheckedInCount(publicEventID, function(error, result){
+        expect(error).to.be.null;
+        expect(result).to.equal(2);
+        done();
+      });
+    });
+
+    it("can retrieve the number of users checked into an event", function(done){
+      eventDao.getCheckedInCount(privateEventID, function(error, result){
+        expect(error).to.be.null;
+        expect(result).to.equal(0);
+        done();
+      });
+    });
+  });
+
+  describe("#getTotalAttendingCount", function(){
+    it("can retrieve the number users attending an event", function(done){
+      eventDao.getTotalAttendingCount(publicEventID, function(error, result){
+        expect(error).to.be.null;
+        expect(result).to.equal(2);
         done();
       });
     });
@@ -244,6 +272,7 @@ describe("eventDao", function(){
       });
     });
   });
+
 
 
 

@@ -37,8 +37,7 @@ describe("SessionStoreService", function(){
       setTimeout(function() {
         sessionService.getTimeToLive("1111122222", function(error, ttl){
           expect(error).to.be.null;
-          console.log(ttl);
-          expect(ttl).to.be.above(9995); 
+          expect(ttl).to.be.above(9995);
           done();
         });
       }, 1500);

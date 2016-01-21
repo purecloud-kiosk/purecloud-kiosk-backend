@@ -13,7 +13,7 @@ var testUser = {
   "personID" : "Test User",
   "email" : "test.user@email.com",
   "name" : "Mr. Test User",
-  "organization" : "Some Organization",
+  "orgGuid" : "2340982-2342342-2344234234-2342342332",
   "eventsManaging" : []
 };
 var testEvents = [
@@ -22,7 +22,6 @@ var testEvents = [
     "description" : "Some description",
     "date" : Date.now(),
     "location" : "Someplace Erie, PA",
-    "organization" : "PureCloud Kiosk",
     "private" : false
   },
   {
@@ -30,7 +29,6 @@ var testEvents = [
     "description" : "Some description",
     "date" : Date.now(),
     "location" : "Someplace Erie, PA",
-    "organization" : "PureCloud Kiosk",
     "private" : false
   },
   {
@@ -38,7 +36,6 @@ var testEvents = [
     "description" : "Some description",
     "date" : Date.now(),
     "location" : "Someplace Erie, PA",
-    "organization" : "PureCloud Kiosk",
     "private" : true
   },
   {
@@ -46,7 +43,6 @@ var testEvents = [
     "description" : "Some description",
     "date" : Date.now(),
     "location" : "Someplace Erie, PA",
-    "organization" : "PureCloud Kiosk",
     "private" : true
   }
 ];
@@ -58,20 +54,23 @@ describe("StatisticsService", function(){
   before(function(done){
     mongoose.connect(config.test_mongo_uri, function(){
       redisClient.hmset(testUserSessionKey, testUser, function(hmSetError, hmSetResponse){
-        /*
-        var testCount = 0;
-        for(var i = 0; i < testEvents.length; i++){
-          eventsService.createEvent(testEvents[i], testUser, function(error, response){
-            console.log(error);
+        eventsService.createEvent(testEvents[0], testUser, function(error, response){
+          console.log(response);
+          eventIDs.push(response.event._id);
+          eventsService.createEvent(testEvents[1], testUser, function(error, response){
             console.log(response);
-            eventIDs.push(response._id);
-            testCount++;
+            eventIDs.push(response.event._id);
+            eventsService.createEvent(testEvents[2], testUser, function(error, response){
+              console.log(response);
+              eventIDs.push(response.event._id);
+              eventsService.createEvent(testEvents[3], testUser, function(error, response){
+                console.log(response);
+                eventIDs.push(response.event._id);
+                done();
+              });
+            });
           });
-        }
-        while(testCount != testEvents.length){}
-        */
-        done();
-
+        });
       });
     });
   });
@@ -88,30 +87,40 @@ describe("StatisticsService", function(){
     it("should be able to get the totalPublicEventsAvailable, totalPrivateEventsAvailable, "+
       "publicEventsCheckedIn, and privateEventsCheckedIn on the user", function(done){
       statsService.getUserStats(testUser, function(result){
-        expect(result.totalPublicEventsAvailable).to.equal(0);
-        expect(result.totalPrivateEventsAvailable).to.equal(0);
+        expect(result.totalPublicEventsAvailable).to.equal(2);
+        expect(result.totalPrivateEventsAvailable).to.equal(2);
         done();
       });
     });
+  });
 
+  describe("#getEventStats", function(){
+    it("can get amount checked in for a public event", function(done){
+      statsService.getEventStats(eventIDs[0], function(error, eventWithStats){
+        expect(error).to.be.null;
+        expect(eventWithStats.checkedInCount).to.equal(0);
+        done();
+      });
+    });
+    it("can get amount checked in and total amount attending for a private event", function(done){
+      statsService.getEventStats(eventIDs[2], function(error, eventWithStats){
+        expect(error).to.be.null;
+        expect(eventWithStats.checkedInCount).to.equal(0);
+        expect(eventWithStats.totalAttendingCount).to.equal(1); // 1 because of manager
+        done();
+      });
+    });
   });
   // clean up
   after(function(done){
-    //dao.removeCheckInsByEvent(testPublicEventID, function(error, result){
-      //dao.removeCheckInsByEvent(testPrivateEventID, function(error, result){
-      /*
-        var testCount = 0;
-        for(var i = 0; i < testEvents.length; i++){
-          eventsService.removeEvent(eventIDs[i], testUser, function(error, response){
-            testCount++;
+    eventsService.removeEvent(eventIDs[0], testUser, function(error, response){
+      eventsService.removeEvent(eventIDs[1], testUser, function(error, response){
+        eventsService.removeEvent(eventIDs[2], testUser, function(error, response){
+          eventsService.removeEvent(eventIDs[3], testUser, function(error, response){
+            done();
           });
-        }
-        while(testCount != testEvents.length){}
-        */
-        mongoose.disconnect(function(){
-          done();
         });
-      //});
-    //});
+      });
+    });
   });
 });
