@@ -140,8 +140,8 @@ describe("EventDBService", function(){
       eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {"limit" : 25, "page" : 0}, function(error, result){
         expect(error).to.be.null;
         expect(result.length).to.be.above(0); // event is either removed or does not exist
-        expect(result[0].event.title).to.equal(testPrivateEvent.title);
-        expect(result[0].event.private).to.equal(true);
+        expect(result[0].title).to.equal(testPrivateEvent.title);
+        expect(result[0].private).to.equal(true);
         done();
       });
     });
@@ -149,7 +149,7 @@ describe("EventDBService", function(){
       eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {"limit" : 25, "page" : 0}, function(error, result){
         expect(error).to.be.null;
         expect(result.length).to.be.above(0); // event is either removed or does not exist
-        expect(result[0].event.date).to.be.a("number");
+        expect(result[0].date).to.be.a("number");
         done();
       });
     });
@@ -160,8 +160,8 @@ describe("EventDBService", function(){
       eventService.getEventsManaging(testManager.personID, testManager.orgGuid, {"limit" : 25, "page" : 0}, function(error, result){
         expect(error).to.be.null;
         expect(result.length).to.be.above(0); // event is either removed or does not exist
-        expect(result[0].event.title).to.not.be.null;
-        expect(result[0].event.title).to.not.equal(undefined);
+        expect(result[0].title).to.not.be.null;
+        expect(result[0].title).to.not.equal(undefined);
         done();
       });
     });
@@ -169,7 +169,7 @@ describe("EventDBService", function(){
       eventService.getEventsManaging(testManager.personID, testManager.orgGuid, {"limit" : 25, "page" : 0}, function(error, result){
         expect(error).to.be.null;
         expect(result.length).to.be.above(0); // event is either removed or does not exist
-        expect(result[0].event.date).to.be.a("number");
+        expect(result[0].date).to.be.a("number");
         done();
       });
     });

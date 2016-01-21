@@ -248,7 +248,7 @@
             schema:
               type : "array"
               items:
-                $ref : "#/definitions/EventsManagingResponse"
+                $ref : "#/definitions/Event"
     /events/public:
       get:
         tags :
@@ -310,7 +310,7 @@
             schema:
               type : "array"
               items:
-                $ref : "#/definitions/EventsManagingResponse"
+                $ref : "#/definitions/Event"
     /events/getEventCheckIns:
       get:
         tags :
@@ -384,7 +384,7 @@
             schema:
               type : "array"
               items:
-                $ref : "#/definitions/EventsManagingResponse"
+                $ref : "#/definitions/Event"
     # /events/uploadImage:
     #   post:
     #     tags :
@@ -509,7 +509,7 @@
           format : "date"
         location:
           type : "string"
-        organization:
+        orgGuid:
           type : "string"
         _id:
           type : "string"
@@ -617,28 +617,6 @@
               type : "string"
             checked_in:
               type : "boolean"
-    EventsManagingResponse:
-      properties:
-        event:
-          properties :
-            title:
-              type : "string"
-            date:
-              type : "number"
-            location:
-              type : "string"
-            organization:
-              type : "string"
-            _id:
-              type : "string"
-            image_url:
-              type : "string"
-            private:
-              type : "boolean"
-            description:
-              type : "string"
-        checked_in :
-          type : "boolean"
     EventUpdatedResponse:
       properties:
         res :
