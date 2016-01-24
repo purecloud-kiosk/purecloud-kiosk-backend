@@ -193,7 +193,6 @@ describe("eventDao", function(){
         done();
       });
     });
-
     it("can retrieve the number of users checked into an event", function(done){
       eventDao.getCheckedInCount(privateEventID, function(error, result){
         expect(error).to.be.null;
@@ -208,6 +207,18 @@ describe("eventDao", function(){
       eventDao.getTotalAttendingCount(publicEventID, function(error, result){
         expect(error).to.be.null;
         expect(result).to.equal(2);
+        done();
+      });
+    });
+  });
+
+  describe("#getAttendanceCounts", function(){
+    it("can get counts", function(done){
+      eventDao.getAttendanceCounts(publicEventID, function(error, result){
+        console.log(error);
+        expect(error).to.be.null;
+        console.log(result);
+        expect(result.length).to.be.above(0);
         done();
       });
     });

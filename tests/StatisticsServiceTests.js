@@ -16,6 +16,13 @@ var testUser = {
   "orgGuid" : "2340982-2342342-2344234234-2342342332",
   "eventsManaging" : []
 };
+var testCheckIn = {
+  "personID" : "Test CheckIn",
+  "email" : "test.user@email.com",
+  "name" : "Mr. Test CheckIn",
+  "orgGuid" : "2340982-2342342-2344234234-2342342332",
+  "timestamp" : Date.now()
+};
 var testEvents = [
   {
     "title" : "Public event #11",
@@ -95,18 +102,27 @@ describe("StatisticsService", function(){
   });
 
   describe("#getEventStats", function(){
-    it("can get amount checked in for a public event", function(done){
-      statsService.getEventStats(eventIDs[0], function(error, eventWithStats){
+    before(function(done){
+      eventsService.checkIntoEvent(eventIDs[0], testUser, testCheckIn, function(error, result){
         expect(error).to.be.null;
-        expect(eventWithStats.checkedInCount).to.equal(0);
         done();
       });
     });
-    it("can get amount checked in and total amount attending for a private event", function(done){
-      statsService.getEventStats(eventIDs[2], function(error, eventWithStats){
+    it("can get amount checked in for a public event", function(done){
+      statsService.getEventStats(eventIDs[0], function(error, stats){
+        console.log(error);
+        console.log(stats);
         expect(error).to.be.null;
-        expect(eventWithStats.checkedInCount).to.equal(0);
-        expect(eventWithStats.totalAttendingCount).to.equal(1); // 1 because of manager
+        expect(stats.checkedIn).to.equal(1);
+        expect(stats.notCheckedIn).to.equal(1); // manager
+        done();
+      });
+    });
+    after(function(done){
+      console.log(eventIDs[0]);
+      eventsService.removeAttendee(eventIDs[0], testUser, testCheckIn.personID, function(error, result){
+        console.log(error);
+        expect(error).to.be.null;
         done();
       });
     });

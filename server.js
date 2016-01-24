@@ -42,39 +42,11 @@ redisClient.on("connect", function(){
     app.use("/purecloud", require("./lib/controllers/routes/pureCloud"));
     app.use("/events", require("./lib/controllers/routes/events"));
     app.use("/stats", require("./lib/controllers/routes/stats"));
-    /**
-     * This is the entry point for the web application.
-     * redirect to the Purecloud Login page if a client access_token is invalid or does not exist
-     **/
-    app.get("/", function(req, res){
-      var token = req.query.client_token;
-      if(token !== undefined){
-        pureCloudService.getSession(token, function(error, response, body){
-          if(response.statusCode != 200){
-            res.sendFile(__dirname + "/dashboard-src/views/login.html");
-          }
-          else{
-            var data = JSON.parse(body);
-            // store some basic user data for later use
-            sessionStoreService.storeSessionData(token, {
-              "personID" : data.res.user.personId,
-              "email" : data.res.user.email,
-              "name" : data.res.person.general.name[0].value,
-              "organization" : data.res.org.general.name[0].value,
-              "eventsManaging" : ["test"]
-            }, req.query.expires_in, function(redisError, redisResponse){
-              res.sendFile(__dirname + "/dashboard-src/views/index.html");
-            });
-          }
-        });
-      }
-      else{
-        res.sendFile(__dirname + "/dashboard-src/views/login.html");
-      }
-    });
+
     app.get("/api-docs", function(req, res){
       res.sendFile(__dirname + "/docs/index.html");
     });
+    
     app.listen(8080, function(){
       console.log("Server is listening on port 8080...");
     });
