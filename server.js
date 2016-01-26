@@ -12,11 +12,9 @@ var config = require("./config.json");
 
 // import and instantiate services
 var PureCloudAPIService = require('./lib/services/PureCloudAPIService');
-var SessionStoreService = require('./lib/services/SessionStoreService');
 
 var app = express();
 var pureCloudService = new PureCloudAPIService();
-var sessionStoreService = new SessionStoreService();
 
 var loggerMiddleware = require("./lib/controllers/middleware/logger");
 
@@ -46,7 +44,7 @@ redisClient.on("connect", function(){
     app.get("/api-docs", function(req, res){
       res.sendFile(__dirname + "/docs/index.html");
     });
-    
+
     app.listen(8080, function(){
       console.log("Server is listening on port 8080...");
     });

@@ -175,7 +175,7 @@ describe("EventDBService", function(){
     });
   });
 
-  describe("#addAttendee", function(){
+  describe("#addPrivateAttendee", function(){
     it("can add an attendee (check-in) to a private event", function(done){
       var somePrivateCheckIn = {
         "personID" : "lisjefil23rjli3rj",
@@ -197,6 +197,8 @@ describe("EventDBService", function(){
         "timestamp" : Date.now()
       };
       eventService.addPrivateAttendee(testPublicEventID, testManager, somePublicCheckIn, function(error, result){
+        console.log(error);
+        console.log(result);
         expect(error).to.be.not.null;
         expect(result).to.equal(undefined);
         done();
