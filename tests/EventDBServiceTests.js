@@ -36,6 +36,34 @@ var testManager = {
   "eventsManaging" : [],
   "access_token" : testManagerSessionKey
 };
+
+var somePublicCheckIn = {
+  "personID" : "lisjefil23rjli3rj",
+  "name" : "Someone in the org.",
+  "orgGuid" : testManager.orgGuid,
+  "timestamp" : Date.now()
+};
+
+var somePrivateCheckIn = {
+  "personID" : "lisjefil23rjli3rj",
+  "name" : "Someone in the org.",
+  "orgGuid" : testManager.orgGuid,
+  "timestamp" : Date.now()
+};
+
+var someNewEventManager = {
+  "personID" : "newManager",
+  "name" : "Some new manager",
+  "orgGuid" : testManager.orgGuid
+};
+
+var managerCheckIn = {
+  "personID" : testManager.personID,
+  "name" : testManager.name,
+  "orgGuid" : testManager.orgGuid,
+  "timestamp" : Date.now()
+};
+
 var testPublicEventID;
 var testPrivateEventID;
 
@@ -177,28 +205,17 @@ describe("EventDBService", function(){
 
   describe("#addPrivateAttendee", function(){
     it("can add an attendee (check-in) to a private event", function(done){
-      var somePrivateCheckIn = {
-        "personID" : "lisjefil23rjli3rj",
-        "name" : "Someone in the org.",
-        "orgGuid" : testManager.orgGuid,
-        "timestamp" : Date.now()
-      };
       eventService.addPrivateAttendee(testPrivateEventID, testManager, somePrivateCheckIn, function(error, result){
+        console.log("Attempting to insert private attendee")
+        console.log(error);
+        console.log(result);
         expect(error).to.be.null;
         expect(result.res).to.not.equal(undefined);
         done();
       });
     });
     it("will not add an attendee (check-in) to a public event", function(done){
-      var somePublicCheckIn = {
-        "personID" : "lisjefil23rjli3rj",
-        "name" : "Someone in the org.",
-        "orgGuid" : testManager.orgGuid,
-        "timestamp" : Date.now()
-      };
       eventService.addPrivateAttendee(testPublicEventID, testManager, somePublicCheckIn, function(error, result){
-        console.log(error);
-        console.log(result);
         expect(error).to.be.not.null;
         expect(result).to.equal(undefined);
         done();
@@ -206,14 +223,48 @@ describe("EventDBService", function(){
     });
   });
 
+  describe("#addEventManager", function(){
+    it("can add an event manager that is not an attendee to an event", function(done){
+
+      eventService.addEventManager(testPrivateEventID, testManager, someNewEventManager, function(error, result){
+        console.log("Attempting to insert event manager");
+        expect(error).to.be.null;
+        expect(result.res).to.not.equal(undefined);
+        dao.getCheckIn(someNewEventManager.personID, testPrivateEventID, function(error, checkIn){
+          expect(error).to.be.null;
+          expect(checkIn).to.be.not.null;
+          expect(checkIn.checked_in).to.equal(false);
+          expect(checkIn.event_manager).to.equal(true);
+          done();
+        });
+      });
+    });
+
+    it("will fail to add an already existing manager", function(done){
+
+      eventService.addEventManager(testPrivateEventID, testManager, someNewEventManager, function(error, result){
+        expect(error).to.be.not.null;
+        done();
+      });
+    });
+
+    it("can make an attendee an event manager", function(done){
+      eventService.addEventManager(testPrivateEventID, testManager, somePrivateCheckIn, function(error, result){
+        console.log("Attempting to insert event manager");
+        expect(error).to.be.null;
+        expect(result.res).to.not.equal(undefined);
+        dao.getCheckIn(someNewEventManager.personID, testPrivateEventID, function(error, checkIn){
+          expect(error).to.be.null;
+          expect(checkIn).to.be.not.null;
+          expect(checkIn.checked_in).to.equal(false);
+          expect(checkIn.event_manager).to.equal(true);
+          done();
+        });
+      });
+    });
+  });
   describe("#checkIntoEvent", function(){
     it("can check in an public event's manager", function(done){
-      var managerCheckIn = {
-        "personID" : testManager.personID,
-        "name" : testManager.name,
-        "orgGuid" : testManager.orgGuid,
-        "timestamp" : Date.now()
-      };
       eventService.checkIntoEvent(testPublicEventID, testManager, managerCheckIn, function(error, result){
         expect(error).to.be.null;
         expect(result.res).to.not.equal(undefined); // event is either removed or does not exist
@@ -221,12 +272,6 @@ describe("EventDBService", function(){
       });
     });
     it("can check in anyone within the organization to a public event", function(done){
-      var somePublicCheckIn = {
-        "personID" : "lisjefil23rjli3rj",
-        "name" : "Someone in the org.",
-        "orgGuid" : testManager.orgGuid,
-        "timestamp" : Date.now()
-      };
       eventService.checkIntoEvent(testPublicEventID, testManager, somePublicCheckIn, function(error, result){
         expect(error).to.be.null;
         expect(result.res).to.not.equal(undefined); // event is either removed or does not exist
@@ -234,13 +279,9 @@ describe("EventDBService", function(){
       });
     });
     it("can check in an private event's manager", function(done){
-      var managerCheckIn = {
-        "personID" : testManager.personID,
-        "name" : testManager.name,
-        "orgGuid" : testManager.orgGuid,
-        "timestamp" : Date.now()
-      };
       eventService.checkIntoEvent(testPrivateEventID, testManager, managerCheckIn, function(error, result){
+        console.log(error);
+        console.log(result);
         expect(error).to.be.null;
         expect(result.res).to.not.equal(undefined); // event is either removed or does not exist
         done();
