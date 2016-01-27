@@ -52,8 +52,14 @@ describe("eventDao", function(){
   });
   after(function(done){
     eventDao.removeEvent(privateEventID, function(error, result){
-      mongoose.disconnect(function(){
-        done();
+      mongoose.connection.db.dropCollection("events", function(){
+        console.log(error);
+        mongoose.connection.db.dropCollection("checkins", function(){
+          console.log(error);
+          mongoose.disconnect(function(){
+            done();
+          });
+        })
       });
     })
   });

@@ -166,7 +166,30 @@
             in : "body"
             description : "Data needed to add a user to a private event."
             schema :
-              $ref : "#/definitions/PrivateAttendeeBody"
+              $ref : "#/definitions/AttendeeBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventRemovedResponse"
+    /events/addEventManager:
+      post:
+        tags :
+          - "events"
+        description: "This route will add an attendee to a private event. If the event is not private, the request will fail.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed to authenticate with. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name : "body"
+            in : "body"
+            description : "Data needed to add a user to a private event."
+            schema :
+              $ref : "#/definitions/ManagerBody"
         responses:
           200:
             description: "Successful response"
@@ -534,24 +557,39 @@
               type : "string"
             name:
               type : "string"
-            organization :
+            orgGuid :
               type : "string"
             timestamp :
               type : "number"
-    PrivateAttendeeBody:
+    AttendeeBody:
+      required:
+        - eventID
+        - attendee
+      properties:
+        eventID:
+          type : "string"
+        attendee:
+          properties:
+            personID:
+              type : "string"
+            name:
+              type : "string"
+            orgGuid :
+              type : "string"
+    ManagerBody:
       required:
         - eventID
         - checkIn
       properties:
         eventID:
           type : "string"
-        checkIn:
+        manager:
           properties:
             personID:
               type : "string"
             name:
               type : "string"
-            organization :
+            orgGuid :
               type : "string"
     RemoveCheckInBody:
       required:
@@ -568,7 +606,7 @@
           type : "string"
         name:
           type : "string"
-        organization:
+        orgGuid:
           type : "string"
         timestamp:
           type : "string"
@@ -593,7 +631,7 @@
               type : "number"
             location:
               type : "string"
-            organization:
+            orgGuid:
               type : "string"
             _id:
               type : "string"
@@ -611,7 +649,7 @@
               type : "string"
             name:
               type : "string"
-            organization:
+            orgGuid:
               type : "string"
             timestamp:
               type : "string"
