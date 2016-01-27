@@ -32,7 +32,8 @@ redisClient.on("connect", function(){
     app.use(loggerMiddleware);
 
     // host static files
-    app.use("/docs", express.static(__dirname + "/docs"));
+    app.use("/docs", express.static(__dirname + "/node_modules/swagger-ui/dist"));
+    app.use("/swagger.yaml", express.static(__dirname + "/docs/swagger.yaml"));
     // templates
     // var indexTemplate = marko.load("./index.marko", {writeToDisk : false});
 
