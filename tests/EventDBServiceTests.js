@@ -89,13 +89,13 @@ describe('EventDBService', function(){
 
   // clean up
   after(function(done){
-    dao.removeCheckInsByEvent(testPublicEventID, function(error, result){
-      dao.removeCheckInsByEvent(testPrivateEventID, function(error, result){
+    dao.removeCheckInsByEvent(testPublicEventID).then(function(result){
+      dao.removeCheckInsByEvent(testPrivateEventID).then(function(result){
         mongoose.disconnect(function(){
           done();
         });
       });
-    })
+    });
 
   });
 
@@ -134,10 +134,12 @@ describe('EventDBService', function(){
       eventService.updateEvent(testPublicEvent, testManager, function(error, result){
         expect(error).to.be.null;
         expect(result).to.be.not.null;
-        dao.getEvent(testPublicEventID, function(getError, getResult){
-          expect(getError).to.be.null;
+        dao.getEvent(testPublicEventID).then(function(getResult){
           expect(getResult).to.be.not.null;
           expect(getResult.title).to.equal(testPublicEvent.title);
+          done();
+        },function(getError){
+          expect(getError).to.be.null;
           done();
         });
       });
@@ -225,13 +227,11 @@ describe('EventDBService', function(){
 
   describe('#addEventManager', function(){
     it('can add an event manager that is not an attendee to an event', function(done){
-
       eventService.addEventManager(testPrivateEventID, testManager, someNewEventManager, function(error, result){
         console.log('Attempting to insert event manager');
         expect(error).to.be.null;
         expect(result.res).to.not.equal(undefined);
-        dao.getCheckIn(someNewEventManager.personID, testPrivateEventID, function(error, checkIn){
-          expect(error).to.be.null;
+        dao.getCheckIn(someNewEventManager.personID, testPrivateEventID).then(function(checkIn){
           expect(checkIn).to.be.not.null;
           expect(checkIn.checked_in).to.equal(false);
           expect(checkIn.event_manager).to.equal(true);
@@ -253,8 +253,7 @@ describe('EventDBService', function(){
         console.log('Attempting to insert event manager');
         expect(error).to.be.null;
         expect(result.res).to.not.equal(undefined);
-        dao.getCheckIn(someNewEventManager.personID, testPrivateEventID, function(error, checkIn){
-          expect(error).to.be.null;
+        dao.getCheckIn(someNewEventManager.personID, testPrivateEventID).then(function(checkIn){
           expect(checkIn).to.be.not.null;
           expect(checkIn.checked_in).to.equal(false);
           expect(checkIn.event_manager).to.equal(true);
