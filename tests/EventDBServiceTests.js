@@ -132,13 +132,14 @@ describe('EventDBService', function(){
       testPublicEvent.eventID = testPublicEventID;
       testPublicEvent.title = 'Updated Public EventDBService Test';
       eventService.updateEvent(testPublicEvent, testManager, function(error, result){
+        console.log(error);
         expect(error).to.be.null;
         expect(result).to.be.not.null;
         dao.getEvent(testPublicEventID).then(function(getResult){
           expect(getResult).to.be.not.null;
           expect(getResult.title).to.equal(testPublicEvent.title);
           done();
-        },function(getError){
+        }).catch(function(getError){
           expect(getError).to.be.null;
           done();
         });

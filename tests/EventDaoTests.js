@@ -69,7 +69,7 @@ describe('eventDao', function(){
         publicEventID = result._id;
         console.log(result);
         done();
-      }, function(error){
+      }).catch(function(error){
         expect(error).to.be.null;
         done();
       });
@@ -79,7 +79,7 @@ describe('eventDao', function(){
         privateEventID = result._id;
         expect(result).to.be.not.null;
         done();
-      }, function(error){
+      }).catch(function(error){
         expect(error).to.be.null;
         done();
       });
@@ -93,8 +93,8 @@ describe('eventDao', function(){
         expect(result.thumbnail_url).to.not.equal(undefined);
         expect(result.image_url).to.not.equal(undefined);
         done();
-      },function(error){
-        expect(error).to.be.not.null;
+      }).catch(function(error){
+        expect(error).to.be.null;
         done();
       });
     });
@@ -124,7 +124,7 @@ describe('eventDao', function(){
       eventDao.insertCheckIn(testManagerCheckIn).then(function(result){
         expect(result.person_id).to.equal(testManagerCheckIn.person_id);
         done();
-      },function(error){
+      }).catch(function(error){
         expect(error).to.be.null;
         done();
       });
@@ -132,7 +132,8 @@ describe('eventDao', function(){
     it('#insertCheckIn cannot insert the same check-in into the database', function(done){
       eventDao.insertCheckIn(testManagerCheckIn).then(function(result){
         done();
-      },function(error){
+      }).catch(function(error){
+        console.log(error);
         expect(error).to.be.not.null;
         done();
       });
@@ -142,7 +143,7 @@ describe('eventDao', function(){
       eventDao.insertCheckIn(testAttendeeCheckIn).then(function(result){
         expect(result.person_id).to.equal(testAttendeeCheckIn.person_id);
         done();
-      },function(error){
+      }).catch(function(error){
         expect(error).to.be.null;
         done();
       });
@@ -271,6 +272,15 @@ describe('eventDao', function(){
         done();
       }, function(error){
         expect(error).to.not.be.null;
+        done();
+      });
+    });
+    it('will throw an error if the event does not exist', function(done){
+      eventDao.removeEvent(publicEventID).then(function(result){
+        expect(result.result.n).to.not.equal(1);
+        done();
+      }, function(error){
+        expect(error).to.not.be.not.null;
         done();
       });
     });
