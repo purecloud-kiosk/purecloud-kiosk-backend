@@ -85,9 +85,22 @@ describe("CachingService", function(){
   describe("#getEventData", function(){
     it("can store an event in a cache", function(done){
       cachingService.getEventData(testEventID).then(function(response){
+        console.log(response);
         expect(response.type).to.equal("event");
-        expect(response.title).to.equal(testEvent.title);
-        expect(response.private).to.equal(testEvent.private);
+        expect(response.data).to.equal(100);
+        done();
+      }).catch(function(error){
+        console.log(error);
+        expect(error).to.be.null;
+        done();
+      });
+    });
+  });
+
+  describe("#removeEventData", function(){
+    it("can store an event in a cache", function(done){
+      cachingService.removeEvent(testEventID).then(function(response){
+        expect(response).to.equal(1);
         done();
       }).catch(function(error){
         expect(error).to.be.null;

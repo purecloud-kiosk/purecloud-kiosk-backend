@@ -102,6 +102,7 @@ describe('EventDBService', function(){
   describe('#createEvent', function(){
     it('can insert a public event into the database', function(done){
       eventService.createEvent(testPublicEvent, testManager, function(error, result){
+        console.log(error);
         expect(error).to.be.null;
         expect(result.event).to.not.equal(undefined);
         expect(result.event.title).to.equal(testPublicEvent.title);
@@ -132,7 +133,6 @@ describe('EventDBService', function(){
       testPublicEvent.eventID = testPublicEventID;
       testPublicEvent.title = 'Updated Public EventDBService Test';
       eventService.updateEvent(testPublicEvent, testManager, function(error, result){
-        console.log(error);
         expect(error).to.be.null;
         expect(result).to.be.not.null;
         dao.getEvent(testPublicEventID).then(function(getResult){
@@ -209,9 +209,6 @@ describe('EventDBService', function(){
   describe('#addPrivateAttendee', function(){
     it('can add an attendee (check-in) to a private event', function(done){
       eventService.addPrivateAttendee(testPrivateEventID, testManager, somePrivateCheckIn, function(error, result){
-        console.log('Attempting to insert private attendee')
-        console.log(error);
-        console.log(result);
         expect(error).to.be.null;
         expect(result.res).to.not.equal(undefined);
         done();
@@ -229,10 +226,14 @@ describe('EventDBService', function(){
   describe('#addEventManager', function(){
     it('can add an event manager that is not an attendee to an event', function(done){
       eventService.addEventManager(testPrivateEventID, testManager, someNewEventManager, function(error, result){
-        console.log('Attempting to insert event manager');
+        console.log(error);
         expect(error).to.be.null;
         expect(result.res).to.not.equal(undefined);
-        dao.getCheckIn(someNewEventManager.personID, testPrivateEventID).then(function(checkIn){
+        dao.getCheckIn({
+          'personID' : someNewEventManager.personID,
+          'eventID' : testPrivateEventID,
+          'manager' : true
+        }).then(function(checkIn){
           expect(checkIn).to.be.not.null;
           expect(checkIn.checked_in).to.equal(false);
           expect(checkIn.event_manager).to.equal(true);
@@ -251,10 +252,12 @@ describe('EventDBService', function(){
 
     it('can make an attendee an event manager', function(done){
       eventService.addEventManager(testPrivateEventID, testManager, somePrivateCheckIn, function(error, result){
-        console.log('Attempting to insert event manager');
         expect(error).to.be.null;
         expect(result.res).to.not.equal(undefined);
-        dao.getCheckIn(someNewEventManager.personID, testPrivateEventID).then(function(checkIn){
+        dao.getCheckIn({
+          'personID' : someNewEventManager.personID,
+          'eventID' : testPrivateEventID
+        }).then(function(checkIn){
           expect(checkIn).to.be.not.null;
           expect(checkIn.checked_in).to.equal(false);
           expect(checkIn.event_manager).to.equal(true);
@@ -266,6 +269,7 @@ describe('EventDBService', function(){
   describe('#checkIntoEvent', function(){
     it('can check in an public event\'s manager', function(done){
       eventService.checkIntoEvent(testPublicEventID, testManager, managerCheckIn, function(error, result){
+        console.log(error);
         expect(error).to.be.null;
         expect(result.res).to.not.equal(undefined); // event is either removed or does not exist
         done();
@@ -280,8 +284,6 @@ describe('EventDBService', function(){
     });
     it('can check in an private event\'s manager', function(done){
       eventService.checkIntoEvent(testPrivateEventID, testManager, managerCheckIn, function(error, result){
-        console.log(error);
-        console.log(result);
         expect(error).to.be.null;
         expect(result.res).to.not.equal(undefined); // event is either removed or does not exist
         done();

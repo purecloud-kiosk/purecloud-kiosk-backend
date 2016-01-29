@@ -152,14 +152,20 @@ describe('eventDao', function(){
 
   describe('#getCheckIn', function(){
     it('can retrieve a single event from the database', function(done){
-      eventDao.getCheckIn(testManagerCheckIn.person_id, publicEventID).then(function(result){
+      eventDao.getCheckIn({
+        'personID' : testManagerCheckIn.person_id,
+        'eventID' : publicEventID
+      }).then(function(result){
         expect(result.name).to.equal(testManagerCheckIn.name);
         done();
       });
     });
 
     it('can be used to update check_in status.', function(done){
-      eventDao.getCheckIn(testManagerCheckIn.person_id, publicEventID).then(function(result){
+      eventDao.getCheckIn({
+        'personID' : testManagerCheckIn.person_id,
+        'eventID' : publicEventID
+      }).then(function(result){
         result.checked_in = true;
         result.save(function(saveError, saveResult){
           expect(saveResult.checked_in).to.equal(true);
