@@ -19,7 +19,7 @@
   "scripts": {
     "start-dev": "nodemon server.js",
     "start": "node server.js",
-    "test": "mocha tests"
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",
