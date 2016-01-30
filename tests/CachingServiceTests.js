@@ -1,8 +1,8 @@
 var expect = require("chai").expect;
 
-var redisClient = require("../lib/models/dao/redisClient");
+var redisClient = require("lib/models/dao/redisClient");
 
-var CachingService = require("../lib/services/CachingService");
+var CachingService = require("lib/services/CachingService");
 var cachingService = new CachingService();
 
 var testEvent = { // event to test with, converted into all strings becaue of redis

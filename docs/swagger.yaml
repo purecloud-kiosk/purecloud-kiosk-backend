@@ -32,7 +32,7 @@
             description: "Successful response"
             schema:
               $ref : "#/definitions/LoginResult"
-    /purecloud/search:
+    /purecloud/searchPeople:
       get:
         tags :
           - "purecloud"

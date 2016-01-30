@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 
-var PureCloudAPIService = require('../lib/services/PureCloudAPIService');
+var PureCloudAPIService = require('lib/services/PureCloudAPIService');
 var pureCloudService = new PureCloudAPIService();
 
 var authKey;

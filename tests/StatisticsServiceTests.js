@@ -1,12 +1,12 @@
 var expect = require('chai').expect;
-var config = require('../config.json');
+var config = require('config.json');
 var mongoose = require('mongoose');
 
-var StatisticsService = require('../lib/services/StatisticsService');
+var StatisticsService = require('lib/services/StatisticsService');
 var statsService = new StatisticsService();
-var EventsDBService = require('../lib/services/EventsDBService');
+var EventsDBService = require('lib/services/EventsDBService');
 var eventsService = new EventsDBService();
-var redisClient = require('../lib/models/dao/redisClient');
+var redisClient = require('lib/models/dao/redisClient');
 var Promise = require('bluebird');
 // mock data
 var testUser = {

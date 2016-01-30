@@ -1,11 +1,11 @@
-var config = require('../config.json');
+var config = require('config.json');
 var mongoose = require('mongoose');
-var redisClient = require('../lib/models/dao/redisClient');
+var redisClient = require('lib/models/dao/redisClient');
 
-var EventDao = require('../lib/models/dao/EventDao');
+var EventDao = require('lib/models/dao/EventDao');
 var dao = new EventDao
 
-var EventsDBService = require('../lib/services/EventsDBService');
+var EventsDBService = require('lib/services/EventsDBService');
 var eventService = new EventsDBService
 var expect = require('chai').expect;
 

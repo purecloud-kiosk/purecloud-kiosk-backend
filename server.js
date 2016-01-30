@@ -1,4 +1,5 @@
 'use strict';
+require('app-module-path').addPath(__dirname);
 // lib imports
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -6,17 +7,17 @@ var request = require('request');
 var mongoose = require('mongoose');
 
 // retrieve redisClient
-var redisClient = require('./lib/models/dao/redisClient.js');
+var redisClient = require('lib/models/dao/redisClient.js');
 // load config file
-var config = require('./config.json');
+var config = require('config.json');
 
 // import and instantiate services
-var PureCloudAPIService = require('./lib/services/PureCloudAPIService');
+var PureCloudAPIService = require('lib/services/PureCloudAPIService');
 
 var app = express();
 var pureCloudService = new PureCloudAPIService();
 
-var loggerMiddleware = require('./lib/controllers/middleware/logger');
+var loggerMiddleware = require('lib/controllers/middleware/logger');
 
 redisClient.on('connect', function(){
   // once connection to redis is successful, connect to mongo
@@ -38,9 +39,9 @@ redisClient.on('connect', function(){
     // var indexTemplate = marko.load('./index.marko', {writeToDisk : false});
 
     //append routes
-    app.use('/purecloud', require('./lib/controllers/routes/pureCloud'));
-    app.use('/events', require('./lib/controllers/routes/events'));
-    app.use('/stats', require('./lib/controllers/routes/stats'));
+    app.use('/purecloud', require('lib/controllers/routes/pureCloud'));
+    app.use('/events', require('lib/controllers/routes/events'));
+    app.use('/stats', require('lib/controllers/routes/stats'));
 
     app.get('/api-docs', function(req, res){
       res.sendFile(__dirname + '/docs/index.html');
