@@ -3,10 +3,10 @@ var mongoose = require('mongoose');
 var redisClient = require('../lib/models/dao/redisClient');
 
 var EventDao = require('../lib/models/dao/EventDao');
-var dao = new EventDao();
+var dao = new EventDao
 
 var EventsDBService = require('../lib/services/EventsDBService');
-var eventService = new EventsDBService();
+var eventService = new EventsDBService
 var expect = require('chai').expect;
 
 
@@ -71,18 +71,16 @@ describe('EventDBService', function(){
   // simulate a login
   before(function(done){
     mongoose.connect(config.test_mongo_uri, function(){
-      redisClient.hmset(testManagerSessionKey, testManager, function(hmSetError, hmSetResponse){
-        redisClient.expire(testManagerSessionKey, 1000, function(expireError, expireResponse){
-          done();
-        });
+      redisClient.set(testManagerSessionKey, JSON.stringify(testManager), function(hmSetError, hmSetResponse){
+        done();
       });
     });
   });
 
   // before each method is called, grab the data from redis, just like how a request would really be processed
   beforeEach(function(done){
-    redisClient.hgetall(testManagerSessionKey, function(error, result){
-      testManager = result;
+    redisClient.get(testManagerSessionKey, function(error, result){
+      testManager = JSON.parse(result);
       done();
     });
   });
@@ -100,8 +98,18 @@ describe('EventDBService', function(){
   });
 
   describe('#createEvent', function(){
-    it('can insert a public event into the database', function(done){
-      eventService.createEvent(testPublicEvent, testManager, function(error, result){
+    it('can insert a public event into the database', function(){
+      return eventService.createEvent(testPublicEvent, testManager).then(function(result){
+        expect(result.event).to.not.equal(undefined);
+        expect(result.event.title).to.equal(testPublicEvent.title);
+        expect(result.event.private).to.equal(testPublicEvent.private);
+        expect(result.event.orgGuid).to.equal(testManager.orgGuid);
+        expect(result.checkIn).to.not.equal(undefined);
+        expect(result.checkIn.person_id).to.equal(testManager.personID);
+        testPublicEventID = result.event._id;
+      });
+      /*
+      eventService.createEvent(testPublicEvent, testManager).then(function(result){
         console.log(error);
         expect(error).to.be.null;
         expect(result.event).to.not.equal(undefined);
@@ -111,123 +119,101 @@ describe('EventDBService', function(){
         expect(result.checkIn).to.not.equal(undefined);
         expect(result.checkIn.person_id).to.equal(testManager.personID);
         testPublicEventID = result.event._id;
-        done();
+
       });
+      */
     });
-    it('can insert a private event into the database', function(done){
-      eventService.createEvent(testPrivateEvent, testManager, function(error, result){
-        expect(error).to.be.null;
+    it('can insert a private event into the database', function(){
+      return eventService.createEvent(testPrivateEvent, testManager).then(function(result){
         expect(result.event).to.not.equal(undefined);
         expect(result.event.title).to.equal(testPrivateEvent.title);
         expect(result.event.private).to.equal(testPrivateEvent.private);
         expect(result.checkIn).to.not.equal(undefined);
         expect(result.checkIn.person_id).to.equal(testManager.personID);
         testPrivateEventID = result.event._id;
-        done();
       });
     });
   });
 
   describe('#updateEvent', function(){
-    it('can update an existing event in the database', function(done){
+    it('can update an existing event in the database', function(){
       testPublicEvent.eventID = testPublicEventID;
       testPublicEvent.title = 'Updated Public EventDBService Test';
-      eventService.updateEvent(testPublicEvent, testManager, function(error, result){
-        expect(error).to.be.null;
+      return eventService.updateEvent(testPublicEvent, testManager).then(function( result){
+        console.log(result);
         expect(result).to.be.not.null;
-        dao.getEvent(testPublicEventID).then(function(getResult){
+        return dao.getEvent(testPublicEventID).then(function(getResult){
           expect(getResult).to.be.not.null;
           expect(getResult.title).to.equal(testPublicEvent.title);
-          done();
-        }).catch(function(getError){
-          expect(getError).to.be.null;
-          done();
         });
       });
     });
   });
 
   describe('#getPublicEvents', function(){
-    it('can retrieve all public events belonging to an organization using an orgGuid', function(done){
-      eventService.getPublicEvents(testManager.orgGuid, {'limit' : 25, 'page' : 0}, function(error, result){
-        expect(error).to.be.null;
+    it('can retrieve all public events belonging to an organization using an orgGuid', function(){
+      return eventService.getPublicEvents(testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].title).to.equal(testPublicEvent.title);
-        done();
       });
     });
-    it('returns dates in millis', function(done){
-      eventService.getPublicEvents(testManager.orgGuid, {'limit' : 25, 'page' : 0}, function(error, result){
-        expect(error).to.be.null;
+    it('returns dates in millis', function(){
+      return eventService.getPublicEvents(testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].date).to.be.a('number');
-        done();
       });
     });
   });
 
   describe('#getPrivateEvents', function(){
-    it('can retrieve all private events belonging to an organization', function(done){
-      eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}, function(error, result){
-        expect(error).to.be.null;
+    it('can retrieve all private events belonging to an organization', function(){
+      eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].title).to.equal(testPrivateEvent.title);
         expect(result[0].private).to.equal(true);
-        done();
       });
     });
-    it('returns dates in millis', function(done){
-      eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}, function(error, result){
-        expect(error).to.be.null;
+    it('returns dates in millis', function(){
+      eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].date).to.be.a('number');
-        done();
       });
     });
   });
 
   describe('#getEventsManaging', function(){
-    it('can retrieve all events the managed by a user', function(done){
-      eventService.getEventsManaging(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}, function(error, result){
-        expect(error).to.be.null;
+    it('can retrieve all events the managed by a user', function(){
+      return eventService.getEventsManaging(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].title).to.not.be.null;
         expect(result[0].title).to.not.equal(undefined);
-        done();
       });
     });
-    it('returns dates in millis', function(done){
-      eventService.getEventsManaging(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}, function(error, result){
-        expect(error).to.be.null;
+    it('returns dates in millis', function(){
+      return eventService.getEventsManaging(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].date).to.be.a('number');
-        done();
       });
     });
   });
 
   describe('#addPrivateAttendee', function(){
-    it('can add an attendee (check-in) to a private event', function(done){
-      eventService.addPrivateAttendee(testPrivateEventID, testManager, somePrivateCheckIn, function(error, result){
-        expect(error).to.be.null;
+    it('can add an attendee (check-in) to a private event', function(){
+      return eventService.addPrivateAttendee(testPrivateEventID, testManager, somePrivateCheckIn).then(function(result){
         expect(result.res).to.not.equal(undefined);
-        done();
       });
     });
-    it('will not add an attendee (check-in) to a public event', function(done){
-      eventService.addPrivateAttendee(testPublicEventID, testManager, somePublicCheckIn, function(error, result){
+    it('will not add an attendee (check-in) to a public event', function(){
+      return eventService.addPrivateAttendee(testPublicEventID, testManager, somePublicCheckIn).catch(function(error){
         expect(error).to.be.not.null;
-        expect(result).to.equal(undefined);
-        done();
+        expect(error).to.not.equal(undefined);
       });
     });
   });
 
   describe('#addEventManager', function(){
-    it('can add an event manager that is not an attendee to an event', function(done){
-      eventService.addEventManager(testPrivateEventID, testManager, someNewEventManager, function(error, result){
-        console.log(error);
-        expect(error).to.be.null;
+    it('can add an event manager that is not an attendee to an event', function(){
+      return eventService.addEventManager(testPrivateEventID, testManager, someNewEventManager).then(function(result){
         expect(result.res).to.not.equal(undefined);
         dao.getCheckIn({
           'personID' : someNewEventManager.personID,
@@ -237,108 +223,90 @@ describe('EventDBService', function(){
           expect(checkIn).to.be.not.null;
           expect(checkIn.checked_in).to.equal(false);
           expect(checkIn.event_manager).to.equal(true);
-          done();
         });
       });
     });
 
-    it('will fail to add an already existing manager', function(done){
-
-      eventService.addEventManager(testPrivateEventID, testManager, someNewEventManager, function(error, result){
+    it('will fail to add an already existing manager', function(){
+      return eventService.addEventManager(testPrivateEventID, testManager, someNewEventManager).catch(function(error){
         expect(error).to.be.not.null;
-        done();
+        expect(error).to.not.equal(undefined);
       });
     });
 
-    it('can make an attendee an event manager', function(done){
-      eventService.addEventManager(testPrivateEventID, testManager, somePrivateCheckIn, function(error, result){
-        expect(error).to.be.null;
+    it('can make an attendee an event manager', function(){
+      return eventService.addEventManager(testPrivateEventID, testManager, somePrivateCheckIn).then(function(result){
         expect(result.res).to.not.equal(undefined);
-        dao.getCheckIn({
+        return dao.getCheckIn({
           'personID' : someNewEventManager.personID,
           'eventID' : testPrivateEventID
         }).then(function(checkIn){
           expect(checkIn).to.be.not.null;
           expect(checkIn.checked_in).to.equal(false);
           expect(checkIn.event_manager).to.equal(true);
-          done();
         });
       });
     });
   });
   describe('#checkIntoEvent', function(){
-    it('can check in an public event\'s manager', function(done){
-      eventService.checkIntoEvent(testPublicEventID, testManager, managerCheckIn, function(error, result){
-        console.log(error);
-        expect(error).to.be.null;
+    it('can check in an public event\'s manager', function(){
+      return eventService.checkIntoEvent(testPublicEventID, testManager, managerCheckIn).then(function(result){
         expect(result.res).to.not.equal(undefined); // event is either removed or does not exist
-        done();
+
       });
     });
-    it('can check in anyone within the organization to a public event', function(done){
-      eventService.checkIntoEvent(testPublicEventID, testManager, somePublicCheckIn, function(error, result){
-        expect(error).to.be.null;
-        expect(result.res).to.not.equal(undefined); // event is either removed or does not exist
-        done();
+    it('can check in anyone within the organization to a public event', function(){
+      return eventService.checkIntoEvent(testPublicEventID, testManager, somePublicCheckIn).then(function(result){
+        expect(result.res).to.not.equal(undefined);
+
       });
     });
-    it('can check in an private event\'s manager', function(done){
-      eventService.checkIntoEvent(testPrivateEventID, testManager, managerCheckIn, function(error, result){
-        expect(error).to.be.null;
-        expect(result.res).to.not.equal(undefined); // event is either removed or does not exist
-        done();
+    it('can check in an private event\'s manager', function(){
+      return eventService.checkIntoEvent(testPrivateEventID, testManager, managerCheckIn).then(function(result){
+        expect(result.res).to.not.equal(undefined);
       });
     });
-    it('will deny a checkin if it has not been added to an event', function(done){
+    it('will deny a checkin if it has not been added to an event', function(){
       var somePrivateCheckIn = {
         'personID' : testManager.personID,
         'name' : testManager.name,
         'orgGuid' : testManager.orgGuid,
         'timestamp' : Date.now()
       };
-      eventService.checkIntoEvent(testPrivateEventID, testManager, somePrivateCheckIn, function(error, result){
-        expect(error).to.be.not.null;
-        expect(error.error).to.equal('The user is already checked in');
-        expect(result).to.equal(undefined); // event is either removed or does not exist
-        done();
+      return eventService.checkIntoEvent(testPrivateEventID, testManager, somePrivateCheckIn).catch(function(error){
+        expect(error).to.not.be.null;
+        expect(error).to.not.equal(undefined);
       });
     });
   });
 
   describe('#searchManagedEvents', function(){
-    it('can search for events matching the query supplied using Regex', function(done){
-      eventService.searchManagedEvents('Public', testManager, {'limit' : 25, 'page' : 0}, function(error, result){
+    it('can search for events matching the query supplied using Regex', function(){
+      return eventService.searchManagedEvents('Public', testManager, {'limit' : 25, 'page' : 0}).then(function(result){
           expect(result.length).to.equal(1);
-          done();
-        });
+      });
     });
-    it('can search for events matching the query supplied using Regex', function(done){
-      eventService.searchManagedEvents('private', testManager,  {'limit' : 25, 'page' : 0}, function(error, result){
+    it('can search for events matching the query supplied using Regex', function(){
+      return eventService.searchManagedEvents('private', testManager,  {'limit' : 25, 'page' : 0}).then(function(result){
           expect(result.length).to.equal(1);
-          done();
-        });
+      });
     });
-    it('will return nothing if the query is not matched', function(done){
-      eventService.searchManagedEvents('not a title', testManager,  {'limit' : 25, 'page' : 0}, function(error, result){
+    it('will return nothing if the query is not matched', function(){
+      return eventService.searchManagedEvents('not a title', testManager,  {'limit' : 25, 'page' : 0}).then(function(result){
           expect(result.length).to.equal(0);
-          done();
-        });
+      });
     });
   });
 
   describe('#removeEvent', function(){
-    it('can remove a public event from the database', function(done){
-      eventService.removeEvent(testPublicEventID, testManager, function(error, result){
-        expect(error).to.be.null;
+    it('can remove a public event from the database', function(){
+      return eventService.removeEvent(testPublicEventID, testManager).then(function(result){
         expect(result.res).to.not.equal(undefined); // event is either removed or does not exist
-        done();
       });
     });
-    it('can remove a private event from the database', function(done){
-      eventService.removeEvent(testPrivateEventID, testManager, function(error, result){
-        expect(error).to.be.null;
+    it('can remove a private event from the database', function(){
+      return eventService.removeEvent(testPrivateEventID, testManager).then(function(result){
         expect(result.res).to.not.equal(undefined); // event is either removed or does not exist
-        done();
       });
     });
   });

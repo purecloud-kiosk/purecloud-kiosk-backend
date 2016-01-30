@@ -195,29 +195,6 @@
             description: "Successful response"
             schema:
               $ref : "#/definitions/EventRemovedResponse"
-    /events/removeCheckIn:
-      post:
-        tags :
-          - "events"
-        description: "This route will remove an check-in from an event. Note: This will works on users in any event, regardless of their check-in status. So this route can be used for removing private attendees.\n"
-        parameters:
-          -
-            name: "Authorization"
-            in: "header"
-            description: "Access Token needed to authenticate with. Format:  `bearer <authToken>`"
-            required: true
-            type: "string"
-          -
-            name : "body"
-            in : "body"
-            description : "Data needed to remove a user from an event."
-            schema :
-              $ref : "#/definitions/RemoveCheckInBody"
-        responses:
-          200:
-            description: "Successful response"
-            schema:
-              $ref : "#/definitions/EventRemovedResponse"
     /events/checkIn:
       post:
         tags :

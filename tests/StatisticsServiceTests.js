@@ -7,7 +7,7 @@ var statsService = new StatisticsService();
 var EventsDBService = require('../lib/services/EventsDBService');
 var eventsService = new EventsDBService();
 var redisClient = require('../lib/models/dao/redisClient');
-
+var Promise = require('bluebird');
 // mock data
 var testUser = {
   'personID' : 'Test User',
@@ -20,7 +20,7 @@ var testCheckIn = {
   'personID' : 'Test CheckIn',
   'email' : 'test.user@email.com',
   'name' : 'Mr. Test CheckIn',
-  'orgGuid' : '2340982-2342342-2344234234-2342342332',
+  'orgGuid' : testUser.orgGuid,
   'timestamp' : Date.now()
 };
 var testEvents = [
@@ -60,23 +60,21 @@ describe('StatisticsService', function(){
   // simulate a login
   before(function(done){
     mongoose.connect(config.test_mongo_uri, function(){
-      redisClient.hmset(testUserSessionKey, testUser, function(hmSetError, hmSetResponse){
-        eventsService.createEvent(testEvents[0], testUser, function(error, response){
-          console.log(response);
+      redisClient.set(testUserSessionKey, JSON.stringify(testUser), function(hmSetError, hmSetResponse){
+        eventsService.createEvent(testEvents[0], testUser).then(function(response){
           eventIDs.push(response.event._id);
-          eventsService.createEvent(testEvents[1], testUser, function(error, response){
-            console.log(response);
-            eventIDs.push(response.event._id);
-            eventsService.createEvent(testEvents[2], testUser, function(error, response){
-              console.log(response);
-              eventIDs.push(response.event._id);
-              eventsService.createEvent(testEvents[3], testUser, function(error, response){
-                console.log(response);
-                eventIDs.push(response.event._id);
-                done();
-              });
-            });
-          });
+          console.log(response.event._id);
+          return eventsService.createEvent(testEvents[1], testUser);
+        }).then(function(response){
+          eventIDs.push(response.event._id);
+          return eventsService.createEvent(testEvents[2], testUser);
+        }).then(function(response){
+          eventIDs.push(response.event._id);
+          return eventsService.createEvent(testEvents[3], testUser);
+        }).then(function(response){
+          eventIDs.push(response.event._id);
+          console.log("done");
+          done();
         });
       });
     });
@@ -84,59 +82,53 @@ describe('StatisticsService', function(){
 
   // before each method is called, grab the data from redis, just like how a request would really be processed
   beforeEach(function(done){
-    redisClient.hgetall(testUserSessionKey, function(error, result){
-      testUser = result;
+    redisClient.get(testUserSessionKey, function(error, result){
+      testUser = JSON.parse(result);
       done();
     });
   });
 
   describe('#getUserStats', function(){
     it('should be able to get the totalPublicEventsAvailable, totalPrivateEventsAvailable, '+
-      'publicEventsCheckedIn, and privateEventsCheckedIn on the user', function(done){
-      statsService.getUserStats(testUser, function(result){
+      'publicEventsCheckedIn, and privateEventsCheckedIn on the user', function(){
+      return statsService.getUserStats(testUser).then(function(result){
+        console.log(result);
         expect(result.totalPublicEventsAvailable).to.equal(2);
         expect(result.totalPrivateEventsAvailable).to.equal(2);
-        done();
       });
     });
   });
 
   describe('#getEventStats', function(){
-    before(function(done){
-      eventsService.checkIntoEvent(eventIDs[0], testUser, testCheckIn, function(error, result){
-        expect(error).to.be.null;
-        done();
+    before(function(){
+      return eventsService.checkIntoEvent(eventIDs[0], testUser, testCheckIn).then(function(result){
+        expect(result).to.be.not.null;
+        expect(result).to.not.equal(undefined);
       });
     });
-    it('can get amount checked in for a public event', function(done){
-      statsService.getEventStats(eventIDs[0], function(error, stats){
-        console.log(error);
-        console.log(stats);
-        expect(error).to.be.null;
+    it('can get amount checked in for a public event', function(){
+      return statsService.getEventStats(eventIDs[0]).then(function(stats){
         expect(stats.checkedIn).to.equal(1);
         expect(stats.notCheckedIn).to.equal(1); // manager
-        done();
       });
     });
-    after(function(done){
+    after(function(){
       console.log(eventIDs[0]);
-      eventsService.removeAttendee(eventIDs[0], testUser, testCheckIn.personID, function(error, result){
-        console.log(error);
-        expect(error).to.be.null;
-        done();
+      return eventsService.removeAttendee(eventIDs[0], testUser, testCheckIn.personID).then(function(result){
+        return;
       });
     });
   });
   // clean up
-  after(function(done){
-    eventsService.removeEvent(eventIDs[0], testUser, function(error, response){
-      eventsService.removeEvent(eventIDs[1], testUser, function(error, response){
-        eventsService.removeEvent(eventIDs[2], testUser, function(error, response){
-          eventsService.removeEvent(eventIDs[3], testUser, function(error, response){
-            done();
-          });
-        });
-      });
+  after(function(){
+    eventsService.removeEvent(eventIDs[0]).then(function(response){
+      return eventsService.removeEvent(eventIDs[1])
+    }).then(function(response){
+      return eventsService.removeEvent(eventIDs[2]);
+    }).then(function(response){
+      return eventsService.removeEvent(eventIDs[3]);
+    }).then(function(response){
+      return;
     });
   });
 });
