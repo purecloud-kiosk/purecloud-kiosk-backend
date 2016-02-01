@@ -110,7 +110,6 @@ describe('StatisticsService', function(){
       });
     });
     after(function(){
-      console.log(eventIDs[0]);
       return eventsService.removeAttendee(eventIDs[0], testUser, testCheckIn.personID).then(function(result){
         return;
       });
@@ -118,12 +117,12 @@ describe('StatisticsService', function(){
   });
   // clean up
   after(function(){
-    eventsService.removeEvent(eventIDs[0]).then(function(response){
-      return eventsService.removeEvent(eventIDs[1])
+    eventsService.removeEvent(eventIDs[0], testUser).then(function(response){
+      return eventsService.removeEvent(eventIDs[1], testUser)
     }).then(function(response){
-      return eventsService.removeEvent(eventIDs[2]);
+      return eventsService.removeEvent(eventIDs[2], testUser);
     }).then(function(response){
-      return eventsService.removeEvent(eventIDs[3]);
+      return eventsService.removeEvent(eventIDs[3], testUser);
     }).then(function(response){
       return;
     });

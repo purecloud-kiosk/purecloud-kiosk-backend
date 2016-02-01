@@ -140,7 +140,6 @@ describe('EventDBService', function(){
       testPublicEvent.eventID = testPublicEventID;
       testPublicEvent.title = 'Updated Public EventDBService Test';
       return eventService.updateEvent(testPublicEvent, testManager).then(function( result){
-        console.log(result);
         expect(result).to.be.not.null;
         return dao.getEvent(testPublicEventID).then(function(getResult){
           expect(getResult).to.be.not.null;
@@ -167,14 +166,14 @@ describe('EventDBService', function(){
 
   describe('#getPrivateEvents', function(){
     it('can retrieve all private events belonging to an organization', function(){
-      eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
+      return eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].title).to.equal(testPrivateEvent.title);
         expect(result[0].private).to.equal(true);
       });
     });
     it('returns dates in millis', function(){
-      eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
+      return eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].date).to.be.a('number');
       });
