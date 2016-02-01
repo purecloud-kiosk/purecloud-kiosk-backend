@@ -63,7 +63,6 @@ describe('StatisticsService', function(){
       redisClient.set(testUserSessionKey, JSON.stringify(testUser), function(hmSetError, hmSetResponse){
         eventsService.createEvent(testEvents[0], testUser).then(function(response){
           eventIDs.push(response.event._id);
-          console.log(response.event._id);
           return eventsService.createEvent(testEvents[1], testUser);
         }).then(function(response){
           eventIDs.push(response.event._id);
@@ -73,7 +72,6 @@ describe('StatisticsService', function(){
           return eventsService.createEvent(testEvents[3], testUser);
         }).then(function(response){
           eventIDs.push(response.event._id);
-          console.log("done");
           done();
         });
       });
@@ -92,7 +90,6 @@ describe('StatisticsService', function(){
     it('should be able to get the totalPublicEventsAvailable, totalPrivateEventsAvailable, '+
       'publicEventsCheckedIn, and privateEventsCheckedIn on the user', function(){
       return statsService.getUserStats(testUser).then(function(result){
-        console.log(result);
         expect(result.totalPublicEventsAvailable).to.equal(2);
         expect(result.totalPrivateEventsAvailable).to.equal(2);
       });

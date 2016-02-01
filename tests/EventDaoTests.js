@@ -109,7 +109,6 @@ describe('eventDao', function(){
     });
     it('#insertCheckIn cannot insert the same check-in into the database', function(){
       return eventDao.insertCheckIn(testManagerCheckIn).catch(function(error){
-        console.log(error);
         expect(error).to.be.not.null;
       });
     });
@@ -231,6 +230,16 @@ describe('eventDao', function(){
     });
   });
 
+  describe('#getEventsCheckInCounts', function(){
+    it('can get the number of events a user is checked into and not checked into', function(){
+      return eventDao.getEventsCheckInCounts(testManagerCheckIn.person_id, testManagerCheckIn.orgGuid).then(function(result){
+        expect(result[0]._id.private).to.equal(false);
+        expect(result[0]._id.checkedIn).to.equal(true);
+        expect(result[0].total).to.equal(1);
+      });
+    });
+  });
+
   describe('#removeEvent', function(){
     it('can remove an event by it\'s \'_id\'', function(){
       return eventDao.removeEvent(publicEventID).then(function(result){
@@ -262,8 +271,5 @@ describe('eventDao', function(){
       });
     });
   });
-
-
-
 
 });
