@@ -105,7 +105,7 @@ describe('EventDBService', function(){
         expect(result.event.private).to.equal(testPublicEvent.private);
         expect(result.event.orgGuid).to.equal(testManager.orgGuid);
         expect(result.checkIn).to.not.equal(undefined);
-        expect(result.checkIn.person_id).to.equal(testManager.personID);
+        expect(result.checkIn.personID).to.equal(testManager.personID);
         testPublicEventID = result.event._id;
       });
       /*
@@ -117,7 +117,7 @@ describe('EventDBService', function(){
         expect(result.event.private).to.equal(testPublicEvent.private);
         expect(result.event.orgGuid).to.equal(testManager.orgGuid);
         expect(result.checkIn).to.not.equal(undefined);
-        expect(result.checkIn.person_id).to.equal(testManager.personID);
+        expect(result.checkIn.personID).to.equal(testManager.personID);
         testPublicEventID = result.event._id;
 
       });
@@ -129,7 +129,7 @@ describe('EventDBService', function(){
         expect(result.event.title).to.equal(testPrivateEvent.title);
         expect(result.event.private).to.equal(testPrivateEvent.private);
         expect(result.checkIn).to.not.equal(undefined);
-        expect(result.checkIn.person_id).to.equal(testManager.personID);
+        expect(result.checkIn.personID).to.equal(testManager.personID);
         testPrivateEventID = result.event._id;
       });
     });
@@ -221,7 +221,7 @@ describe('EventDBService', function(){
         }).then(function(checkIn){
           expect(checkIn).to.be.not.null;
           expect(checkIn.checked_in).to.equal(false);
-          expect(checkIn.event_manager).to.equal(true);
+          expect(checkIn.eventManager).to.equal(true);
         });
       });
     });
@@ -242,7 +242,7 @@ describe('EventDBService', function(){
         }).then(function(checkIn){
           expect(checkIn).to.be.not.null;
           expect(checkIn.checked_in).to.equal(false);
-          expect(checkIn.event_manager).to.equal(true);
+          expect(checkIn.eventManager).to.equal(true);
         });
       });
     });

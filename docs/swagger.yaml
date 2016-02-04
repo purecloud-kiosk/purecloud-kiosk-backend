@@ -459,9 +459,9 @@
           type : "number"
         location:
           type : "string"
-        image_url:
+        imageUrl:
           type : "string"
-        thumbnail_url:
+        thumbnailUrl:
           type : "string"
         private:
           type : "boolean"
@@ -474,9 +474,9 @@
         - date
         - location
         - description
-        - image_url
+        - imageUrl
         - private
-        - thumbnail_url
+        - thumbnailUrl
       properties :
         eventID :
           type : "string"
@@ -486,9 +486,9 @@
           type : "number"
         location:
           type : "string"
-        image_url:
+        imageUrl:
           type : "string"
-        thumbnail_url:
+        thumbnailUrl:
           type : "string"
         private:
           type : "boolean"
@@ -513,9 +513,9 @@
           type : "string"
         _id:
           type : "string"
-        image_url:
+        imageUrl:
           type : "string"
-        thumbnail_url:
+        thumbnailUrl:
           type : "string"
         private:
           type : "boolean"
@@ -585,7 +585,7 @@
           type : "string"
     CheckIn:
       properties:
-        person_id:
+        personID:
           type : "string"
         name:
           type : "string"
@@ -620,9 +620,9 @@
               type : "string"
             _id:
               type : "string"
-            image_url:
+            imageUrl:
               type : "string"
-            thumbnail_url:
+            thumbnailUrl:
               type : "string"
             private:
               type : "boolean"
@@ -630,7 +630,7 @@
               type : "string"
         check_in:
           properties:
-            person_id:
+            personID:
               type : "string"
             name:
               type : "string"

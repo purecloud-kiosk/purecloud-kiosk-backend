@@ -24,21 +24,21 @@ var testPrivateEvent = { // event to test with
   'private' : true
 };
 var testAttendeeCheckIn = {
-  'person_id' : 'llsijefleij23489343324',
+  'personID' : 'llsijefleij23489343324',
   'name' : 'Sample Manager CheckIn',
   'orgGuid' : '3248932-3423424323-234324234-234234234',
   'checked_in' : true,
   'timestamp' : Date.now(), // date checked_in
-  'event_manager' : false,
+  'eventManager' : false,
   'image' : 'String'
 };
 var testManagerCheckIn = {
-  'person_id' : 'llsijefleijefsseff43324',
+  'personID' : 'llsijefleijefsseff43324',
   'name' : 'Sample CheckIn',
   'orgGuid' : '3248932-3423424323-234324234-234234234',
   'checked_in' : true,
   'timestamp' : Date.now(), // date checked_in
-  'event_manager' : true,
+  'eventManager' : true,
   'image' : 'String'
 };
 var publicEventID; // id to remove (the above event/'s id)
@@ -81,8 +81,8 @@ describe('eventDao', function(){
     it('can retrieve a single event from the database', function(){
       return eventDao.getEvent(publicEventID).then(function(result){
         expect(result.title).to.equal(testPublicEvent.title);
-        expect(result.thumbnail_url).to.not.equal(undefined);
-        expect(result.image_url).to.not.equal(undefined);
+        expect(result.thumbnailUrl).to.not.equal(undefined);
+        expect(result.imageUrl).to.not.equal(undefined);
       });
     });
   });
@@ -104,7 +104,7 @@ describe('eventDao', function(){
       // add publicEventID to checkIn
       testManagerCheckIn.event = publicEventID;
       return eventDao.insertCheckIn(testManagerCheckIn).then(function(result){
-        expect(result.person_id).to.equal(testManagerCheckIn.person_id);
+        expect(result.personID).to.equal(testManagerCheckIn.personID);
       });
     });
     it('#insertCheckIn cannot insert the same check-in into the database', function(){
@@ -115,7 +115,7 @@ describe('eventDao', function(){
     it('#insertCheckIn can insert a different check-in into the database', function(){
       testAttendeeCheckIn.event = publicEventID;
       return eventDao.insertCheckIn(testAttendeeCheckIn).then(function(result){
-        expect(result.person_id).to.equal(testAttendeeCheckIn.person_id);
+        expect(result.personID).to.equal(testAttendeeCheckIn.personID);
       });
     });
   });
@@ -123,7 +123,7 @@ describe('eventDao', function(){
   describe('#getCheckIn', function(){
     it('can retrieve a single event from the database', function(){
       return eventDao.getCheckIn({
-        'personID' : testManagerCheckIn.person_id,
+        'personID' : testManagerCheckIn.personID,
         'eventID' : publicEventID
       }).then(function(result){
         expect(result.name).to.equal(testManagerCheckIn.name);
@@ -132,7 +132,7 @@ describe('eventDao', function(){
 
     it('can be used to update check_in status.', function(done){
       eventDao.getCheckIn({
-        'personID' : testManagerCheckIn.person_id,
+        'personID' : testManagerCheckIn.personID,
         'eventID' : publicEventID
       }).then(function(result){
         result.checked_in = true;
@@ -147,7 +147,7 @@ describe('eventDao', function(){
   describe('#getAssociatedEvents', function(){
     it('can retrieve events that a manager is associated with in the database using an event manager\'s ID', function(){
       return eventDao.getAssociatedEvents({
-        'personID' : testManagerCheckIn.person_id,
+        'personID' : testManagerCheckIn.personID,
         'orgGuid' : testManagerCheckIn.orgGuid,
         'manager' : true,
         'limit' : 25,
@@ -169,7 +169,7 @@ describe('eventDao', function(){
   describe('#getPrivateEvents', function(){
     it('can retrieve private events a user has access to', function(){
       return eventDao.getPrivateEvents({
-        'personID' : testManagerCheckIn.person_id,
+        'personID' : testManagerCheckIn.personID,
         'orgGuid' : testPublicEvent.orgGuid,
         'limit' : 25,
         'page' : 0
@@ -222,7 +222,7 @@ describe('eventDao', function(){
     it('can search for events matching the query supplied using Regex', function(){
       return eventDao.searchManagedEvents({
         'eventTitle' : 'test',
-        'personID' : testManagerCheckIn.person_id,
+        'personID' : testManagerCheckIn.personID,
         'orgGuid' : testManagerCheckIn.orgGuid
       }).then(function(result){
         expect(result.length).to.equal(1);
@@ -232,7 +232,7 @@ describe('eventDao', function(){
 
   describe('#getEventsCheckInCounts', function(){
     it('can get the number of events a user is checked into and not checked into', function(){
-      return eventDao.getEventsCheckInCounts(testManagerCheckIn.person_id, testManagerCheckIn.orgGuid).then(function(result){
+      return eventDao.getEventsCheckInCounts(testManagerCheckIn.personID, testManagerCheckIn.orgGuid).then(function(result){
         expect(result[0]._id.private).to.equal(false);
         expect(result[0]._id.checkedIn).to.equal(true);
         expect(result[0].total).to.equal(1);
