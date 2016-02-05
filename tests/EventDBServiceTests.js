@@ -31,8 +31,9 @@ var testManager = {
   'personID' : 'Test Manager',
   'email' : 'test.manager@email.com',
   'name' : 'Mr. Test Manager',
-  'organization' : 'Some Organization',
+  'orgName' : 'Some Organization',
   'orgGuid' : '2343442234-fsfefes234-sfsef23-sfseffsfsfe3',
+  'email' : 'ljisef@lfsije.com',
   'eventsManaging' : [],
   'access_token' : testManagerSessionKey
 };
@@ -41,6 +42,7 @@ var somePublicCheckIn = {
   'personID' : 'lisjefil23rjli3rj',
   'name' : 'Someone in the org.',
   'orgGuid' : testManager.orgGuid,
+  'email' : 'ljisef@lfsije.com',
   'timestamp' : Date.now()
 };
 
@@ -48,19 +50,22 @@ var somePrivateCheckIn = {
   'personID' : 'lisjefil23rjli3rj',
   'name' : 'Someone in the org.',
   'orgGuid' : testManager.orgGuid,
+  'email' : 'ljisef@lfsije.com',
   'timestamp' : Date.now()
 };
 
 var someNewEventManager = {
   'personID' : 'newManager',
   'name' : 'Some new manager',
-  'orgGuid' : testManager.orgGuid
+  'orgGuid' : testManager.orgGuid,
+  'email' : 'ljisef@lfsije.com',
 };
 
 var managerCheckIn = {
   'personID' : testManager.personID,
   'name' : testManager.name,
   'orgGuid' : testManager.orgGuid,
+  'email' : 'ljisef@lfsije.com',
   'timestamp' : Date.now()
 };
 

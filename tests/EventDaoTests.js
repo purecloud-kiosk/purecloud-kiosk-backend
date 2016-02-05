@@ -10,7 +10,7 @@ var testPublicEvent = { // event to test with
   'description' : 'Some description',
   'date' : Date.now(),
   'location' : 'Someplace Erie, PA',
-  'organization' : 'PureCloud Kiosk',
+  'orgName' : 'PureCloud Kiosk',
   'orgGuid' : '3248932-3423424323-234324234-234234234',
   'private' : false
 };
@@ -19,7 +19,7 @@ var testPrivateEvent = { // event to test with
   'description' : 'Some description',
   'date' : Date.now(),
   'location' : 'Someplace Erie, PA',
-  'organization' : 'PureCloud Kiosk',
+  'orgName' : 'PureCloud Kiosk',
   'orgGuid' : '3248932-3423424323-234324234-234234234',
   'private' : true
 };
@@ -30,6 +30,7 @@ var testAttendeeCheckIn = {
   'checked_in' : true,
   'timestamp' : Date.now(), // date checked_in
   'eventManager' : false,
+  'email' : 'ljisef@lfsije.com',
   'image' : 'String'
 };
 var testManagerCheckIn = {
@@ -39,6 +40,7 @@ var testManagerCheckIn = {
   'checked_in' : true,
   'timestamp' : Date.now(), // date checked_in
   'eventManager' : true,
+  'email' : 'ljisef@lfsije.com',
   'image' : 'String'
 };
 var publicEventID; // id to remove (the above event/'s id)
@@ -229,7 +231,7 @@ describe('eventDao', function(){
       });
     });
   });
-
+/*
   describe('#getEventsCheckInCounts', function(){
     it('can get the number of events a user is checked into and not checked into', function(){
       return eventDao.getEventsCheckInCounts(testManagerCheckIn.personID, testManagerCheckIn.orgGuid).then(function(result){
@@ -239,6 +241,18 @@ describe('eventDao', function(){
       });
     });
   });
+*/
+
+/*
+  describe('#addInvitation', function(){
+    it('can add an invitation ', function(){
+      return eventDao.updateInvitation().then(function(result){
+        expect(result.result.ok).to.equal(1);
+        expect(result.result.n).to.be.above(0);
+      });
+    });
+  });
+*/
 
   describe('#removeEvent', function(){
     it('can remove an event by it\'s \'_id\'', function(){
@@ -271,5 +285,7 @@ describe('eventDao', function(){
       });
     });
   });
+
+
 
 });
