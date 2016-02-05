@@ -86,7 +86,7 @@ describe('StatisticsService', function(){
       done();
     });
   });
-
+/*
   describe('#getUserStats', function(){
     it('should be able to get the totalPublicEventsAvailable, totalPrivateEventsAvailable, '+
       'publicEventsCheckedIn, and privateEventsCheckedIn on the user', function(){
@@ -96,7 +96,7 @@ describe('StatisticsService', function(){
       });
     });
   });
-/*
+*/
   describe('#getEventStats', function(){
     before(function(){
       return eventsService.checkIntoEvent(eventIDs[0], testUser, testCheckIn).then(function(result){
@@ -116,7 +116,7 @@ describe('StatisticsService', function(){
       });
     });
   });
-  */
+
   // clean up
   after(function(){
     eventsService.removeEvent(eventIDs[0], testUser).then(function(response){
