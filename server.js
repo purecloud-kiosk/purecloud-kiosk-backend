@@ -33,6 +33,7 @@ redisClient.on('connect', function(){
     app.use(loggerMiddleware);
 
     // host static files
+    app.use('/public', express.static(__dirname + '/public'));
     app.use('/docs', express.static(__dirname + '/node_modules/swagger-ui/dist'));
     app.use('/swagger.yaml', express.static(__dirname + '/docs/swagger.yaml'));
     // templates
@@ -42,9 +43,13 @@ redisClient.on('connect', function(){
     app.use('/purecloud', require('lib/controllers/routes/pureCloud'));
     app.use('/events', require('lib/controllers/routes/events'));
     app.use('/stats', require('lib/controllers/routes/stats'));
+    app.use('/invitation', require('lib/controllers/routes/invitation'));
 
     app.get('/api-docs', function(req, res){
       res.sendFile(__dirname + '/docs/index.html');
+    });
+    app.use('*', function(req, res){
+      res.sendFile(__dirname + '/public/html/404.html');
     });
 
     app.listen(8080, function(){
