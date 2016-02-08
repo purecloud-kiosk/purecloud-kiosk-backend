@@ -6,7 +6,7 @@ var EventDao = require('lib/models/dao/EventDao');
 var dao = new EventDao
 
 var EventsDBService = require('lib/services/EventsDBService');
-var eventService = new EventsDBService
+var eventService = new EventsDBService();
 var expect = require('chai').expect;
 
 
@@ -75,7 +75,7 @@ var testPrivateEventID;
 describe('EventDBService', function(){
   // simulate a login
   before(function(done){
-    mongoose.connect(config.test_mongo_uri, function(){
+    mongoose.connect(config.mongo_config.test_uri, function(){
       redisClient.set(testManagerSessionKey, JSON.stringify(testManager), function(hmSetError, hmSetResponse){
         done();
       });

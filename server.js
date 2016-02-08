@@ -7,9 +7,11 @@ var request = require('request');
 var mongoose = require('mongoose');
 
 // retrieve redisClient
-var redisClient = require('lib/models/dao/redisClient.js');
+var redisClient = require('lib/models/dao/redisClient');
+// retrieve elasticsearch client
+var elasticClient = require('lib/models/dao/elasticClient');
 // load config file
-var config = require('config.json');
+var mongo_config = require('config.json').mongo_config;
 
 // import and instantiate services
 var PureCloudAPIService = require('lib/services/PureCloudAPIService');
@@ -20,35 +22,43 @@ var pureCloudService = new PureCloudAPIService();
 var loggerMiddleware = require('lib/controllers/middleware/logger');
 
 redisClient.on('connect', function(){
-  // once connection to redis is successful, connect to mongo
-  mongoose.connect(config.production_mongo_uri);
-  var db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'connection error:'));
-  db.once('open', function(){
-    // upon open, add necessary middleware
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended : true}));
+  // ping elastic to see if there is a connection
+  elasticClient.ping({}, function(error){
+    if(error){
+      console.trace('elasticsearch is down!');
+      process.exit();
+    }
+    else{
+      // once connection to redis and elastic are successful, connect to mongo
+      mongoose.connect(mongo_config.production_uri);
+      var db = mongoose.connection;
+      db.on('error', console.error.bind(console, 'connection error:'));
+      db.once('open', function(){
+        // upon open, add necessary middleware
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({extended : true}));
+        // logger for seeing requests, only for development mode, switch to production for better performance
+        if(app.settings.env === 'development'){
+          console.log('dev mode on');
+          app.use(loggerMiddleware);
+        }
+        // host static files
+        app.use('/docs', express.static(__dirname + '/node_modules/swagger-ui/dist'));
+        app.use('/swagger.yaml', express.static(__dirname + '/docs/swagger.yaml'));
 
-    // logger for seeing requests
-    app.use(loggerMiddleware);
+        //append routes
+        app.use('/purecloud', require('lib/controllers/routes/pureCloud'));
+        app.use('/events', require('lib/controllers/routes/events'));
+        app.use('/stats', require('lib/controllers/routes/stats'));
 
-    // host static files
-    app.use('/docs', express.static(__dirname + '/node_modules/swagger-ui/dist'));
-    app.use('/swagger.yaml', express.static(__dirname + '/docs/swagger.yaml'));
-    // templates
-    // var indexTemplate = marko.load('./index.marko', {writeToDisk : false});
+        app.get('/api-docs', function(req, res){
+          res.sendFile(__dirname + '/docs/index.html');
+        });
 
-    //append routes
-    app.use('/purecloud', require('lib/controllers/routes/pureCloud'));
-    app.use('/events', require('lib/controllers/routes/events'));
-    app.use('/stats', require('lib/controllers/routes/stats'));
-
-    app.get('/api-docs', function(req, res){
-      res.sendFile(__dirname + '/docs/index.html');
-    });
-
-    app.listen(8080, function(){
-      console.log('Server is listening on port 8080...');
-    });
+        app.listen(8080, function(){
+          console.log('Server is listening on port 8080...');
+        });
+      });
+    }
   });
 });

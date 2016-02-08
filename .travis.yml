@@ -4,6 +4,7 @@ node_js:
 services:
   - mongodb
   - redis-server
+  - elasticsearch
 before_script:
   - sleep 15
   - npm install
