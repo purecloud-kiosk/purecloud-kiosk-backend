@@ -155,10 +155,24 @@ describe('eventDao', function(){
         'limit' : 25,
         'page' : 0
       }).then(function(result){
+        console.log(result);
         expect(result).to.have.length.of.at.least(1);
       });
     });
   });
+
+  describe("#getEventIDs", function(){
+    it('can get event ids from an event', function(){
+      return eventDao.getEventIDs({
+        'personID' : testManagerCheckIn.personID,
+        'orgGuid' : testManagerCheckIn.orgGuid,
+        'manager' : true,
+      }).then(function(result){
+        console.log(result);
+        expect(result[0].toString()).to.equal(publicEventID.toString());
+      })
+    });
+  })
 
   describe('#getPublicEvents', function(){
     it('can retrieve public events belonging to an organization', function(){

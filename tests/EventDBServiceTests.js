@@ -175,6 +175,7 @@ describe('EventDBService', function(){
         expect(result.length).to.be.above(0); // event is either removed or does not exist
         expect(result[0].title).to.equal(testPrivateEvent.title);
         expect(result[0].private).to.equal(true);
+        console.log(result);
       });
     });
     it('returns dates in millis', function(){

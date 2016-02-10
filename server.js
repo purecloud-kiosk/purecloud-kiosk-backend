@@ -22,7 +22,6 @@ var pureCloudService = new PureCloudAPIService();
 var loggerMiddleware = require('lib/controllers/middleware/logger');
 
 redisClient.on('connect', function(){
-<<<<<<< HEAD
   // ping elastic to see if there is a connection
   elasticClient.ping({}, function(error){
     if(error){
