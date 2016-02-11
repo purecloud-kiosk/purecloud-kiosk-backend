@@ -169,21 +169,21 @@ describe('EventDBService', function(){
     });
   });
 
-  describe('#getPrivateEvents', function(){
-    it('can retrieve all private events belonging to an organization', function(){
-      return eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
-        expect(result.length).to.be.above(0); // event is either removed or does not exist
-        expect(result[0].title).to.equal(testPrivateEvent.title);
-        expect(result[0].private).to.equal(true);
-      });
-    });
-    it('returns dates in millis', function(){
-      return eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
-        expect(result.length).to.be.above(0); // event is either removed or does not exist
-        expect(result[0].date).to.be.a('number');
-      });
-    });
-  });
+  // describe('#getPrivateEvents', function(){
+  //   it('can retrieve all private events belonging to an organization', function(){
+  //     return eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
+  //       expect(result.length).to.be.above(0); // event is either removed or does not exist
+  //       expect(result[0].title).to.equal(testPrivateEvent.title);
+  //       expect(result[0].private).to.equal(true);
+  //     });
+  //   });
+  //   it('returns dates in millis', function(){
+  //     return eventService.getPrivateEvents(testManager.personID, testManager.orgGuid, {'limit' : 25, 'page' : 0}).then(function(result){
+  //       expect(result.length).to.be.above(0); // event is either removed or does not exist
+  //       expect(result[0].date).to.be.a('number');
+  //     });
+  //   });
+  // });
 
   describe('#getEventsManaging', function(){
     it('can retrieve all events the managed by a user', function(){
@@ -284,23 +284,23 @@ describe('EventDBService', function(){
     });
   });
 
-  describe('#searchManagedEvents', function(){
-    it('can search for events matching the query supplied using Regex', function(){
-      return eventService.searchManagedEvents('Public', testManager, {'limit' : 25, 'page' : 0}).then(function(result){
-          expect(result.length).to.equal(1);
-      });
-    });
-    it('can search for events matching the query supplied using Regex', function(){
-      return eventService.searchManagedEvents('private', testManager,  {'limit' : 25, 'page' : 0}).then(function(result){
-          expect(result.length).to.equal(1);
-      });
-    });
-    it('will return nothing if the query is not matched', function(){
-      return eventService.searchManagedEvents('not a title', testManager,  {'limit' : 25, 'page' : 0}).then(function(result){
-          expect(result.length).to.equal(0);
-      });
-    });
-  });
+  // describe('#searchManagedEvents', function(){
+  //   it('can search for events matching the query supplied using Regex', function(){
+  //     return eventService.searchManagedEvents('Public', testManager, {'limit' : 25, 'page' : 0}).then(function(result){
+  //         expect(result.length).to.equal(1);
+  //     });
+  //   });
+  //   it('can search for events matching the query supplied using Regex', function(){
+  //     return eventService.searchManagedEvents('private', testManager,  {'limit' : 25, 'page' : 0}).then(function(result){
+  //         expect(result.length).to.equal(1);
+  //     });
+  //   });
+  //   it('will return nothing if the query is not matched', function(){
+  //     return eventService.searchManagedEvents('not a title', testManager,  {'limit' : 25, 'page' : 0}).then(function(result){
+  //         expect(result.length).to.equal(0);
+  //     });
+  //   });
+  // });
 
   describe('#removeEvent', function(){
     it('can remove a public event from the database', function(){

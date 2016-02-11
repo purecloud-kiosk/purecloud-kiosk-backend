@@ -175,20 +175,20 @@ describe('eventDao', function(){
     });
   });
 
-  describe('#getPrivateEvents', function(){
-    it('can retrieve private events a user has access to', function(){
-      return eventDao.getPrivateEvents({
-        'personID' : testManagerCheckIn.personID,
-        'orgGuid' : testPublicEvent.orgGuid,
-        'limit' : 25,
-        'page' : 0
-      }).then(function(result){
-        console.log(result);
-        expect(result).to.have.length.of.at.least(1);
-        expect(result[0].event).to.be.not.null;
-      });
-    });
-  });
+  // describe('#getPrivateEvents', function(){
+  //   it('can retrieve private events a user has access to', function(){
+  //     return eventDao.getPrivateEvents({
+  //       'personID' : testManagerCheckIn.personID,
+  //       'orgGuid' : testPublicEvent.orgGuid,
+  //       'limit' : 25,
+  //       'page' : 0
+  //     }).then(function(result){
+  //       console.log(result);
+  //       expect(result).to.have.length.of.at.least(1);
+  //       expect(result[0].event).to.be.not.null;
+  //     });
+  //   });
+  // });
 
   describe('#getPublicEventsCount', function(){
     it('can retrieve a count of all public events belonging to an organization', function(){
@@ -228,19 +228,19 @@ describe('eventDao', function(){
       });
     });
   });
-  describe('#searchManagedEvents', function(){
-    it('can search for events matching the query supplied using Regex', function(){
-      return eventDao.searchManagedEvents({
-        'eventTitle' : 'test',
-        'personID' : testManagerCheckIn.personID,
-        'orgGuid' : testManagerCheckIn.orgGuid,
-        'limit' : 25,
-        'page' : 0
-      }).then(function(result){
-        expect(result.length).to.equal(1);
-      });
-    });
-  });
+  // describe('#searchManagedEvents', function(){
+  //   it('can search for events matching the query supplied using Regex', function(){
+  //     return eventDao.searchManagedEvents({
+  //       'eventTitle' : 'test',
+  //       'personID' : testManagerCheckIn.personID,
+  //       'orgGuid' : testManagerCheckIn.orgGuid,
+  //       'limit' : 25,
+  //       'page' : 0
+  //     }).then(function(result){
+  //       expect(result.length).to.equal(1);
+  //     });
+  //   });
+  // });
 /*
   describe('#getEventsCheckInCounts', function(){
     it('can get the number of events a user is checked into and not checked into', function(){
