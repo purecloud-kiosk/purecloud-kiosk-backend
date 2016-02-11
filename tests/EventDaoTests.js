@@ -102,9 +102,16 @@ describe('eventDao', function(){
   });
 
   describe('#insertCheckIn', function(){
-    it('#insertCheckIn can insert a check-in into the database', function(){
+    it('#insertCheckIn can insert a check-in for a public event into the database', function(){
       // add publicEventID to checkIn
       testManagerCheckIn.event = publicEventID;
+      return eventDao.insertCheckIn(testManagerCheckIn).then(function(result){
+        expect(result.personID).to.equal(testManagerCheckIn.personID);
+      });
+    });
+    it('#insertCheckIn can insert a check-in for a private event into the database', function(){
+      // add publicEventID to checkIn
+      testManagerCheckIn.event = privateEventID;
       return eventDao.insertCheckIn(testManagerCheckIn).then(function(result){
         expect(result.personID).to.equal(testManagerCheckIn.personID);
       });
@@ -176,8 +183,9 @@ describe('eventDao', function(){
         'limit' : 25,
         'page' : 0
       }).then(function(result){
+        console.log(result);
         expect(result).to.have.length.of.at.least(1);
-        expect(result[0].event).to.be.null;
+        expect(result[0].event).to.be.not.null;
       });
     });
   });
@@ -225,7 +233,9 @@ describe('eventDao', function(){
       return eventDao.searchManagedEvents({
         'eventTitle' : 'test',
         'personID' : testManagerCheckIn.personID,
-        'orgGuid' : testManagerCheckIn.orgGuid
+        'orgGuid' : testManagerCheckIn.orgGuid,
+        'limit' : 25,
+        'page' : 0
       }).then(function(result){
         expect(result.length).to.equal(1);
       });
