@@ -105,6 +105,10 @@ describe('eventDao', function(){
     it('#insertCheckIn can insert a check-in for a public event into the database', function(){
       // add publicEventID to checkIn
       testManagerCheckIn.event = publicEventID;
+      testManagerCheckIn.eventTitle = testPublicEvent.title;
+      testManagerCheckIn.eventLocation = testPublicEvent.location;
+      testManagerCheckIn.eventPrivate = testPublicEvent.private;
+      testManagerCheckIn.eventDate = testPublicEvent.date;
       return eventDao.insertCheckIn(testManagerCheckIn).then(function(result){
         expect(result.personID).to.equal(testManagerCheckIn.personID);
       });
@@ -112,6 +116,11 @@ describe('eventDao', function(){
     it('#insertCheckIn can insert a check-in for a private event into the database', function(){
       // add publicEventID to checkIn
       testManagerCheckIn.event = privateEventID;
+
+      testManagerCheckIn.eventTitle = testPrivateEvent.title;
+      testManagerCheckIn.eventLocation = testPrivateEvent.location;
+      testManagerCheckIn.eventPrivate = testPrivateEvent.private;
+      testManagerCheckIn.eventDate = testPrivateEvent.date;
       return eventDao.insertCheckIn(testManagerCheckIn).then(function(result){
         expect(result.personID).to.equal(testManagerCheckIn.personID);
       });
@@ -123,6 +132,10 @@ describe('eventDao', function(){
     });
     it('#insertCheckIn can insert a different check-in into the database', function(){
       testAttendeeCheckIn.event = publicEventID;
+      testAttendeeCheckIn.eventTitle = testPrivateEvent.title;
+      testAttendeeCheckIn.eventLocation = testPrivateEvent.location;
+      testAttendeeCheckIn.eventPrivate = testPrivateEvent.private;
+      testAttendeeCheckIn.eventDate = testPrivateEvent.date;
       return eventDao.insertCheckIn(testAttendeeCheckIn).then(function(result){
         expect(result.personID).to.equal(testAttendeeCheckIn.personID);
       });
