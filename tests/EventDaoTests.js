@@ -27,8 +27,8 @@ var testAttendeeCheckIn = {
   'personID' : 'llsijefleij23489343324',
   'name' : 'Sample Manager CheckIn',
   'orgGuid' : '3248932-3423424323-234324234-234234234',
-  'checked_in' : true,
-  'timestamp' : Date.now(), // date checked_in
+  'checkedIn' : true,
+  'timestamp' : Date.now(), // date checkedIn
   'eventManager' : false,
   'email' : 'ljisef@lfsije.com',
   'image' : 'String'
@@ -37,8 +37,8 @@ var testManagerCheckIn = {
   'personID' : 'llsijefleijefsseff43324',
   'name' : 'Sample CheckIn',
   'orgGuid' : '3248932-3423424323-234324234-234234234',
-  'checked_in' : true,
-  'timestamp' : Date.now(), // date checked_in
+  'checkedIn' : true,
+  'timestamp' : Date.now(), // date checkedIn
   'eventManager' : true,
   'email' : 'ljisef@lfsije.com',
   'image' : 'String'
@@ -144,9 +144,9 @@ describe('eventDao', function(){
         'personID' : testManagerCheckIn.personID,
         'eventID' : publicEventID
       }).then(function(result){
-        result.checked_in = true;
+        result.checkedIn = true;
         result.save(function(saveError, saveResult){
-          expect(saveResult.checked_in).to.equal(true);
+          expect(saveResult.checkedIn).to.equal(true);
           done();
         });
       });

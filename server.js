@@ -21,6 +21,7 @@ var loggerMiddleware = require('lib/controllers/middleware/logger');
 
 redisClient.on('connect', function(){
   // once connection to redis is successful, connect to mongo
+  //mongoose.set('debug', true);
   mongoose.connect(config.production_mongo_uri);
   var db = mongoose.connection;
   db.on('error', console.error.bind(console, 'connection error:'));

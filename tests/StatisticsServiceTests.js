@@ -62,15 +62,27 @@ describe('StatisticsService', function(){
   before(function(done){
     mongoose.connect(config.test_mongo_uri, function(){
       redisClient.set(testUserSessionKey, JSON.stringify(testUser), function(hmSetError, hmSetResponse){
-        eventsService.createEvent(testEvents[0], testUser).then(function(response){
-          eventIDs.push(response.event._id);
-          return eventsService.createEvent(testEvents[1], testUser);
+        eventsService.createEvent({
+          'eventData' : testEvents[0],
+          'user' : testUser
         }).then(function(response){
           eventIDs.push(response.event._id);
-          return eventsService.createEvent(testEvents[2], testUser);
+          return eventsService.createEvent({
+            'eventData' : testEvents[1],
+            'user' : testUser
+          });
         }).then(function(response){
           eventIDs.push(response.event._id);
-          return eventsService.createEvent(testEvents[3], testUser);
+          return eventsService.createEvent({
+            'eventData' : testEvents[2],
+            'user' : testUser
+          });
+        }).then(function(response){
+          eventIDs.push(response.event._id);
+          return eventsService.createEvent({
+            'eventData' : testEvents[3],
+            'user' : testUser
+          });
         }).then(function(response){
           eventIDs.push(response.event._id);
           done();
@@ -99,7 +111,11 @@ describe('StatisticsService', function(){
 */
   describe('#getEventStats', function(){
     before(function(){
-      return eventsService.checkIntoEvent(eventIDs[0], testUser, testCheckIn).then(function(result){
+      return eventsService.checkIntoEvent({
+        'eventID' : eventIDs[0],
+        'user' : testUser,
+        'checkIn' : testCheckIn
+      }).then(function(result){
         expect(result).to.be.not.null;
         expect(result).to.not.equal(undefined);
       });
@@ -111,7 +127,11 @@ describe('StatisticsService', function(){
       });
     });
     after(function(){
-      return eventsService.removeAttendee(eventIDs[0], testUser, testCheckIn.personID).then(function(result){
+      return eventsService.removeAttendee({
+        'eventID' : eventIDs[0],
+        'user' : testUser,
+        'personID' : testCheckIn.personID
+      }).then(function(result){
         return;
       });
     });
@@ -119,12 +139,24 @@ describe('StatisticsService', function(){
 
   // clean up
   after(function(){
-    eventsService.removeEvent(eventIDs[0], testUser).then(function(response){
-      return eventsService.removeEvent(eventIDs[1], testUser)
+    eventsService.removeEvent({
+      'eventID' : eventIDs[0],
+      'user' : testUser
     }).then(function(response){
-      return eventsService.removeEvent(eventIDs[2], testUser);
+      return eventsService.removeEvent({
+        'eventID' : eventIDs[1],
+        'user' : testUser
+      });
     }).then(function(response){
-      return eventsService.removeEvent(eventIDs[3], testUser);
+      return eventsService.removeEvent({
+        'eventID' : eventIDs[2],
+        'user' : testUser
+      });
+    }).then(function(response){
+      return eventsService.removeEvent({
+        'eventID' : eventIDs[3],
+        'user' : testUser
+      });
     }).then(function(response){
       return;
     });

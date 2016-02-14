@@ -242,6 +242,12 @@
             description: "'Page' to grab, defaults to `0`"
             required: false
             type: "string"
+          -
+            name: "upcoming"
+            in: "query"
+            description: "Whether to grab only upcoming events. Defaults to true"
+            required: false
+            type: "boolean"
         responses:
           200:
             description: "Successful response"
@@ -273,6 +279,12 @@
             description: "'Page' to grab, defaults to `0`"
             required: false
             type: "string"
+          -
+            name: "upcoming"
+            in: "query"
+            description: "Whether to grab only upcoming events. Defaults to true"
+            required: false
+            type: "boolean"
         responses:
           "200":
             description: "Successful response"
@@ -304,6 +316,12 @@
             description: "'Page' to grab, defaults to `0`"
             required: false
             type: "string"
+          -
+            name: "upcoming"
+            in: "query"
+            description: "Whether to grab only upcoming events. Defaults to true"
+            required: false
+            type: "boolean"
         responses:
           "200":
             description: "Successful response"
@@ -378,6 +396,12 @@
             description: "'Page' to grab, defaults to `0`"
             required: false
             type: "string"
+          -
+            name: "upcoming"
+            in: "query"
+            description: "Whether to grab only upcoming events. Defaults to true"
+            required: false
+            type: "boolean"
         responses:
           200:
             description: "Successful response"
@@ -593,7 +617,7 @@
           type : "string"
         timestamp:
           type : "string"
-        checked_in:
+        checkedIn:
           type : "boolean"
         image:
           type : "string"
@@ -638,7 +662,7 @@
               type : "string"
             timestamp:
               type : "string"
-            checked_in:
+            checkedIn:
               type : "boolean"
             image:
               type : "string"
