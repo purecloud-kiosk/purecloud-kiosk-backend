@@ -30,7 +30,7 @@ var attendee = {
 
 describe('InvitationService', function(){
   before(function(done){
-    mongoose.connect(config.test_mongo_uri, function(){
+    mongoose.connect(config.mongo_config.test_uri, function(){
       done();
     });
   });

@@ -7,7 +7,9 @@ var request = require('request');
 var mongoose = require('mongoose');
 
 // retrieve redisClient
-var redisClient = require('lib/models/dao/redisClient.js');
+var redisClient = require('lib/models/dao/redisClient');
+// retrieve elasticsearch client
+var elasticClient = require('lib/models/dao/elasticClient');
 // load config file
 var config = require('config.json');
 
@@ -20,15 +22,31 @@ var pureCloudService = new PureCloudAPIService();
 var loggerMiddleware = require('lib/controllers/middleware/logger');
 
 redisClient.on('connect', function(){
-  // once connection to redis is successful, connect to mongo
-  //mongoose.set('debug', true);
-  mongoose.connect(config.production_mongo_uri);
-  var db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'connection error:'));
-  db.once('open', function(){
-    // upon open, add necessary middleware
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended : true}));
+<<<<<<< HEAD
+  // ping elastic to see if there is a connection
+  elasticClient.ping({}, function(error){
+    if(error){
+      console.trace('elasticsearch is down!');
+      process.exit();
+    }
+    else{
+      // once connection to redis and elastic are successful, connect to mongo
+      mongoose.connect(mongo_config.production_uri);
+      var db = mongoose.connection;
+      db.on('error', console.error.bind(console, 'connection error:'));
+      db.once('open', function(){
+        // upon open, add necessary middleware
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({extended : true}));
+        // logger for seeing requests, only for development mode, switch to production for better performance
+        if(app.settings.env === 'development'){
+          console.log('dev mode on');
+          app.use(loggerMiddleware);
+        }
+        // host static files
+        app.use('/public', express.static(__dirname + '/public'));
+        app.use('/docs', express.static(__dirname + '/node_modules/swagger-ui/dist'));
+        app.use('/swagger.yaml', express.static(__dirname + '/docs/swagger.yaml'));
 
     // logger for seeing requests
     app.use(loggerMiddleware);

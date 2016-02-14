@@ -5,13 +5,14 @@ PureCloud Kiosk is a service that allows PureCloud users to create and manage ch
 ## Usage
 ### Requirements
 * [NodeJS](http://nodejs.org/) (with [NPM](https://www.npmjs.org/))
-* [MongoDB](http://mongodb.org)
+* [MongoDB](http://mongodb.org) (3.2.1 or greater)
 * [Redis](http://redis.io)
+* [Elasticsearch](https://www.elastic.co/products/elasticsearch) (2.2.0)
 
 ### Installation
 1. Clone this repo.
 2. Install the Node dependencies with `npm install`.
-3. Edit the `production_mongo_uri`, the `redis_host`, and `redis_port` in `config.json` (if needed). Then start MongoDB and Redis.
+3. Edit the fields in `config.json` (if needed) to configure Mongo, Redis, Elastic, and Amazon AWS. Then start MongoDB and Redis.
 4. Start the server with `npm start` or `node server.js`. The server will be launched onto port `8080`.
 
 ### API Documentation

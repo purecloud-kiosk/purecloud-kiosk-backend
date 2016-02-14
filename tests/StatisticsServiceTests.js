@@ -60,7 +60,7 @@ var testUserSessionKey = 'testManagerKey';
 describe('StatisticsService', function(){
   // simulate a login
   before(function(done){
-    mongoose.connect(config.test_mongo_uri, function(){
+    mongoose.connect(config.mongo_config.test_uri, function(){
       redisClient.set(testUserSessionKey, JSON.stringify(testUser), function(hmSetError, hmSetResponse){
         eventsService.createEvent({
           'eventData' : testEvents[0],

@@ -1,8 +1,12 @@
 {
-  "production_mongo_uri" : "mongodb://localhost/eventDB",
-  "test_mongo_uri" : "mongodb://localhost/testEventDB",
-  "redis_port" : "6379",
-  "redis_host" : "127.0.0.1",
+  "mongo_config" : {
+    "production_uri" : "mongodb://localhost/eventDB",
+    "test_uri" : "mongodb://localhost/testEventDB"
+  },
+  "redis_config" : {
+    "port" : "6379",
+    "host" : "127.0.0.1"
+  },
   "aws_config" : {
     "accessKeyId": "<aws access key goes here, don't commit your key or anyone else's>",
     "secretAccessKey": "<aws secret key goes here, don't commit this either>",
@@ -14,5 +18,9 @@
       "user" : "charlieduongtransporter@gmail.com",
       "pass" : "**************"
     }
+  },
+  "elastic_config" : {
+    "host" : "localhost:9200",
+    "log" : "trace"
   }
 }
