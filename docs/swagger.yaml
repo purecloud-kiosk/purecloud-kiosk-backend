@@ -366,11 +366,11 @@
               type : "array"
               items:
                 $ref : "#/definitions/CheckIn"
-    /events/searchManagedEvents:
+    /events/search:
       get:
-        tags :
+        tags:
           - "events"
-        description: "Searches the events that the user is managing. Use the limit and page fields for pagination if needed.\n"
+        description: "Searches the events in the database. Use the limit and page fields for pagination if needed.\n"
         parameters:
           -
             name: "Authorization"
@@ -397,11 +397,29 @@
             required: false
             type: "string"
           -
+            name: "private"
+            in : "query"
+            description: "Optional field use to specify if only private or public events should be shown. Returns only private events if set to true, public events only if false. If the field is not supplied, it will return both private and public events "
+            required : false
+            type : "boolean"
+          -
             name: "upcoming"
             in: "query"
-            description: "Whether to grab only upcoming events. Defaults to true"
+            description: "Whether to grab only upcoming events. Defaults to true. Set to false to include previous events."
             required: false
             type: "boolean"
+          -
+            name: "managing"
+            in: "query"
+            description: "Whether to grab only managed events or not. Defaults to false."
+            required: false
+            type: "boolean"
+          -
+            name: "sortOrder"
+            in: "query"
+            description: "Order events are given. Accepted values are 'asc' (ascending) and 'desc' (descending). Defaults to 'asc'."
+            required: false
+            type: "string"
         responses:
           200:
             description: "Successful response"

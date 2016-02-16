@@ -21,6 +21,7 @@
   },
   "elastic_config" : {
     "host" : "localhost:9200",
+    "log" : "trace",
     "maxSockets" : 30
   }
 }
