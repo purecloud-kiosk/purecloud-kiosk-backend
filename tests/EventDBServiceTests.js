@@ -149,7 +149,7 @@ describe('EventDBService', function(){
   describe('#updateEvent', function(){
     it('can update an existing event in the database', function(){
       testPublicEvent.eventID = testPublicEventID;
-      testPublicEvent.title = 'Updated Public EventDBService Test';
+      testPublicEvent.title = 'Updated new Public EventDBService Test';
       return eventService.updateEvent({
         'eventData' : testPublicEvent,
         'user' : testManager
@@ -231,23 +231,6 @@ describe('EventDBService', function(){
       });
     });
   });
-
-    describe('#updateEvent', function(){
-      it('can update an existing event in the database', function(){
-        testPublicEvent.eventID = testPublicEventID;
-        testPublicEvent.title = 'Updated Public EventDBService Test';
-        return eventService.updateEvent({
-          'eventData' : testPublicEvent,
-          'user' : testManager
-        }).then(function( result){
-          expect(result).to.be.not.null;
-          return dao.getEvent(testPublicEventID).then(function(getResult){
-            expect(getResult).to.be.not.null;
-            expect(getResult.title).to.equal(testPublicEvent.title);
-          });
-        });
-      });
-    });
 
 
   describe('#addEventManager', function(){
