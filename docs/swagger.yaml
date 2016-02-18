@@ -370,7 +370,7 @@
       get:
         tags:
           - "events"
-        description: "Searches the events in the database. Use the limit and page fields for pagination if needed.\n"
+        description: "Searches the events in the database. This route will first search for events associated with a user (either he or she is managing the event, has been invited to the event, or has been checked into the event. Set private to false to search all public events in the org. Use the limit and page fields for pagination if needed.\n"
         parameters:
           -
             name: "Authorization"
@@ -399,7 +399,7 @@
           -
             name: "private"
             in : "query"
-            description: "Optional field use to specify if only private or public events should be shown. Returns only private events if set to true, public events only if false. If the field is not supplied, it will return both private and public events "
+            description: "Optional field use to specify if only private or public events should be shown. Returns only private events if set to true, public events only if false."
             required : false
             type : "boolean"
           -
