@@ -92,8 +92,10 @@ describe('eventDao', function(){
   });
 
   describe('#updateEvent', function(done){
+
     it('can update an existing event in the database', function(){
       testPublicEvent.title = 'testTitle2';
+      delete testPublicEvent._id;
       return eventDao.updateEvent({
         'eventID' : publicEventID,
         'eventData' : testPublicEvent
