@@ -15,6 +15,7 @@ var testUser = {
   'name' : 'Mr. Test User',
   'orgGuid' : '2340982-2342342-2344234234-2342342332',
   'orgName' : 'Some org',
+  'userType' : 'normal',
   'eventsManaging' : []
 };
 var testCheckIn = {
@@ -121,7 +122,10 @@ describe('StatisticsService', function(){
       });
     });
     it('can get amount checked in for a public event', function(){
-      return statsService.getEventStats(eventIDs[0]).then(function(stats){
+      return statsService.getEventStats({
+        'eventID' : eventIDs[0],
+        'user' : testUser
+      }).then(function(stats){
         expect(stats.checkedIn).to.equal(1);
         expect(stats.notCheckedIn).to.equal(1); // manager
       });

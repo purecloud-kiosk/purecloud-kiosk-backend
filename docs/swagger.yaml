@@ -477,6 +477,31 @@
               type : "array"
               items:
                 $ref : "#/definitions/CheckIn"
+    /stats/event:
+      get:
+        tags :
+          - "stats"
+        description: "Retrieves statistics and other information about the event.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "eventID"
+            in: "query"
+            description: "The ID of the event"
+            required: true
+            type : "string"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/CheckIn"
   definitions:
     LoginBody :
       required:
