@@ -382,7 +382,7 @@
             name: "q"
             in: "query"
             description: "The query."
-            required: true
+            required: false
             type: "number"
           -
             name: "limit"

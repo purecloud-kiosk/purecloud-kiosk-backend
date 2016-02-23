@@ -16,7 +16,7 @@
     "service" : "gmail",
     "auth" : {
       "user" : "charlieduongtransporter@gmail.com",
-      "pass" : "**************"
+      "pass" : "transporter@1994"
     }
   },
   "elastic_config" : {
