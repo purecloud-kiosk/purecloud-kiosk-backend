@@ -19,6 +19,9 @@
       "pass" : "transporter@1994"
     }
   },
+  "kafka_config" : {
+    "connectionString" : "localhost:2181"
+  },
   "elastic_config" : {
     "host" : "localhost:9200",
     "log" : "trace",

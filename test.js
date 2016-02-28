@@ -9,3 +9,4 @@ require('tests/EventDBServiceTests');
 require('tests/StatisticsServiceTests');
 require('tests/InvitationServiceTests');
 // require('tests/ElasticServiceTests');
+//require('tests/ElasticDaoTests');

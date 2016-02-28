@@ -1,27 +1,9 @@
 var expect = require('chai').expect;
 var elasticClient = require('lib/models/dao/elasticClient');
 
-var ElasticService = require('lib/services/ElasticService');
-var elasticService = new ElasticService();
+var ElasticDao = require('lib/models/dao/ElasticDao');
+var elasticDao = new ElasticDao();
 
-var kafka = require('kafka-node'),
-    Producer = kafka.Producer,
-    client = new kafka.Client(),
-    producer = new Producer(client);
-
-/*
-'id' : {'type' : 'string'},
-'event' : {'type' : 'string'},
-'title' : {'type' : 'string'},
-'description' : {'type' : 'string'},
-'private' : {'type' : 'boolean'},
-'date' : {'type' : 'date'},
-'location' : {'type' : 'string'},
-'orgName' : {'type' : 'string'}, // used for emails
-'orgGuid' : {'type' : 'string'},
-'imageUrl' : {'type' : 'string'},
-'thumbnailUrl' : {'type' : 'string'}
-*/
 var testEvent = { // event to test with
   '_id' : 'ag4392490382490243',
   'title' : 'Public EventDBService Test',
@@ -30,23 +12,23 @@ var testEvent = { // event to test with
   'location' : 'Someplace Erie, PA',
   'private' : false
 };
-var testEvent2 = { // event to test with
-  'id' : 'ag4392490382490243',
-  'event' : 'psejfesijsfeilfseji',
-  'title' : 'Public EventDBService Test #999999',
-  'description' : 'Some description',
-  'date' : new Date(),
-  'location' : 'Someplace Erie, PA',
-  'private' : false,
-  'orgGuid' : '24032402934=234-9423293-234324',
-  'orgName' : "purecloud kiosk",
-  'imageUrl' : "null",
-  'thumbnailUrl' : "null"
+
+var testCheckIn = {
+  'personID' : 'llsijefleij23489343324',
+  'name' : 'Sample Manager CheckIn',
+  'orgGuid' : '3248932-3423424323-234324234-234234234',
+  'checkedIn' : true,
+  'timestamp' : Date.now(), // date checkedIn
+  'eventManager' : false,
+  'email' : 'ljisef@lfsije.com',
+  'image' : 'String'
 };
 var eventID = testEvent._id;
 
-
-
+var kafka = require('kafka-node'),
+    Producer = kafka.Producer,
+    client = new kafka.Client(),
+    producer = new Producer(client);
 describe('ElasticService', function(){
   // describe('#insertEvent', function(){
   //   it('should be able to insert an event into elastic', function(){
@@ -85,17 +67,11 @@ describe('ElasticService', function(){
     });
   });
   describe('#insertEvent', function(){
-    it('should be able to use kafka to ' , function(done){
-      producer.send([{
-        'topic' : 'event',
-        'messages' : [
-          JSON.stringify({'action' : 'index' , 'index' : 'eventdb', 'type' : 'event', 'id' : testEvent2.id, 'body' : testEvent2}),
-        ]
-      }], function(err, data){
-        console.log(err);
-        console.log(data);
-        done();
-      });
+    it('should be able to use kafka to ' , function(){
+      return elasticDao.insertEventAndCheckIn({
+        'event' : testEvent,
+        'checkIn' : testCheckIn
+      })
     });
   });
 
