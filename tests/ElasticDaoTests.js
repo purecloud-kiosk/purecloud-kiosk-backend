@@ -8,7 +8,7 @@ var testEvent = { // event to test with
   '_id' : 'ag4392490382490243',
   'title' : 'Public EventDBService Test',
   'description' : 'Some description',
-  'date' : Date.now(),
+  'startDate' : Date.now(),
   'location' : 'Someplace Erie, PA',
   'private' : false
 };

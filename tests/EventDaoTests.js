@@ -8,7 +8,7 @@ var expect = require('chai').expect;
 var testPublicEvent = { // event to test with
   'title' : 'Some Event Title Here',
   'description' : 'Some description',
-  'date' : Date.now(),
+  'startDate' : Date.now(),
   'location' : 'Someplace Erie, PA',
   'orgName' : 'PureCloud Kiosk',
   'orgGuid' : '3248932-3423424323-234324234-234234234',
@@ -17,7 +17,7 @@ var testPublicEvent = { // event to test with
 var testPrivateEvent = { // event to test with
   'title' : 'Some Private Event',
   'description' : 'Some description',
-  'date' : Date.now(),
+  'startDate' : Date.now(),
   'location' : 'Someplace Erie, PA',
   'orgName' : 'PureCloud Kiosk',
   'orgGuid' : '3248932-3423424323-234324234-234234234',

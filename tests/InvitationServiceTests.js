@@ -9,7 +9,8 @@ var config = require('config.json');
 var event = {
   '_id' : '507f1f77bcf86cd799439011',
   'title' : 'Test Event',
-  'date' : Date.now(),
+  'startDate' : Date.now(),
+  'endDate' : Date.now() + 100000 + 360000,
   'location' : 'Test location',
   'private' : true,
   'orgName' : 'Some organization',

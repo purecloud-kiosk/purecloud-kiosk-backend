@@ -3,7 +3,6 @@ require('app-module-path').addPath(__dirname);
 // lib imports
 var express = require('express');
 var bodyParser = require('body-parser');
-var request = require('request');
 var mongoose = require('mongoose');
 
 // retrieve redisClient
@@ -32,7 +31,7 @@ redisClient.on('connect', function(){
     }
     else{
       console.log('Elasticsearch is up.');
-      kafkaProducer.on('ready', function(){
+//      kafkaProducer.on('ready', function(){
         console.log('Kafka client is ready');
         // once connection to redis and elastic are successful, connect to mongo
         mongoose.connect(mongo_config.production_uri);
@@ -80,7 +79,7 @@ redisClient.on('connect', function(){
             console.log('Server is listening on port 8080...');
           });
         });
-      });
+//      });
     }
   });
 });

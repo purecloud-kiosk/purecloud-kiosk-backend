@@ -14,14 +14,15 @@ var expect = require('chai').expect;
 var testPublicEvent = { // event to test with
   'title' : 'Public EventDBService Test',
   'description' : 'Some description',
-  'date' : Date.now() + 100000,
+  'startDate' : Date.now() + 100000,
   'location' : 'Someplace Erie, PA',
   'private' : false
 };
 var testPrivateEvent = { // event to test with
   'title' : 'Private EventDBService Test',
   'description' : 'Some description',
-  'date' : Date.now() + 100000,
+  'startDate' : Date.now() + 100000,
+  'endDate' : Date.now() + 100000 + 360000,
   'location' : 'Someplace Erie, PA',
   'private' : true
 };
@@ -173,7 +174,7 @@ describe('EventDBService', function(){
     it('returns dates in millis', function(){
       return eventService.getPublicEvents({'user' : testManager, 'limit' : 25, 'page' : 0}).then(function(result){
         expect(result.length).to.be.above(0); // event is either removed or does not exist
-        expect(result[0].date).to.be.a('number');
+        expect(result[0].startDate).to.be.a('number');
       });
     });
   });
@@ -205,7 +206,7 @@ describe('EventDBService', function(){
     it('returns dates in millis', function(){
       return eventService.getEventsManaging({'user' : testManager, 'limit' : 25, 'page' : 0}).then(function(result){
         expect(result.length).to.be.above(0); // event is either removed or does not exist
-        expect(result[0].date).to.be.a('number');
+        expect(result[0].startDate).to.be.a('number');
       });
     });
   });

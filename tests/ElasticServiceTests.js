@@ -26,7 +26,8 @@ var testEvent = { // event to test with
   '_id' : 'ag4392490382490243',
   'title' : 'Public EventDBService Test',
   'description' : 'Some description',
-  'date' : Date.now(),
+  'startDate' : Date.now(),
+  'endDate' : Date.now() + 100000 + 360000,
   'location' : 'Someplace Erie, PA',
   'private' : false
 };
@@ -35,7 +36,8 @@ var testEvent2 = { // event to test with
   'event' : 'psejfesijsfeilfseji',
   'title' : 'Public EventDBService Test #999999',
   'description' : 'Some description',
-  'date' : new Date(),
+  'startDate' : new Date(),
+  'endDate' : Date.now() + 100000 + 360000,
   'location' : 'Someplace Erie, PA',
   'private' : false,
   'orgGuid' : '24032402934=234-9423293-234324',

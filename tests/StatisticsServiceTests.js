@@ -29,28 +29,32 @@ var testEvents = [
   {
     'title' : 'Public event #11',
     'description' : 'Some description',
-    'date' : Date.now(),
+    'startDate' : Date.now(),
+    'endDate' : Date.now() + 100000 + 360000,
     'location' : 'Someplace Erie, PA',
     'private' : false
   },
   {
     'title' : 'Public event #12',
     'description' : 'Some description',
-    'date' : Date.now(),
+    'startDate' : Date.now(),
+    'endDate' : Date.now() + 100000 + 360000,
     'location' : 'Someplace Erie, PA',
     'private' : false
   },
   {
     'title' : 'Private event #13',
     'description' : 'Some description',
-    'date' : Date.now(),
+    'startDate' : Date.now(),
+    'endDate' : Date.now() + 100000 + 360000,
     'location' : 'Someplace Erie, PA',
     'private' : true
   },
   {
     'title' : 'Private event #14',
     'description' : 'Some description',
-    'date' : Date.now(),
+    'startDate' : Date.now(),
+    'endDate' : Date.now() + 100000 + 360000,
     'location' : 'Someplace Erie, PA',
     'private' : true
   }
