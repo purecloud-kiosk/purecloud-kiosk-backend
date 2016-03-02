@@ -522,7 +522,9 @@
       properties :
         title:
           type : "string"
-        date:
+        startDate:
+          type : "number"
+        endDate:
           type : "number"
         location:
           type : "string"
@@ -549,7 +551,9 @@
           type : "string"
         title:
           type : "string"
-        date:
+        startDate:
+          type : "number"
+        endDate:
           type : "number"
         location:
           type : "string"
@@ -571,8 +575,9 @@
       properties :
         title:
           type : "string"
-        date:
-          type : "number"
+        startDate:
+          format : "date"
+        endDate:
           format : "date"
         location:
           type : "string"
@@ -679,7 +684,9 @@
           properties :
             title:
               type : "string"
-            date:
+            startDate:
+              type : "number"
+            endDate:
               type : "number"
             location:
               type : "string"
