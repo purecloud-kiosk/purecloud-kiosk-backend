@@ -366,7 +366,7 @@
               type : "array"
               items:
                 $ref : "#/definitions/CheckIn"
-    /events/search:
+    /events/searchEvents:
       get:
         tags:
           - "events"
