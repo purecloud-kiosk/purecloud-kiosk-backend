@@ -15,7 +15,6 @@ services:
   - redis-server
   - elasticsearch
 before_script:
-  - sudo apt-get install g++
   - sleep 15
   - npm install
 script:
