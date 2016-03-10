@@ -47,11 +47,6 @@ redisClient.on('connect', function(){
             console.log('dev mode on');
             app.use(loggerMiddleware);
           }
-          // host static files
-          app.use('/public', express.static(__dirname + '/public'));
-          app.use('/docs', express.static(__dirname + '/node_modules/swagger-ui/dist'));
-          app.use('/swagger.yaml', express.static(__dirname + '/docs/swagger.yaml'));
-
           // logger for seeing requests
           app.use(loggerMiddleware);
 
@@ -59,8 +54,6 @@ redisClient.on('connect', function(){
           app.use('/public', express.static(__dirname + '/public'));
           app.use('/docs', express.static(__dirname + '/node_modules/swagger-ui/dist'));
           app.use('/swagger.yaml', express.static(__dirname + '/docs/swagger.yaml'));
-          // templates
-          // var indexTemplate = marko.load('./index.marko', {writeToDisk : false});
 
           //append routes
           app.use('/purecloud', require('lib/controllers/routes/pureCloud'));

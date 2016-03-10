@@ -366,6 +366,67 @@
               type : "array"
               items:
                 $ref : "#/definitions/CheckIn"
+    /events/searchAttendees:
+      get:
+        tags:
+          - "events"
+        description: "Searches for users attending an event. By default, this will search for users who have checked into the event. If the event is private, the results can be filtered to search for those who have not checked into the event yet.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "eventID"
+            in: "query"
+            description: "The id of the event to search"
+            required: true
+            type: "string"
+          -
+            name: "query"
+            in: "query"
+            description: "The query used for the search"
+            required: false
+            type: "number"
+          -
+            name: "limit"
+            in: "query"
+            description: "Number of results to limit. Defaults to 25."
+            required: false
+            type: "number"
+          -
+            name: "page"
+            in: "query"
+            description: "'Page' to grab, defaults to `0`"
+            required: false
+            type: "string"
+          -
+            name: "checkedIn"
+            in : "query"
+            description: "Optional field used to specify whether to search for users who have been checked in or not. (only works when searching private events)"
+            required : false
+            type : "boolean"
+          -
+            name: "fields"
+            in : "query"
+            description: "Fields to search(can be name and email, defaults to only name)"
+            required : false
+            type : "array"
+          -
+            name: "inviteStatuses"
+            in : "query"
+            description: "For private events only. This is used to filter through the users that have provided a response to the invite email."
+            required : false
+            type : "array"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/Event"
     /events/searchEvents:
       get:
         tags:
@@ -379,11 +440,17 @@
             required: true
             type: "string"
           -
-            name: "q"
+            name: "query"
             in: "query"
             description: "The query."
             required: false
             type: "number"
+          -
+            name: "fields"
+            in : "query"
+            description: "Fields to search(can be name and email, defaults to only title)"
+            required : false
+            type : "array"
           -
             name: "limit"
             in: "query"
