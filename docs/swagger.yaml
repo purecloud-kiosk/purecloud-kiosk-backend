@@ -427,6 +427,37 @@
               type : "array"
               items:
                 $ref : "#/definitions/Event"
+    /events/getEvents:
+      get:
+        tags:
+          - "events"
+        description: "Searches the events in the database. This route will first search for events associated with a user (either he or she is managing the event, has been invited to the event, or has been checked into the event. Set private to false to search all public events in the org. Use the limit and page fields for pagination if needed.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "after"
+            in: "query"
+            description: "Grab events after this date..."
+            required: true
+            type: "date"
+          -
+            name: "before"
+            in: "query"
+            description: "... and before this date"
+            required: true
+            type: "date"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/Event"
     /events/searchEvents:
       get:
         tags:
@@ -650,7 +681,7 @@
           type : "string"
         orgGuid:
           type : "string"
-        _id:
+        id:
           type : "string"
         imageUrl:
           type : "string"
@@ -679,6 +710,8 @@
               type : "number"
             image :
               type : "string"
+            email :
+              type : "string"
     AttendeeBody:
       required:
         - eventID
@@ -696,6 +729,8 @@
               type : "string"
             image:
               type : "string"
+            email:
+              type : "string"
     ManagerBody:
       required:
         - eventID
@@ -712,6 +747,8 @@
             orgGuid :
               type : "string"
             image :
+              type : "string"
+            email :
               type : "string"
     RemoveCheckInBody:
       required:
@@ -736,6 +773,8 @@
           type : "boolean"
         image:
           type : "string"
+        email:
+          type : "string"
     LoginResult :
       properties:
         ms:
@@ -759,7 +798,7 @@
               type : "string"
             orgGuid:
               type : "string"
-            _id:
+            id:
               type : "string"
             imageUrl:
               type : "string"
