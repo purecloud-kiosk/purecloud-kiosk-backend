@@ -17,7 +17,6 @@ services:
   - redis-server
   - elasticsearch
 before_script:
-  - apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
   - sleep 15
   - npm install
 script:
