@@ -29,26 +29,26 @@ var attendee = {
   'orgGuid' : '3940234-234lkj32-23lkjli23-28oo804'
 };
 
-describe('InvitationService', function(){
-  before(function(done){
-    mongoose.connect(config.mongo_config.test_uri, function(){
+describe('InvitationService', () => {
+  before((done) => {
+    mongoose.connect(config.mongo_config.test_uri, () => {
       done();
     });
   });
-  after(function(done){
-    mongoose.connection.db.dropCollection('invitations', function(){
-      mongoose.disconnect(function(){
+  after((done) => {
+    mongoose.connection.db.dropCollection('invitations', () => {
+      mongoose.disconnect(() => {
         done();
       });
     });
   });
-  describe('#sendInvites', function(){
-    it('should be able to successfully send off an invitation email to another user.', function(){
+  describe('#sendInvites', () => {
+    it('should be able to successfully send off an invitation email to another user.', () => {
       this.timeout(4000);
       return inviteService.sendInvite({
         'event' : event,
         'attendee' : attendee
-      }).then(function(result){
+      }).then((result) => {
         expect(result).to.be.not.null;
       });
     });

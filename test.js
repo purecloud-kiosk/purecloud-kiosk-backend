@@ -4,9 +4,9 @@
 require('app-module-path').addPath(__dirname);
 
 require('tests/EventDaoTests');
-require('tests/CachingServiceTests');
+// require('tests/CachingServiceTests');
 require('tests/EventDBServiceTests');
-require('tests/StatisticsServiceTests');
-require('tests/InvitationServiceTests');
+// require('tests/StatisticsServiceTests');
+// require('tests/InvitationServiceTests');
 // require('tests/ElasticServiceTests');
 //require('tests/ElasticDaoTests');

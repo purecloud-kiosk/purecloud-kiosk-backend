@@ -218,6 +218,29 @@
             description: "Successful response"
             schema:
               $ref : "#/definitions/EventRemovedResponse"
+    /events/bulkCheckIn:
+      post:
+        tags :
+          - "events"
+        description: "This route will allow for checkins to be performed in bulk. \n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed to authenticate with. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name : "body"
+            in : "body"
+            description : "An array of check in data"
+            schema :
+              $ref : "#/definitions/CheckIns"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventRemovedResponse"
     /events/managing:
       get:
         tags :
@@ -712,6 +735,14 @@
               type : "string"
             email :
               type : "string"
+    CheckIns:
+      required:
+        - "checkIns"
+      properties:
+        checkIns:
+          type: array
+          items:
+            $ref: CheckInBody
     AttendeeBody:
       required:
         - eventID

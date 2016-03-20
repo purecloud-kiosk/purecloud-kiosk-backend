@@ -29,9 +29,9 @@ var kafka = require('kafka-node'),
     Producer = kafka.Producer,
     client = new kafka.Client(),
     producer = new Producer(client);
-describe('ElasticService', function(){
-  // describe('#insertEvent', function(){
-  //   it('should be able to insert an event into elastic', function(){
+describe('ElasticService', () => {
+  // describe('#insertEvent', () => {
+  //   it('should be able to insert an event into elastic', () => {
   //     return elasticService.insertEvent(testEvent).then(function(result){
   //       elasticClient.get({
   //         'index' : 'eventdb',
@@ -46,8 +46,8 @@ describe('ElasticService', function(){
   //   });
   // });
   //
-  // describe('#removeEvent', function(){
-  //   it('should be able to remove an event from elastic', function(){
+  // describe('#removeEvent', () => {
+  //   it('should be able to remove an event from elastic', () => {
   //     return elasticService.removeEvent(eventID).then(function(result){
   //       return elasticClient.get({
   //         'index' : 'eventdb',
@@ -59,15 +59,15 @@ describe('ElasticService', function(){
   //     });
   //   });
   // });
-  before(function(done){
+  before((done) => {
     console.log('before')
-    producer.on('ready', function(){
+    producer.on('ready', () => {
       console.log('ready!');
       done();
     });
   });
-  describe('#insertEvent', function(){
-    it('should be able to use kafka to ' , function(){
+  describe('#insertEvent', () => {
+    it('should be able to use kafka to ' , () => {
       return elasticDao.insertEventAndCheckIn({
         'event' : testEvent,
         'checkIn' : testCheckIn

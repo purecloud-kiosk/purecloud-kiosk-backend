@@ -49,9 +49,9 @@ var eventID = testEvent._id;
 
 
 
-describe('ElasticService', function(){
-  // describe('#insertEvent', function(){
-  //   it('should be able to insert an event into elastic', function(){
+describe('ElasticService', () => {
+  // describe('#insertEvent', () => {
+  //   it('should be able to insert an event into elastic', () => {
   //     return elasticService.insertEvent(testEvent).then(function(result){
   //       elasticClient.get({
   //         'index' : 'eventdb',
@@ -66,8 +66,8 @@ describe('ElasticService', function(){
   //   });
   // });
   //
-  // describe('#removeEvent', function(){
-  //   it('should be able to remove an event from elastic', function(){
+  // describe('#removeEvent', () => {
+  //   it('should be able to remove an event from elastic', () => {
   //     return elasticService.removeEvent(eventID).then(function(result){
   //       return elasticClient.get({
   //         'index' : 'eventdb',
@@ -79,21 +79,21 @@ describe('ElasticService', function(){
   //     });
   //   });
   // });
-  before(function(done){
+  before((done) => {
     console.log('before')
-    producer.on('ready', function(){
+    producer.on('ready', () => {
       console.log('ready!');
       done();
     });
   });
-  describe('#insertEvent', function(){
-    it('should be able to use kafka to ' , function(done){
+  describe('#insertEvent', () => {
+    it('should be able to use kafka to ' , (done) => {
       producer.send([{
         'topic' : 'event',
         'messages' : [
           JSON.stringify({'action' : 'index' , 'index' : 'eventdb', 'type' : 'event', 'id' : testEvent2.id, 'body' : testEvent2}),
         ]
-      }], function(err, data){
+      }], (err, data) => {
         console.log(err);
         console.log(data);
         done();

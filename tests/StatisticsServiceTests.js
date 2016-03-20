@@ -62,33 +62,33 @@ var testEvents = [
 var eventIDs = []; // for use when cleaning up
 var testUserSessionKey = 'testManagerKey';
 
-describe('StatisticsService', function(){
+describe('StatisticsService', () => {
   // simulate a login
-  before(function(done){
-    mongoose.connect(config.mongo_config.test_uri, function(){
-      redisClient.set(testUserSessionKey, JSON.stringify(testUser), function(hmSetError, hmSetResponse){
+  before((done) => {
+    mongoose.connect(config.mongo_config.test_uri, () => {
+      redisClient.set(testUserSessionKey, JSON.stringify(testUser), (hmSetError, hmSetResponse) => {
         eventsService.createEvent({
           'eventData' : testEvents[0],
           'user' : testUser
-        }).then(function(response){
+        }).then((response) => {
           eventIDs.push(response.event._id);
           return eventsService.createEvent({
             'eventData' : testEvents[1],
             'user' : testUser
           });
-        }).then(function(response){
+        }).then((response) => {
           eventIDs.push(response.event._id);
           return eventsService.createEvent({
             'eventData' : testEvents[2],
             'user' : testUser
           });
-        }).then(function(response){
+        }).then((response) => {
           eventIDs.push(response.event._id);
           return eventsService.createEvent({
             'eventData' : testEvents[3],
             'user' : testUser
           });
-        }).then(function(response){
+        }).then((response) => {
           eventIDs.push(response.event._id);
           done();
         });
@@ -97,75 +97,75 @@ describe('StatisticsService', function(){
   });
 
   // before each method is called, grab the data from redis, just like how a request would really be processed
-  beforeEach(function(done){
-    redisClient.get(testUserSessionKey, function(error, result){
+  beforeEach((done) => {
+    redisClient.get(testUserSessionKey, (error, result) => {
       testUser = JSON.parse(result);
       done();
     });
   });
 /*
-  describe('#getUserStats', function(){
+  describe('#getUserStats', () => {
     it('should be able to get the totalPublicEventsAvailable, totalPrivateEventsAvailable, '+
-      'publicEventsCheckedIn, and privateEventsCheckedIn on the user', function(){
-      return statsService.getUserStats(testUser).then(function(result){
+      'publicEventsCheckedIn, and privateEventsCheckedIn on the user', () => {
+      return statsService.getUserStats(testUser).then((result) => {
         expect(result.totalPublicEventsAvailable).to.equal(2);
         expect(result.totalPrivateEventsAvailable).to.equal(2);
       });
     });
   });
 */
-  describe('#getEventStats', function(){
-    before(function(){
+  describe('#getEventStats', () => {
+    before(() => {
       return eventsService.checkIntoEvent({
         'eventID' : eventIDs[0],
         'user' : testUser,
         'checkIn' : testCheckIn
-      }).then(function(result){
+      }).then((result) => {
         expect(result).to.be.not.null;
         expect(result).to.not.equal(undefined);
       });
     });
-    it('can get amount checked in for a public event', function(){
+    it('can get amount checked in for a public event', () => {
       return statsService.getEventStats({
         'eventID' : eventIDs[0],
         'user' : testUser
-      }).then(function(stats){
+      }).then((stats) => {
         expect(stats.checkedIn).to.equal(1);
         expect(stats.notCheckedIn).to.equal(1); // manager
       });
     });
-    after(function(){
+    after(() => {
       return eventsService.removeAttendee({
         'eventID' : eventIDs[0],
         'user' : testUser,
         'personID' : testCheckIn.personID
-      }).then(function(result){
+      }).then((result) => {
         return;
       });
     });
   });
 
   // clean up
-  after(function(){
+  after(() => {
     eventsService.removeEvent({
       'eventID' : eventIDs[0],
       'user' : testUser
-    }).then(function(response){
+    }).then((response) => {
       return eventsService.removeEvent({
         'eventID' : eventIDs[1],
         'user' : testUser
       });
-    }).then(function(response){
+    }).then((response) => {
       return eventsService.removeEvent({
         'eventID' : eventIDs[2],
         'user' : testUser
       });
-    }).then(function(response){
+    }).then((response) => {
       return eventsService.removeEvent({
         'eventID' : eventIDs[3],
         'user' : testUser
       });
-    }).then(function(response){
+    }).then((response) => {
       return;
     });
   });

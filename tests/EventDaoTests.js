@@ -1,3 +1,4 @@
+'use strict';
 var config = require('config.json');
 var EventDao = require('lib/models/dao/EventDao');
 var eventDao = new EventDao();
@@ -48,17 +49,17 @@ var testManagerCheckIn = {
 var publicEventID; // id to remove (the above event/'s id)
 var privateEventID;
 
-describe('eventDao', function(){
-  before(function(done){
-    mongoose.connect(config.mongo_config.test_uri, function(){
+describe('eventDao', () => {
+  before((done) => {
+    mongoose.connect(config.mongo_config.test_uri, () => {
       done();
     });
   });
-  after(function(done){
-    eventDao.removeEvent(privateEventID).then(function(result){
-      mongoose.connection.db.dropCollection('events', function(){
-        mongoose.connection.db.dropCollection('checkins', function(){
-          mongoose.disconnect(function(){
+  after((done) => {
+    eventDao.removeEvent(privateEventID).then((result) => {
+      mongoose.connection.db.dropCollection('events', () => {
+        mongoose.connection.db.dropCollection('checkins', () => {
+          mongoose.disconnect(() => {
             done();
           });
         })
@@ -66,26 +67,26 @@ describe('eventDao', function(){
     });
 
   });
-  describe('#insertEvent', function(){
+  describe('#insertEvent', () => {
     testPublicEvent.id = testPublicEvent._id = mongoose.Types.ObjectId();
-    it('can insert a public event into the database', function(){
-      return eventDao.insertEvent(testPublicEvent).then(function(result){
+    it('can insert a public event into the database', () => {
+      return eventDao.insertEvent(testPublicEvent).then((result) => {
         expect(result).to.be.not.null;
         publicEventID = result._id;
       });
     });
-    it('can insert a private event into the database', function(){
+    it('can insert a private event into the database', () => {
       testPrivateEvent.id = testPrivateEvent._id = mongoose.Types.ObjectId();
-      return eventDao.insertEvent(testPrivateEvent).then(function(result){
+      return eventDao.insertEvent(testPrivateEvent).then((result) => {
         privateEventID = result._id;
         expect(result).to.be.not.null;
       });
     });
   });
 
-  describe('#getEvent', function(){
-    it('can retrieve a single event from the database', function(){
-      return eventDao.getEvent(publicEventID).then(function(result){
+  describe('#getEvent', () => {
+    it('can retrieve a single event from the database', () => {
+      return eventDao.getEvent(publicEventID).then((result) => {
         expect(result.title).to.equal(testPublicEvent.title);
         expect(result.thumbnailUrl).to.not.equal(undefined);
         expect(result.imageUrl).to.not.equal(undefined);
@@ -93,63 +94,63 @@ describe('eventDao', function(){
     });
   });
 
-  describe('#updateEvent', function(done){
+  describe('#updateEvent', (done) => {
 
-    it('can update an existing event in the database', function(){
+    it('can update an existing event in the database', () => {
       testPublicEvent.title = 'testTitle2';
       delete testPublicEvent._id;
       return eventDao.updateEvent({
         'eventID' : publicEventID,
         'eventData' : testPublicEvent
-      }).then(function(result){
+      }).then((result) => {
         expect(result.n).to.equal(1);
       });
     });
   });
 
-  describe('#insertCheckIn', function(){
-    it('#insertCheckIn can insert a check-in for a public event into the database', function(){
+  describe('#insertCheckIn', () => {
+    it('#insertCheckIn can insert a check-in for a public event into the database', () => {
       // add publicEventID to checkIn
       testManagerCheckIn.event = publicEventID;
-      return eventDao.insertCheckIn(testManagerCheckIn).then(function(result){
+      return eventDao.insertCheckIn(testManagerCheckIn).then((result) => {
         expect(result.personID).to.equal(testManagerCheckIn.personID);
       });
     });
-    it('#insertCheckIn can insert a check-in for a private event into the database', function(){
+    it('#insertCheckIn can insert a check-in for a private event into the database', () => {
       // add publicEventID to checkIn
       testManagerCheckIn.event = privateEventID;
-      return eventDao.insertCheckIn(testManagerCheckIn).then(function(result){
+      return eventDao.insertCheckIn(testManagerCheckIn).then((result) => {
         expect(result.personID).to.equal(testManagerCheckIn.personID);
       });
     });
-    it('#insertCheckIn cannot insert the same check-in into the database', function(){
+    it('#insertCheckIn cannot insert the same check-in into the database', () => {
       return eventDao.insertCheckIn(testManagerCheckIn).catch(function(error){
         expect(error).to.be.not.null;
       });
     });
-    it('#insertCheckIn can insert a different check-in into the database', function(){
+    it('#insertCheckIn can insert a different check-in into the database', () => {
       testAttendeeCheckIn.event = publicEventID;
-      return eventDao.insertCheckIn(testAttendeeCheckIn).then(function(result){
+      return eventDao.insertCheckIn(testAttendeeCheckIn).then((result) => {
         expect(result.personID).to.equal(testAttendeeCheckIn.personID);
       });
     });
   });
 
-  describe('#getCheckIn', function(){
-    it('can retrieve a single event from the database', function(){
+  describe('#getCheckIn', () => {
+    it('can retrieve a single event from the database', () => {
       return eventDao.getCheckIn({
         'personID' : testManagerCheckIn.personID,
         'eventID' : publicEventID
-      }).then(function(result){
+      }).then((result) => {
         expect(result.name).to.equal(testManagerCheckIn.name);
       });
     });
 
-    it('can be used to update check_in status.', function(done){
+    it('can be used to update check_in status.', (done) => {
       eventDao.getCheckIn({
         'personID' : testManagerCheckIn.personID,
         'eventID' : publicEventID
-      }).then(function(result){
+      }).then((result) => {
         result.checkedIn = true;
         result.save(function(saveError, saveResult){
           expect(saveResult.checkedIn).to.equal(true);
@@ -159,36 +160,36 @@ describe('eventDao', function(){
     });
   });
 
-  describe('#getAssociatedEvents', function(){
-    it('can retrieve events that a manager is associated with in the database using an event manager\'s ID', function(){
+  describe('#getAssociatedEvents', () => {
+    it('can retrieve events that a manager is associated with in the database using an event manager\'s ID', () => {
       return eventDao.getAssociatedEvents({
         'personID' : testManagerCheckIn.personID,
         'orgGuid' : testManagerCheckIn.orgGuid,
         'manager' : true,
         'limit' : 25,
         'page' : 0
-      }).then(function(result){
+      }).then((result) => {
         expect(result).to.have.length.of.at.least(1);
       });
     });
   });
 
-  describe('#getPublicEvents', function(){
-    it('can retrieve public events belonging to an organization', function(){
-      return eventDao.getPublicEvents({'orgGuid' : testPublicEvent.orgGuid, 'limit' : 25, 'page' : 0}).then(function(result){
+  describe('#getPublicEvents', () => {
+    it('can retrieve public events belonging to an organization', () => {
+      return eventDao.getPublicEvents({'orgGuid' : testPublicEvent.orgGuid, 'limit' : 25, 'page' : 0}).then((result) => {
         expect(result).to.have.length.of.at.least(1);
       });
     });
   });
 
-  // describe('#getPrivateEvents', function(){
-  //   it('can retrieve private events a user has access to', function(){
+  // describe('#getPrivateEvents', () => {
+  //   it('can retrieve private events a user has access to', () => {
   //     return eventDao.getPrivateEvents({
   //       'personID' : testManagerCheckIn.personID,
   //       'orgGuid' : testPublicEvent.orgGuid,
   //       'limit' : 25,
   //       'page' : 0
-  //     }).then(function(result){
+  //     }).then((result) => {
   //       console.log(result);
   //       expect(result).to.have.length.of.at.least(1);
   //       expect(result[0].event).to.be.not.null;
@@ -196,61 +197,61 @@ describe('eventDao', function(){
   //   });
   // });
 
-  describe('#getPublicEventsCount', function(){
-    it('can retrieve a count of all public events belonging to an organization', function(){
-      return eventDao.getPublicEventsCount(testPublicEvent.orgGuid).then(function(result){
+  describe('#getPublicEventsCount', () => {
+    it('can retrieve a count of all public events belonging to an organization', () => {
+      return eventDao.getPublicEventsCount(testPublicEvent.orgGuid).then((result) => {
         expect(result).to.equal(1);
       });
     });
   });
-  describe('#getAttendanceCounts', function(){
-    it('can get counts', function(){
-      return eventDao.getAttendanceCounts(publicEventID).then(function(result){
+  describe('#getAttendanceCounts', () => {
+    it('can get counts', () => {
+      return eventDao.getAttendanceCounts(publicEventID).then((result) => {
         expect(result.length).to.be.above(0);
       });
     });
   });
 
-  describe('#getEventCheckIns', function(){
-    it('can retrieve check-ins of an event', function(){
+  describe('#getEventCheckIns', () => {
+    it('can retrieve check-ins of an event', () => {
       return eventDao.getEventCheckIns({
         'eventID' : publicEventID,
         'limit' : 25,
         'page' : 0
-      }).then(function(result){
+      }).then((result) => {
         expect(result).to.have.length.of.at.least(1);
       });
     });
   });
 
-  describe('#getEventManagers', function(){
-    it('can retrieve event managers from an event using an event\'s ID', function(){
+  describe('#getEventManagers', () => {
+    it('can retrieve event managers from an event using an event\'s ID', () => {
       return eventDao.getEventManagers({
         'eventID' : publicEventID,
         'limit' : 25,
         'page' : 0
-      }).then(function(result){
+      }).then((result) => {
         expect(result).to.have.length.of.at.least(1);
       });
     });
   });
-  // describe('#searchManagedEvents', function(){
-  //   it('can search for events matching the query supplied using Regex', function(){
+  // describe('#searchManagedEvents', () => {
+  //   it('can search for events matching the query supplied using Regex', () => {
   //     return eventDao.searchManagedEvents({
   //       'eventTitle' : 'test',
   //       'personID' : testManagerCheckIn.personID,
   //       'orgGuid' : testManagerCheckIn.orgGuid,
   //       'limit' : 25,
   //       'page' : 0
-  //     }).then(function(result){
+  //     }).then((result) => {
   //       expect(result.length).to.equal(1);
   //     });
   //   });
   // });
 /*
-  describe('#getEventsCheckInCounts', function(){
-    it('can get the number of events a user is checked into and not checked into', function(){
-      return eventDao.getEventsCheckInCounts(testManagerCheckIn.personID, testManagerCheckIn.orgGuid).then(function(result){
+  describe('#getEventsCheckInCounts', () => {
+    it('can get the number of events a user is checked into and not checked into', () => {
+      return eventDao.getEventsCheckInCounts(testManagerCheckIn.personID, testManagerCheckIn.orgGuid).then((result) => {
         expect(result[0]._id.private).to.equal(false);
         expect(result[0]._id.checkedIn).to.equal(true);
         expect(result[0].total).to.equal(1);
@@ -260,9 +261,9 @@ describe('eventDao', function(){
 */
 
 /*
-  describe('#addInvitation', function(){
-    it('can add an invitation ', function(){
-      return eventDao.updateInvitation().then(function(result){
+  describe('#addInvitation', () => {
+    it('can add an invitation ', () => {
+      return eventDao.updateInvitation().then((result) => {
         expect(result.result.ok).to.equal(1);
         expect(result.result.n).to.be.above(0);
       });
@@ -270,37 +271,53 @@ describe('eventDao', function(){
   });
 */
 
-  describe('#removeEvent', function(){
-    it('can remove an event by it\'s \'_id\'', function(){
-      return eventDao.removeEvent(publicEventID).then(function(result){
+  describe('#removeEvent', () => {
+    it('can remove an event by it\'s \'_id\'', () => {
+      return eventDao.removeEvent(publicEventID).then((result) => {
         expect(result.result.n).to.equal(1);
       });
     });
-    it('will throw an error if the event does not exist', function(){
-      return eventDao.removeEvent(publicEventID).catch(function(error){
+    it('will throw an error if the event does not exist', () => {
+      return eventDao.removeEvent(publicEventID).catch((error) => {
         expect(error).to.not.null;
         expect(error).to.not.equal(undefined);
       });
     });
   });
 
-  describe('#removeCheckIn', function(){
-    it('can remove a single check-in by using an eventID and personID', function(){
-      return eventDao.removeCheckIn('llsijefleij23489343324', publicEventID).then(function(result){
+  describe('#removeCheckIn', () => {
+    it('can remove a single check-in by using an eventID and personID', () => {
+      return eventDao.removeCheckIn('llsijefleij23489343324', publicEventID).then((result) => {
         expect(result.result.ok).to.equal(1);
         expect(result.result.n).to.be.above(0);
+      });
+    });
+  });
+  describe('#bulkUpsertCheckIns', () => {
+
+    it('can perform a bulk insert', () => {
+      var checkIns = [];
+      var test = testAttendeeCheckIn;
+      test.event = publicEventID;
+      for(var i = 0; i < 20; i++){
+        test.personID = "person " + i;
+        test.id = test._id = mongoose.Types.ObjectId();
+        checkIns.push(JSON.parse(JSON.stringify(test)));
+      }
+      return eventDao.bulkUpdateCheckIns({'checkIns' : checkIns, 'upsert' : true});
+    });
+  });
+
+  describe('#removeCheckInsByEvent', () => {
+    it('can remove all check-ins by an eventID', () => {
+      return eventDao.removeCheckInsByEvent(publicEventID).then((result) => {
+        expect(result.result.ok).to.equal(1);
+        expect(result.result.n).to.be.above(0);
+        console.log(result.result.n);
       });
     });
   });
 
-  describe('#removeCheckInsByEvent', function(){
-    it('can remove all check-ins by an eventID', function(){
-      return eventDao.removeCheckInsByEvent(publicEventID).then(function(result){
-        expect(result.result.ok).to.equal(1);
-        expect(result.result.n).to.be.above(0);
-      });
-    });
-  });
 
 
 
