@@ -382,6 +382,12 @@
             description: "'Page' to grab, defaults to `0`"
             required: false
             type: "string"
+          -
+            name: "getAll"
+            in: "query"
+            description: "Set to 'true' to retrieve all check ins. Note: This will ignore both limit and page"
+            required: false
+            type: "boolean"
         responses:
           200:
             description: "Successful response"
