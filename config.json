@@ -8,8 +8,8 @@
     "host" : "localhost"
   },
   "aws_config" : {
-    "accessKeyId": "AKIAJSMDW6YCNRLLP4PQ",
-    "secretAccessKey": "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",
+    "accessKeyId": "",
+    "secretAccessKey": "",
     "region": "us-east-1"
   },
   "email_transporter" : {
