@@ -24,7 +24,7 @@
     "validator": "^4.5.0"
   },
   "scripts": {
-    "start-dev": "nodemon server.js",
+    "start-dev": "nodemon --ignore 'logs/*' server.js",
     "start": "node server.js",
     "test": "mocha"
   },
