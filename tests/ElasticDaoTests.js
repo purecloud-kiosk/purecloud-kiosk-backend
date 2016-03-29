@@ -29,7 +29,7 @@ var kafka = require('kafka-node'),
     Producer = kafka.Producer,
     client = new kafka.Client(),
     producer = new Producer(client);
-describe('ElasticService', () => {
+describe('ElasticDao', () => {
   // describe('#insertEvent', () => {
   //   it('should be able to insert an event into elastic', () => {
   //     return elasticService.insertEvent(testEvent).then(function(result){

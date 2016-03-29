@@ -8,8 +8,8 @@
     "host" : "localhost"
   },
   "aws_config" : {
-    "accessKeyId": "<aws access key goes here, don't commit your key or anyone else's>",
-    "secretAccessKey": "<aws secret key goes here, don't commit this either>",
+    "accessKeyId": "AKIAJSMDW6YCNRLLP4PQ",
+    "secretAccessKey": "IvErqsiGQuobu1UhHRFSG+qD/BJIVPno+YCV4EAX",
     "region": "us-east-1"
   },
   "email_transporter" : {
@@ -24,7 +24,7 @@
   },
   "elastic_config" : {
     "host" : "localhost:9200",
-    
+
     "maxSockets" : 30
   }
 }

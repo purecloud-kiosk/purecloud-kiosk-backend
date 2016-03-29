@@ -1,5 +1,6 @@
 'use strict';
 require('app-module-path').addPath(__dirname);
+var scribe = require('scribe-js')();
 // lib imports
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -19,6 +20,7 @@ var PureCloudAPIService = require('lib/services/PureCloudAPIService');
 var app = express();
 var pureCloudService = new PureCloudAPIService();
 
+//var scribe = require('scribe')();
 var loggerMiddleware = require('lib/controllers/middleware/logger');
 
 redisClient.on('connect', function(){
@@ -45,11 +47,8 @@ redisClient.on('connect', function(){
           // logger for seeing requests, only for development mode, switch to production for better performance
           if(app.settings.env === 'development'){
             console.log('dev mode on');
-            app.use(loggerMiddleware);
+            app.use('/logs', scribe.webPanel());
           }
-          // logger for seeing requests
-          app.use(loggerMiddleware);
-
           // host static files
           app.use('/public', express.static(__dirname + '/public'));
           app.use('/docs', express.static(__dirname + '/node_modules/swagger-ui/dist'));

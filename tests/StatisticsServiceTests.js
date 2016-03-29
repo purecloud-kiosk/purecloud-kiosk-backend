@@ -130,8 +130,8 @@ describe('StatisticsService', () => {
         'eventID' : eventIDs[0],
         'user' : testUser
       }).then((stats) => {
-        expect(stats.checkedIn).to.equal(1);
-        expect(stats.notCheckedIn).to.equal(1); // manager
+        expect(stats.checkInStats.checkedIn).to.equal(1);
+        expect(stats.checkInStats.notCheckedIn).to.equal(1); // manager
       });
     });
     after(() => {
