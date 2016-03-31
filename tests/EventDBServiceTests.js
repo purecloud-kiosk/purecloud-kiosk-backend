@@ -510,6 +510,19 @@ describe('EventDBService', () => {
     });
   });
 
+  describe('#getMultipleEventCheckInCounts', ()=> {
+    it('should be able to return multiple check in counts', () => {
+      console.log('provided events: ');
+      console.log(testPrivateEventID);
+      console.log(testPublicEventID);
+      return eventService.getMultipleEventCheckInCounts({
+        'eventIDs' : testPrivateEventID + "," + testPublicEventID,
+        'user' : testManager
+      }).then((result) => {
+        console.log(result);
+      });
+    });
+  });
 
   describe('#removeEvent', () => {
     it('can remove a public event from the database', () => {

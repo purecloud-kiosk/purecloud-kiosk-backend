@@ -10,6 +10,7 @@
   "aws_config" : {
     "accessKeyId": "",
     "secretAccessKey": "",
+    "bucket" : "purecloudkiosk",
     "region": "us-east-1"
   },
   "email_transporter" : {

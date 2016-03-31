@@ -235,6 +235,14 @@ describe('eventDao', () => {
       });
     });
   });
+  describe('#getMultipleEventCheckInCounts', ()=> {
+    it('can retrieve the number of checkIns for each event passed to it', ()=> {
+      var eventArray = [publicEventID, privateEventID];
+      return eventDao.getMultipleEventCheckInCounts(eventArray).then((result)=>{
+        console.log(result);
+      });
+    });
+  });
   // describe('#searchManagedEvents', () => {
   //   it('can search for events matching the query supplied using Regex', () => {
   //     return eventDao.searchManagedEvents({

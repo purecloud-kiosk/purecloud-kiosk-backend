@@ -47,7 +47,11 @@ redisClient.on('connect', function(){
           // logger for seeing requests, only for development mode, switch to production for better performance
           if(app.settings.env === 'development'){
             console.log('dev mode on');
-            app.use('/logs', scribe.webPanel());
+            app.use(scribe.express.logger());
+            app.use('/logs', (req,res,next) => {
+              // auth should be handled here
+              next();
+            }, scribe.webPanel());
           }
           // host static files
           app.use('/public', express.static(__dirname + '/public'));
@@ -55,6 +59,8 @@ redisClient.on('connect', function(){
           app.use('/swagger.yaml', express.static(__dirname + '/docs/swagger.yaml'));
 
           //append routes
+
+          app.use('/file', require('lib/controllers/routes/file'));
           app.use('/purecloud', require('lib/controllers/routes/pureCloud'));
           app.use('/events', require('lib/controllers/routes/events'));
           app.use('/stats', require('lib/controllers/routes/stats'));
