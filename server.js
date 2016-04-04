@@ -3,6 +3,7 @@ require('app-module-path').addPath(__dirname);
 var scribe = require('scribe-js')();
 // lib imports
 var express = require('express');
+var socketIO = require('socket.io');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
@@ -23,10 +24,10 @@ var pureCloudService = new PureCloudAPIService();
 //var scribe = require('scribe')();
 var loggerMiddleware = require('lib/controllers/middleware/logger');
 
-redisClient.on('connect', function(){
+redisClient.on('connect', () => {
   console.log('Redis client connected');
   // ping elastic to see if there is a connection
-  elasticClient.ping({}, function(error){
+  elasticClient.ping({}, (error) => {
     if(error){
       console.trace('elasticsearch is down!');
       process.exit();
@@ -39,7 +40,7 @@ redisClient.on('connect', function(){
         mongoose.connect(mongo_config.production_uri);
         var db = mongoose.connection;
         db.on('error', console.error.bind(console, 'connection error:'));
-        db.once('open', function(){
+        db.once('open', () => {
           console.log('Mongoose connected');
           // upon open, add necessary middleware
           app.use(bodyParser.json());
@@ -66,16 +67,20 @@ redisClient.on('connect', function(){
           app.use('/stats', require('lib/controllers/routes/stats'));
           app.use('/invitation', require('lib/controllers/routes/invitation'));
 
-          app.get('/api-docs', function(req, res){
+          app.get('/api-docs', (req, res) => {
             res.sendFile(__dirname + '/docs/index.html');
           });
-          app.use('*', function(req, res){
+          app.use('*', (req, res) => {
             res.sendFile(__dirname + '/public/html/404.html');
           });
 
-          app.listen(8080, function(){
+          var server = app.listen(8080, () => {
             console.log('Server is listening on port 8080...');
           });
+          var io = socketIO.listen(server);
+
+          require('lib/controllers/socketEndpoints/socket')(io);
+
         });
 //      });
     }
