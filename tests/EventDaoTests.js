@@ -14,7 +14,12 @@ var testPublicEvent = { // event to test with
   'location' : 'Someplace Erie, PA',
   'orgName' : 'PureCloud Kiosk',
   'orgGuid' : '3248932-3423424323-234324234-234234234',
-  'private' : false
+  'private' : false,
+  'lastUpdatedBy' : {
+    'name' : 'checkin',
+    'email' : 'email',
+    'personID' : 'personID'
+  }
 };
 var testPrivateEvent = { // event to test with
   'title' : 'Some Private Event',
@@ -24,7 +29,12 @@ var testPrivateEvent = { // event to test with
   'location' : 'Someplace Erie, PA',
   'orgName' : 'PureCloud Kiosk',
   'orgGuid' : '3248932-3423424323-234324234-234234234',
-  'private' : true
+  'private' : true,
+  'lastUpdatedBy' : {
+    'name' : 'checkin',
+    'email' : 'email',
+    'personID' : 'personID'
+  }
 };
 var testAttendeeCheckIn = {
   'personID' : 'llsijefleij23489343324',
