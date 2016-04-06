@@ -28,7 +28,7 @@
   "scripts": {
     "start-dev": "nodemon --ignore 'logs/*' server.js",
     "start": "node server.js",
-    "test": "mocha"
+    "test": "NODE_ENV=test mocha"
   },
   "author": "",
   "license": "ISC",

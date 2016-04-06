@@ -95,7 +95,6 @@ describe('eventDao', () => {
   });
 
   describe('#updateEvent', (done) => {
-
     it('can update an existing event in the database', () => {
       testPublicEvent.title = 'testTitle2';
       delete testPublicEvent._id;
@@ -140,7 +139,8 @@ describe('eventDao', () => {
     it('can retrieve a single event from the database', () => {
       return eventDao.getCheckIn({
         'personID' : testManagerCheckIn.personID,
-        'eventID' : publicEventID
+        'eventID' : publicEventID,
+        'orgGuid' : testManagerCheckIn.orgGuid
       }).then((result) => {
         expect(result.name).to.equal(testManagerCheckIn.name);
       });
@@ -149,7 +149,8 @@ describe('eventDao', () => {
     it('can be used to update check_in status.', (done) => {
       eventDao.getCheckIn({
         'personID' : testManagerCheckIn.personID,
-        'eventID' : publicEventID
+        'eventID' : publicEventID,
+        'orgGuid' : testManagerCheckIn.orgGuid
       }).then((result) => {
         result.checkedIn = true;
         result.save(function(saveError, saveResult){

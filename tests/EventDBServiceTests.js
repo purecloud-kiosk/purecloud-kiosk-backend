@@ -253,6 +253,7 @@ describe('EventDBService', () => {
         dao.getCheckIn({
           'personID' : someNewEventManager.personID,
           'eventID' : testPrivateEventID,
+          'orgGuid' : testManager.orgGuid,
           'manager' : true
         }).then(function(checkIn){
           expect(checkIn).to.be.not.null;
@@ -263,8 +264,8 @@ describe('EventDBService', () => {
     });
 
     it('will fail to add an already existing manager', () => {
-      return eventService.addEventManager(
-        {'eventID' : testPrivateEventID,
+      return eventService.addEventManager({
+        'eventID' : testPrivateEventID,
         'user' : testManager,
         'newManager' : someNewEventManager
       }).catch((error) => {
@@ -282,7 +283,8 @@ describe('EventDBService', () => {
         expect(result.res).to.not.equal(undefined);
         return dao.getCheckIn({
           'personID' : someNewEventManager.personID,
-          'eventID' : testPrivateEventID
+          'eventID' : testPrivateEventID,
+          'orgGuid' : testManager.orgGuid
         }).then(function(checkIn){
           expect(checkIn).to.be.not.null;
           expect(checkIn.checkedIn).to.equal(false);

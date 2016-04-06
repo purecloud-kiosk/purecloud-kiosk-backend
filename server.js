@@ -24,6 +24,8 @@ var pureCloudService = new PureCloudAPIService();
 //var scribe = require('scribe')();
 var loggerMiddleware = require('lib/controllers/middleware/logger');
 
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
 redisClient.on('connect', () => {
   console.log('Redis client connected');
   // ping elastic to see if there is a connection
