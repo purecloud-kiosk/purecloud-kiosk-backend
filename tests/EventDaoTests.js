@@ -112,7 +112,9 @@ describe('eventDao', () => {
         'eventID' : publicEventID,
         'eventData' : testPublicEvent
       }).then((result) => {
-        expect(result.n).to.equal(1);
+        expect(result).to.not.equal(undefined);
+        console.log(result);
+        expect(result.title).to.equal(testPublicEvent.title);
       });
     });
   });
@@ -156,7 +158,7 @@ describe('eventDao', () => {
       });
     });
 
-    it('can be used to update check_in status.', (done) => {
+    it('can be used to update check in status.', (done) => {
       eventDao.getCheckIn({
         'personID' : testManagerCheckIn.personID,
         'eventID' : publicEventID,
