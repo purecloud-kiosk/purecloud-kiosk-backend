@@ -629,6 +629,25 @@
               type : "array"
               items:
                 $ref : "#/definitions/CheckIn"
+    /notification/org:
+      get:
+        tags :
+          - "notification"
+        description: "Retrieves org-wide notifications that a user has not seen yet.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/CheckIn"
   definitions:
     LoginBody :
       required:

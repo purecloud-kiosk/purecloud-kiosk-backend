@@ -63,13 +63,12 @@ redisClient.on('connect', () => {
           app.use('/swagger.yaml', express.static(__dirname + '/docs/swagger.yaml'));
 
           //append routes
-
           app.use('/file', require('lib/controllers/routes/file'));
           app.use('/purecloud', require('lib/controllers/routes/pureCloud'));
           app.use('/events', require('lib/controllers/routes/events'));
           app.use('/stats', require('lib/controllers/routes/stats'));
           app.use('/invitation', require('lib/controllers/routes/invitation'));
-
+          app.use('/notification', require('lib/controllers/routes/notification'));
           app.get('/api-docs', (req, res) => {
             res.sendFile(__dirname + '/docs/index.html');
           });

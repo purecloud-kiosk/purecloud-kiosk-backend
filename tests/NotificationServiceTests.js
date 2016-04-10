@@ -6,10 +6,11 @@ var NotificationDao = require('lib/models/dao/NotificationDao');
 var notificationDao = new NotificationDao();
 var NotificationService = require('lib/services/NotificationService');
 var notificationService = new NotificationService();
+var notificationConstants = require('lib/models/constants/notificationConstants');
 var console = process.console;
 
 var posterID = 'esfijlesfijlsef';
-
+let testEventID = 'testeventid';
 var orgGuid = 'thisisanorgguid';
 var recipientID = 'abcabcabc';
 describe('NotificationService', function() {
@@ -56,7 +57,7 @@ describe('NotificationService', function() {
           'orgGuid' : orgGuid
         },
         'notificationMessage' : {
-          'type' : 'ORG',
+          'type' : notificationConstants.ORG,
           'action' : 'ACTION',
           'content' : {
             'some' : 'stuff here'
@@ -66,6 +67,7 @@ describe('NotificationService', function() {
         return notificationDao.getNotifications({
           'personID' : posterID,
           'orgGuid' : orgGuid,
+          'type' : notificationConstants.ORG,
           'date' : new Date(0)
         });
       }).then((notifications) => {
@@ -81,7 +83,7 @@ describe('NotificationService', function() {
         },
         'recipientID' : recipientID,
         'notificationMessage' : {
-          'type' : 'ORG',
+          'type' : notificationConstants.ORG,
           'action' : 'ACTION',
           'content' : {
             'some' : 'stuff here'
@@ -91,6 +93,34 @@ describe('NotificationService', function() {
         return notificationDao.getNotifications({
           'personID' : posterID,
           'orgGuid' : orgGuid,
+          'type' : notificationConstants.ORG,
+          'date' : new Date(0)
+        });
+      }).then((notifications) => {
+        expect(notifications.length).to.equal(1);
+      });
+    });
+
+    it('should be able to store a notification for a specific event', () => {
+      return notificationService.sendNotification({
+        'channel' : 'fakechannel',
+        'user' : {
+          'personID' : posterID,
+          'orgGuid' : orgGuid
+        },
+        'event' : testEventID,
+        'notificationMessage' : {
+          'type' : notificationConstants.EVENT,
+          'action' : 'ACTION',
+          'content' : {
+            'some' : 'stuff here'
+          }
+        }
+      }).then((result) => {
+        return notificationDao.getNotifications({
+          'personID' : posterID,
+          'orgGuid' : orgGuid,
+          'type' : notificationConstants.ORG,
           'date' : new Date(0)
         });
       }).then((notifications) => {
@@ -102,9 +132,10 @@ describe('NotificationService', function() {
   describe('#updateUserLastSeenDate', () => {
     it('should be able to upsert a user\'s last seen date' , () => {
       return notificationService.updateUserLastSeenDate({
-        'personID' : 'abc',
-        'orgGuid' : 'abc',
-        'date' : new Date()
+        'user': {
+          'personID' : 'abc',
+          'orgGuid' : 'abc'
+        }
       }).then((result) => {
         console.log(result);
         expect(result).to.be.not.null;
@@ -113,13 +144,15 @@ describe('NotificationService', function() {
     });
   });
 
-  describe('#getUnseenNotifications', () => {
+  describe('#getUnseenOrgNotifications', () => {
     it('should be able to retrieve all notifications for a recipient' , (done) => {
       setTimeout(()=> {
         console.log('current time date ' + new Date());
-        notificationService.getUnseenNotifications({
-          'personID' : recipientID,
-          'orgGuid' : orgGuid
+        notificationService.getUnseenOrgNotifications({
+          'user' : {
+            'personID' : recipientID,
+            'orgGuid' : orgGuid
+          }
         }).then((results) => {
           console.log(results);
           expect(results).to.be.not.null;
@@ -133,9 +166,11 @@ describe('NotificationService', function() {
     it('should be able to retrieve new notifications for other users in an org' , (done) => {
       setTimeout(()=> {
         console.log('current time date ' + new Date());
-        notificationService.getUnseenNotifications({
-          'personID' : posterID,
-          'orgGuid' : orgGuid
+        notificationService.getUnseenOrgNotifications({
+          'user' : {
+            'personID' : posterID,
+            'orgGuid' : orgGuid
+          }
         }).then((results) => {
           console.log(results);
           expect(results).to.be.not.null;
@@ -144,6 +179,22 @@ describe('NotificationService', function() {
           done();
         });
       },500);
+    });
+  });
+  describe('#getEventNotifications', () => {
+    it('should be able retrieve notifications for an event' , () => {
+        return notificationService.getEventNotifications({
+          'user' : {
+            'personID' : posterID,
+            'orgGuid' : orgGuid
+          },
+          'event' : testEventID
+        }).then((results) => {
+          console.log(results);
+          expect(results).to.be.not.null;
+          expect(results).to.not.equal(undefined);
+          expect(results.length).to.equal(1);
+        });
     });
   });
 });

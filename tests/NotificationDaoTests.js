@@ -2,6 +2,7 @@
 var expect = require('chai').expect;
 var config = require('config.json');
 var mongoose = require('mongoose');
+var notificationConstants = require('lib/models/constants/notificationConstants');
 var NotificationDao = require('lib/models/dao/NotificationDao');
 var notificationDao = new NotificationDao();
 var console = process.console;
@@ -90,7 +91,8 @@ describe('NotificationDao', () => {
       return notificationDao.getNotifications({
         'personID' : 'abc',
         'orgGuid' : orgGuid,
-        'date' : new Date(0)
+        'type' : notificationConstants.ORG,
+        'after' : new Date(0)
       }).then((results) => {
         expect(results).to.be.not.null;
         expect(results).to.not.equal(undefined);
@@ -102,7 +104,8 @@ describe('NotificationDao', () => {
       return notificationDao.getNotifications({
         'personID' : recipientID,
         'orgGuid' : orgGuid,
-        'date' : new Date(0)
+        'type' : notificationConstants.ORG,
+        'after' : new Date(0)
       }).then((results) => {
         expect(results).to.be.not.null;
         expect(results).to.not.equal(undefined);
@@ -110,15 +113,30 @@ describe('NotificationDao', () => {
       });
     });
 
-    it('will not return anything if the user the date provided before zero' , () => {
+    it('will not return anything if the date provided after date the notifications were posted' , () => {
       return notificationDao.getNotifications({
         'personID' : recipientID,
         'orgGuid' : orgGuid,
-        'date' : new Date()
+        'type' : notificationConstants.ORG,
+        'after' : new Date()
       }).then((results) => {
         expect(results).to.be.not.null;
         expect(results).to.not.equal(undefined);
         expect(results.length).to.equal(0);
+      });
+    });
+
+    it('should be able to accept a limit and a page to configure how many notifications to return' , () => {
+      return notificationDao.getNotifications({
+        'personID' : recipientID,
+        'orgGuid' : orgGuid,
+        'type' : notificationConstants.ORG,
+        'limit' : 1,
+        'page' : 0
+      }).then((results) => {
+        expect(results).to.be.not.null;
+        expect(results).to.not.equal(undefined);
+        expect(results.length).to.equal(1);
       });
     });
   });
