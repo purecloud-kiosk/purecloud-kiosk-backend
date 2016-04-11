@@ -75,9 +75,9 @@ redisClient.on('connect', () => {
           app.use('*', (req, res) => {
             res.sendFile(__dirname + '/public/html/404.html');
           });
-
-          var server = app.listen(8080, () => {
-            console.log('Server is listening on port 8080...');
+          let port = process.argv[2] || 8080;
+          var server = app.listen(port, () => {
+            console.log('Server is listening on port ' + port + '...');
           });
           var io = socketIO.listen(server);
 

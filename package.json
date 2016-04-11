@@ -26,8 +26,9 @@
     "validator": "^4.5.0"
   },
   "scripts": {
-    "start-dev": "NODE_ENV=test nodemon --ignore 'logs/*' server.js",
-    "start": "node server.js",
+    "start-dev": "nodemon --ignore 'logs/*' server.js",
+    "start-test": "NODE_ENV=test nodemon --ignore 'logs/*' server.js 8000",
+    "start": "NODE_ENV=production node server.js 8000",
     "test": "NODE_ENV=test mocha"
   },
   "author": "",
