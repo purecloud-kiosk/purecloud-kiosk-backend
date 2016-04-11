@@ -8,8 +8,8 @@
     "host" : "localhost"
   },
   "aws_config" : {
-    "accessKeyId": "AKIAIGH463K5RUAYU7OQ",
-    "secretAccessKey": "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",
+    "accessKeyId": "",
+    "secretAccessKey": "",
     "bucket" : "purecloudkiosk",
     "region": "us-east-1"
   },
