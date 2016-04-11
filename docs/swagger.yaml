@@ -241,6 +241,29 @@
             description: "Successful response"
             schema:
               $ref : "#/definitions/EventRemovedResponse"
+    /events/postMessage:
+      post:
+        tags :
+          - "events"
+        description: "This route for managers or admins to post messages for an event. \n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed to authenticate with. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name : "body"
+            in : "body"
+            description : "The message to post to an event"
+            schema :
+              $ref : "#/definitions/MessageBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventRemovedResponse"
     /events/managing:
       get:
         tags :
@@ -648,6 +671,31 @@
               type : "array"
               items:
                 $ref : "#/definitions/CheckIn"
+    /notification/event:
+      get:
+        tags :
+          - "notification"
+        description: "Retrieves event specific notifications.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "eventID"
+            in: "query"
+            description: "The id of the event to get messages from"
+            required : true
+            type: "string"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/CheckIn"
   definitions:
     LoginBody :
       required:
@@ -790,7 +838,7 @@
     ManagerBody:
       required:
         - eventID
-        - checkIn
+        - manager
       properties:
         eventID:
           type : "string"
@@ -830,6 +878,15 @@
         image:
           type : "string"
         email:
+          type : "string"
+    MessageBody :
+      required :
+        - eventID
+        - message
+      properties :
+        eventID :
+          type : "string"
+        message :
           type : "string"
     LoginResult :
       properties:

@@ -30,6 +30,7 @@ describe('NotificationDao', () => {
       var testNotification = {
         'posterID' : posterID, // id of the person who posted the notification
         'orgGuid' : orgGuid, // org associated with notification
+        'posterName' : 'user',
         'message' : {
           'type' : 'ORG',
           'action' : 'test',
@@ -45,6 +46,7 @@ describe('NotificationDao', () => {
     it('should be able to store a notification for a specific user', () => {
       var testNotification = {
         'posterID' : posterID, // id of the person who posted the notification
+        'posterName' : 'user',
         'orgGuid' : orgGuid, // org associated with notification
         'recipientID' : recipientID,
         'message' : {
@@ -64,6 +66,7 @@ describe('NotificationDao', () => {
     it('should be able to upsert a user\'s last seen date' , () => {
       return notificationDao.updateUserLastSeenDate({
         'personID' : 'abc',
+        'posterName' : 'user',
         'orgGuid' : 'abc',
         'date' : new Date()
       }).then((result) => {
@@ -78,6 +81,7 @@ describe('NotificationDao', () => {
     it('should be able to retrieve a user\'s last seen date' , () => {
       return notificationDao.getUserLastSeenDate({
         'personID' : 'abc',
+        'posterName' : 'user',
         'orgGuid' : 'abc'
       }).then((result) => {
         console.log(result);

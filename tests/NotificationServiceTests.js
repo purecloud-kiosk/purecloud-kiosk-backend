@@ -53,6 +53,7 @@ describe('NotificationService', function() {
       return notificationService.sendNotification({
         'channel' : 'fakechannel',
         'user' : {
+          'name' : 'user',
           'personID' : posterID,
           'orgGuid' : orgGuid
         },
@@ -78,6 +79,7 @@ describe('NotificationService', function() {
       return notificationService.sendNotification({
         'channel' : 'fakechannel',
         'user' : {
+          'name' : 'user',
           'personID' : posterID,
           'orgGuid' : orgGuid
         },
@@ -105,6 +107,7 @@ describe('NotificationService', function() {
       return notificationService.sendNotification({
         'channel' : 'fakechannel',
         'user' : {
+          'name' : 'user',
           'personID' : posterID,
           'orgGuid' : orgGuid
         },
