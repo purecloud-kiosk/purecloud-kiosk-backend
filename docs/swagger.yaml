@@ -79,6 +79,24 @@
             description: "Access Token needed for authentication. If the user is not authenticated, this request will fail."
             required: true
             type: "string"
+    /purecloud/retrievePerson:
+      get:
+        tags :
+          - "purecloud"
+        description: "Route used for retrieving a QRCode for a user. Access token is passed through the query params instead of the Authorization header because it easier to retrieve images. The url can just be placed in an `<img>` tag."
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. If the user is not authenticated, this request will fail."
+            required: true
+            type: "string"
+          -
+            name: "personID"
+            in: "query"
+            description: "The personID of the user to grab"
+            required: true
+            type: "string"
     /events/create:
       post:
         tags :
@@ -380,6 +398,49 @@
         tags :
           - "events"
         description: "Retrieves all checked-in users of an event. Use the limit and page fields for pagination if needed. For example, `limit = 25` and `page = 0` will retrieve the first 25 results. `limit = 25` and `page = 1` will retrieve the next 25 results.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "eventID"
+            in: "query"
+            description: "ID of event"
+            required: true
+            type: "string"
+          -
+            name: "limit"
+            in: "query"
+            description: "Number of results to limit. Defaults to 25."
+            required: false
+            type: "number"
+          -
+            name: "page"
+            in: "query"
+            description: "'Page' to grab, defaults to `0`"
+            required: false
+            type: "string"
+          -
+            name: "getAll"
+            in: "query"
+            description: "Set to 'true' to retrieve all check ins. Note: This will ignore both limit and page"
+            required: false
+            type: "boolean"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/CheckIn"
+    /events/getManagers:
+      get:
+        tags :
+          - "events"
+        description: "Retrieves all of the managers of an event.\n"
         parameters:
           -
             name: "Authorization"
