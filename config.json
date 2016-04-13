@@ -1,11 +1,11 @@
 {
   "mongo_config" : {
-    "production_uri" : "mongodb://mongo/eventDB",
-    "test_uri" : "mongodb://mongo/testEventDB"
+    "production_uri" : "mongodb://localhost/eventDB",
+    "test_uri" : "mongodb://localhost/testEventDB"
   },
   "redis_config" : {
     "port" : "6379",
-    "host" : "redis"
+    "host" : "localhost"
   },
   "aws_config" : {
     "accessKeyId": "",
@@ -21,10 +21,10 @@
     }
   },
   "kafka_config" : {
-    "connectionString" : "zookeeper:2181"
+    "connectionString" : "localhost:2181"
   },
   "elastic_config" : {
-    "host" : "elasticsearch:9200",
+    "host" : "localhost:9200",
 
     "maxSockets" : 30
   }
