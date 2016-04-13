@@ -44,7 +44,6 @@ describe('InvitationService', () => {
   });
   describe('#sendInvites', () => {
     it('should be able to successfully send off an invitation email to another user.', () => {
-      this.timeout(4000);
       return inviteService.sendInvite({
         'event' : event,
         'attendee' : attendee
