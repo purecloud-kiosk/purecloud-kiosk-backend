@@ -282,13 +282,33 @@ describe('EventDBService', () => {
       }).then((result) => {
         expect(result.res).to.not.equal(undefined);
         return dao.getCheckIn({
-          'personID' : someNewEventManager.personID,
+          'personID' : somePrivateCheckIn.personID,
           'eventID' : testPrivateEventID,
           'orgGuid' : testManager.orgGuid
         }).then(function(checkIn){
           expect(checkIn).to.be.not.null;
           expect(checkIn.checkedIn).to.equal(false);
           expect(checkIn.eventManager).to.equal(true);
+        });
+      });
+    });
+  });
+  describe('#removeEventManager', () => {
+    it('can remove management privileges from a user', () => {
+      return eventService.removeEventManager({
+        'eventID' : testPrivateEventID,
+        'user' : testManager,
+        'managerID' : somePrivateCheckIn.personID
+      }).then((result) => {
+        expect(result.res).to.not.equal(undefined);
+        return dao.getCheckIn({
+          'personID' : somePrivateCheckIn.personID,
+          'eventID' : testPrivateEventID,
+          'orgGuid' : testManager.orgGuid
+        }).then(function(checkIn){
+          expect(checkIn).to.be.not.null;
+          expect(checkIn.checkedIn).to.equal(false);
+          expect(checkIn.eventManager).to.equal(false);
         });
       });
     });

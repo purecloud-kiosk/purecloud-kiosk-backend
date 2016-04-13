@@ -213,6 +213,29 @@
             description: "Successful response"
             schema:
               $ref : "#/definitions/EventRemovedResponse"
+    /events/removeEventManager:
+      post:
+        tags :
+          - "events"
+        description: "This route will add an attendee to a private event. If the event is not private, the request will fail.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed to authenticate with. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name : "body"
+            in : "body"
+            description : "Data needed to add a user to a private event."
+            schema :
+              $ref : "#/definitions/RemoveManagerBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventRemovedResponse"
     /events/checkIn:
       post:
         tags :
@@ -940,6 +963,15 @@
               type : "string"
             email :
               type : "string"
+    RemoveManagerBody:
+      required:
+        - eventID
+        - managerID
+      properties:
+        eventID:
+          type : "string"
+        managerID:
+          type : "string"
     RemoveCheckInBody:
       required:
         - eventID
