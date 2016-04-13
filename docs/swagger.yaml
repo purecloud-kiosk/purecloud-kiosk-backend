@@ -282,6 +282,31 @@
             description: "Successful response"
             schema:
               $ref : "#/definitions/EventRemovedResponse"
+    /events/get/{eventID}:
+      get:
+        tags :
+          - "events"
+        description: "Retrieves the event corresponding to the given ID.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "eventID"
+            in: "path"
+            description: "The id of the event to retrieve"
+            required: true
+            type: "string"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/Event"
     /events/managing:
       get:
         tags :
