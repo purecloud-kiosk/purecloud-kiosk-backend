@@ -25,6 +25,7 @@
   },
   "elastic_config" : {
     "host" : "localhost:9200",
+
     "maxSockets" : 30
   }
 }
