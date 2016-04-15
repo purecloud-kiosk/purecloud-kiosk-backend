@@ -225,9 +225,9 @@ describe('eventDao', () => {
     });
   });
 
-  describe('#getEventCheckIns', () => {
+  describe('#getEventAttendees', () => {
     it('can retrieve check-ins of an event', () => {
-      return eventDao.getEventCheckIns({
+      return eventDao.getEventAttendees({
         'eventID' : publicEventID,
         'limit' : 25,
         'page' : 0

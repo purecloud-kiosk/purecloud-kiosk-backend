@@ -441,7 +441,7 @@
               type : "array"
               items:
                 $ref : "#/definitions/Event"
-    /events/getEventCheckIns:
+    /events/getEventAttendees:
       get:
         tags :
           - "events"
@@ -475,6 +475,18 @@
             name: "getAll"
             in: "query"
             description: "Set to 'true' to retrieve all check ins. Note: This will ignore both limit and page"
+            required: false
+            type: "boolean"
+          -
+            name: "checkedIn"
+            in: "query"
+            description: "Set to 'true' to retrieve users who have checked into the event. Set to false to retrieve users who have not checked into an event."
+            required: false
+            type: "boolean"
+          -
+            name: "inviteStatus"
+            in: "query"
+            description: "Used to filter invite statuses. Set to either 'yes', 'no', 'maybe', or 'unknown'."
             required: false
             type: "boolean"
         responses:
