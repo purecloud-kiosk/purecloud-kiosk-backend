@@ -52,6 +52,7 @@ describe('NotificationService', function() {
     it('should be able to store a notification for the entire org', () => {
       return notificationService.sendNotification({
         'channel' : 'fakechannel',
+        'store' : true,
         'user' : {
           'name' : 'user',
           'personID' : posterID,
@@ -65,6 +66,7 @@ describe('NotificationService', function() {
           }
         }
       }).then((result) => {
+        console.log('stored');
         return notificationDao.getNotifications({
           'personID' : posterID,
           'orgGuid' : orgGuid,
@@ -78,6 +80,7 @@ describe('NotificationService', function() {
     it('should be able to store a notification for a specific recipient', () => {
       return notificationService.sendNotification({
         'channel' : 'fakechannel',
+        'store' : true,
         'user' : {
           'name' : 'user',
           'personID' : posterID,
@@ -106,6 +109,7 @@ describe('NotificationService', function() {
     it('should be able to store a notification for a specific event', () => {
       return notificationService.sendNotification({
         'channel' : 'fakechannel',
+        'store' : true,
         'user' : {
           'name' : 'user',
           'personID' : posterID,
