@@ -45,8 +45,7 @@ describe('FileDao', () => {
   describe('#getFile', () => {
     it('should be able to retrieve a file via an id and uploaderID', () => {
       return fileDao.getFile({
-        'fileID' : fileID,
-        'uploaderID' : testUploader
+        'fileID' : fileID
       }).then((result) => {
         expect(result).to.be.not.null;
         expect(result).to.not.equal(undefined);
