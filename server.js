@@ -6,7 +6,7 @@ var express = require('express');
 var socketIO = require('socket.io');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-
+var memwatch = require('memwatch-next');
 // retrieve redisClient
 var redisClient = require('lib/models/dao/redisClient');
 // retrieve elasticsearch client
@@ -56,6 +56,11 @@ redisClient.on('connect', () => {
               // auth should be handled here
               next();
             }, scribe.webPanel());
+            // if a leak was detected, exit with error
+            memwatch.on('leak', function(info){
+              console.error(info);
+              process.exit(1);
+            });
           }
           // host static files
           app.use('/public', express.static(__dirname + '/public'));
@@ -72,19 +77,22 @@ redisClient.on('connect', () => {
           app.get('/api-docs', (req, res) => {
             res.sendFile(__dirname + '/docs/index.html');
           });
+          // for any other route, feed client the 404 page
           app.use('*', (req, res) => {
             res.sendFile(__dirname + '/public/html/404.html');
           });
+          // allow for custom ports
           let port = process.argv[2] || 8080;
+
           var server = app.listen(port, () => {
             console.log('Server is listening on port ' + port + '...');
           });
-          var io = socketIO.listen(server);
 
+          // apply socket endpoints
+          var io = socketIO.listen(server);
           require('lib/controllers/socketEndpoints/socket')(io);
 
         });
-//      });
     }
   });
 });
