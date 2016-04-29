@@ -305,6 +305,29 @@
             description: "Successful response"
             schema:
               $ref : "#/definitions/EventRemovedResponse"
+    /events/sendInvitations:
+      post:
+        tags :
+          - "events"
+        description: "This route for managers or admins to post messages for an event. \n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed to authenticate with. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name : "body"
+            in : "body"
+            description : "The eventID to remove"
+            schema :
+              $ref : "#/definitions/RemoveEventBody"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              $ref : "#/definitions/EventRemovedResponse"
     /events/get/{eventID}:
       get:
         tags :
