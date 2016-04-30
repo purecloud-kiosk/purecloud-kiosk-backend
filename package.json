@@ -15,6 +15,7 @@
     "kafka-node": "^0.3.2",
     "memwatch-next": "^0.2.10",
     "moment": "^2.11.2",
+    "moment-timezone": "^0.5.3",
     "mongoose": "^4.2.6",
     "mustache": "^2.2.1",
     "nodemailer": "^2.1.0",
