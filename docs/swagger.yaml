@@ -721,6 +721,31 @@
               type : "array"
               items:
                 $ref : "#/definitions/Event"
+    /events/retrieveCheckInIntervals:
+      get:
+        tags:
+          - "events"
+        description: "Retrieves the dates and times of when users have checked into the event.\n"
+        parameters:
+          -
+            name: "Authorization"
+            in: "header"
+            description: "Access Token needed for authentication. Format:  `bearer <authToken>`"
+            required: true
+            type: "string"
+          -
+            name: "eventID"
+            in: "query"
+            description: "ID of the event to retrieve the data for"
+            required: true
+            type: "number"
+        responses:
+          200:
+            description: "Successful response"
+            schema:
+              type : "array"
+              items:
+                $ref : "#/definitions/Event"
     # /events/uploadImage:
     #   post:
     #     tags :

@@ -13,8 +13,6 @@ var redisClient = require('lib/models/dao/redisClient');
 var elasticClient = require('lib/models/dao/elasticClient');
 // load config for mongo
 var mongo_config = require('config.json').mongo_config;
-// load kakfa producer
-var kafkaProducer = require('lib/models/dao/kafkaProducer');
 // import and instantiate services
 var PureCloudAPIService = require('lib/services/PureCloudAPIService');
 
@@ -37,7 +35,9 @@ redisClient.on('connect', () => {
     }
     else{
       console.log('Elasticsearch is up.');
-//      kafkaProducer.on('ready', function(){
+      // load kakfa producer
+      var kafkaProducer = require('lib/models/dao/kafkaProducer');
+      kafkaProducer.on('ready', function(){
         console.log('Kafka client is ready');
         // once connection to redis and elastic are successful, connect to mongo
         mongoose.connect(mongo_config.production_uri);
@@ -93,6 +93,7 @@ redisClient.on('connect', () => {
           require('lib/controllers/socketEndpoints/socket')(io);
 
         });
+      });
     }
   });
 });
