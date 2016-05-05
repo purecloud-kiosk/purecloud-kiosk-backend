@@ -1,0 +1,68 @@
+version: '2'
+services:
+  # frontend:
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - ./purecloud-kiosk-frontend:/frontend
+  #   image: node
+  #   depends_on:
+  #     - backend
+  #   working_dir: /frontend
+  #   command: bash -c "sleep 5 && npm run start-dev"
+  backend:
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./purecloud-kiosk-backend:/backend
+    image: node
+    depends_on:
+      - redis
+      - mongo
+      - consumer
+      - kafka
+      - elasticsearch
+      - zookeeper
+    links:
+      - zookeeper:zk
+    working_dir: /backend
+    command: bash -c "sleep infinity"
+  consumer:
+    volumes:
+      - ./kafka-elasticsearch-standalone-consumer:/consumer
+    image: java
+    depends_on:
+      - elasticsearch
+      - kafka
+      - zookeeper
+    working_dir: /consumer
+    command: bash -c "sleep 15 && ./run_indexer.sh"
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    links:
+      - zookeeper:zk
+    environment:
+      #KAFKA_ADVERTISED_HOST_NAME: 192.168.0.28
+      KAFKA_CREATE_TOPICS: "event:10:1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  redis:
+    image: redis
+  mongo:
+    image: mongo
+  java:
+    image: java:8
+  elasticsearch:
+    ports:
+      - "9200:9200" #expose port for use with Sense on host
+    image: charlieduong94/elasticsearch:2.2.0
+    command: elasticsearch
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
